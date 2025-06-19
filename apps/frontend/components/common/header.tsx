@@ -16,9 +16,16 @@ export default function Header (){
       </div>
 
       <div className="flex lg:justify-center gap-4 lg:gap-12 lg:items-center">
+        <Link href="/#How To USE">How To Use </Link>
         <Link href="/#Pricing">Pricing</Link>
+        
          {isloogedIn && <Link href="/dashboard">Dashboard</Link>}
       </div>
+
+       {/* <div className="flex lg:justify-center gap-4 lg:gap-12 lg:items-center">
+        <Link href="/#How To USE">How To Use </Link>
+         
+      </div> */}
 
       <div className="flex lg:justify-end lg:flex-1">
         {isloogedIn ? (
