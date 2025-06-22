@@ -20,9 +20,6 @@ const plans = [
 
       'processing minutes',
       'YouTube processing',
-      'Chat with your video',
-      'SEO Tool',
-      ' Prompts workspace',
       'Video timestamps',
     ],
     id: 'basic',
