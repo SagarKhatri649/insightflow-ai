@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Header from '../components/common/header';
 import Footer from '../components/common/footer';
+import { ClerkProvider } from "@clerk/nextjs";
 // import { Component } from "lucide-react";
 
 const fontSans = FontSans({
@@ -23,15 +24,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" >
-      <body className={`${fontSans.variable} font-sans antialiased bg-background text-foreground`}>
+    <ClerkProvider>
+      <html lang="en" className="dark" >
+        <body className={`${fontSans.variable} font-sans antialiased bg-background text-foreground`}>
 
-        <div className="relative flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-      </body>
-    </html>
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
