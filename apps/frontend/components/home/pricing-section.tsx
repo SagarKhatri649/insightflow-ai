@@ -14,7 +14,7 @@ type PriceType = {
 const plans = [
   {
     name: 'Basic',
-    price: 9,
+    price: 2,
     description: 'Perfect for occasional use',
     items: [
 
@@ -29,7 +29,7 @@ const plans = [
   },
   {
     name: 'Pro',
-    price: 19,
+    price: 10,
     description: '  for Professional Use use',
     items: [
       'processing minutes',
