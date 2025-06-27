@@ -27,8 +27,6 @@ export default function HeroSection() {
         <Button
           variant={'link'}
           className="text-white mt-8 texxt-base sm:text-lg lg:text-2xl rounded-full px-8 sm:px-10 lg:px-12 sm:py-7 lg:py-8 lg:mt-16 bg-linear-to-r  from-slate-500 to-rose-500 hover:from-rose-500 hover:to-slate-500 hover:no-underline font-bold shadow-lg transition-all duration-300">
-
-
           <Link href="/#pricing" className="flex gap-2 items-center">
             <span>Try Now</span>
             <ArrowRight className="animate-pulse" />

@@ -26,7 +26,7 @@ export default function UploadHeader() {
         </span>{' '}
       </div>
       <div className='mt-2 text-lg leading-8 text-gray-100 max-w-2xl text-center'>
-        <p> Past your youtube video link here
+        <p> Drop youtube link here
         </p>
       </div>
     </div>
