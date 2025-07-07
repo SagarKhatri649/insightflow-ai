@@ -73,6 +73,7 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Toaster, useToast } from "@/components/ui/sonner";
+import { useUploadThing } from "@/utils/uploadthing";
 
 const schema = z.object({
   file: z
@@ -90,6 +91,19 @@ const schema = z.object({
 export default function UploadForm() {
   const { toast } = useToast();
 
+  const { startUpload } = useUploadThing("videoOrAudioUploader", {
+    onClientUploadComplete: () => {
+      alert("uploaded successfully!");
+    },
+    onUploadError: () => {
+      alert("error occurred while uploading");
+    },
+    onUploadBegin: ({ }) => {
+      console.log("upload has begun for");
+    },
+
+  });
+
   /** client‑side submit handler */
   const handleTranscribe = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -105,12 +119,16 @@ export default function UploadForm() {
       toast("Something went wrong", {
         description:
           res.error.flatten().fieldErrors.file?.[0] ?? "Invalid file",
-      });
-      return;
+      })
+
+    }
+    if (file) {
+      const resp = await startUpload([file]);
+      console.log({ resp });
     }
 
-    // TODO: your upload / transcribe logic here
-    toast("Uploading…", { description: file!.name });
+    // // TODO: your upload / transcribe logic here
+    // toast("Uploading…", { description: file!.name });
   };
 
   return (

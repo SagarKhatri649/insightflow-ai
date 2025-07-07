@@ -1,3 +1,4 @@
+import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -17,11 +18,12 @@ export const ourFileRouter = {
       maxFileSize:'32MB',
       // maxFileCount: 1,
     },
+    audio: { maxFileSize: "32MB" },
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
-      const user = await auth(req);
+      const user = await currentUser();
 
       // If you throw, the user will not be able to upload
       if (!user) throw new UploadThingError("Unauthorized");
@@ -36,7 +38,7 @@ export const ourFileRouter = {
       console.log("file url", file.ufsUrl);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      return { uploadedBy: metadata.userId ,fileUrl: file.ufsUrl};
     }),
 } satisfies FileRouter;
 
