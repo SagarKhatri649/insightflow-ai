@@ -15,11 +15,11 @@
 //        * For full list of options and defaults, see the File Route API reference
 //        * @see https://docs.uploadthing.com/file-routes#route-config
 //        */
-//       maxFileSize:'32MB',
+//       maxFileSize:"32MB"
 //       // maxFileCount: 1,
-//     },
-//     audio: { maxFileSize: "32MB" },
-//   })
+//     }})
+//     // audio: { maxFileSize: "32MB" },
+
 //     // Set permissions and file types for this FileRoute
 //     .middleware(async ({ req }) => {
 //       // This code runs on your server before upload
@@ -31,44 +31,49 @@
 //       // Whatever is returned here is accessible in onUploadComplete as `metadata`
 //       return { userId: user.id };
 //     })
-//     .onUploadComplete(async ({ metadata, file }) => {
+//     .onUploadComplete(async ({ metadata, file}) => {
 //       // This code RUNS ON YOUR SERVER after upload
 //       console.log("Upload complete for userId:", metadata.userId);
 
-//       console.log("file url", file.ufsUrl);
+//       console.log("file url", file.Url);
 
 //       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-//       return { uploadedBy: metadata.userId ,fileUrl: file.url,};
+//       return { uploadedBy: metadata.userId, file};
 //     }),
 // } satisfies FileRouter;
 
 // export type OurFileRouter = typeof ourFileRouter;
+ 
 import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
+ 
 export const ourFileRouter = {
-  videoOrAudioUploader: f({
-    video: { maxFileSize: "32MB" },
-    audio: { maxFileSize: "32MB" },
-  })
-    .middleware(async () => {
+   
+  videoOrAudioUploader: f({video: {
+    maxFileSize:"32MB"}})
+    .middleware(async ({ req }) => {
+       
       const user = await currentUser();
-      if (!user) throw new UploadThingError("Unauthorized");
+      if (!user) throw new UploadThingError("Unauthorized"); 
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
-      console.log("file url:", file.url);          // ✅ correct field
 
-      // This object is merged into the array item returned to the client
-      return {
-        uploadedBy: metadata.userId,
-        fileUrl: file.url,                         // ✅ same field name client expects
+      console.log("file url", file.url);
+
+       
+      return { 
+        userId: metadata.userId,
+        url: file.url,
+        name: file.name,
       };
     }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
+ 
