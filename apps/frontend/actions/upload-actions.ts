@@ -1,79 +1,153 @@
+// "use server";
+
+// import OpenAI from  'openai';
+
+// const openai = new OpenAI({
+//   apiKey: process.env.OPEN_AI_DEMO_KEY,
+// });
+
+// export async function transcribeUploadedFile(
+
+//   resp:{
+//     serverData: { userId: string; file: any };
+//   }[]
+  
+// ) {
+//   if (!resp) {
+//     return {
+//       success: false,
+//       message: "File upload failed",
+//       data: null,
+//     };
+//   }
+
+//   const first = resp?.[0];
+
+//   if (!first || !first.serverData || !first.serverData.file) {
+//     return {
+//       success: false,
+//       message: "Missing file data from upload response",
+//       data: null,
+//    };
+//   }
+
+//   const {
+//     userId,
+//     // file: { url: fileUrl, name: fileName },
+//     file: { ufsUrl: fileUrl, name: fileName }
+//     } = first.serverData;
+//   // const {
+//   //   serverData :{
+//   //     userId,
+//   //     file: { url: fileUrl, name: fileName },
+//   //   },
+//   // } = resp[0];
+
+//   if (!fileUrl || !fileName){
+//     return {
+//       success: false,
+//       message: "File upload failed",
+//       data: null,
+//     };
+
+//   }
+//   // const response = await fetch(fileUrl);
+//   try {
+
+//     const response = await fetch(fileUrl);
+
+//     if (!response.ok) {
+//       return {
+//         success: false,
+//         message: "Failed to fetch uploaded file from URL",
+//         data: null,
+//       };
+//     }
+
+//     const blob = await response.blob();
+//     const file = new File([blob], fileName || "audio.webm", {
+//       type: blob.type,
+//     });
+
+
+//     const transcriptions = await openai.audio.transcriptions.create({
+//       model : 'whisper-1',
+//       file: file,
+//     });
+
+//     console.log("Transcribed Text:", transcriptions.text);
+//     return {
+//       success : true,
+//       message: "File uploaded successfully!",
+//       data: { transcriptions, userId},
+//     };
+//   }
+//   catch (error){
+
+//     console.error('Error processing file', error);
+
+//     if(error instanceof OpenAI.APIError && error.status === 413)
+//     {
+//       return {
+//         success: false,
+//         message:
+//         "File size exceeds the max limit of 20MB",
+
+//         data : null,
+//       };
+//     }
+//     return{
+//       success: false,   
+//       message: error instanceof Error ? error.
+//       message : "Error processing file",
+//       data: null,
+//     };
+
+//   }
+  
+// }
 "use server";
 
-import OpenAI from  'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_DEMO_KEY
+  apiKey: process.env.OPEN_AI_DEMO_KEY,
 });
 
-export async function transcribeUploadedFile(
+export async function transcribeUploadedFile({
+  ufsUrl,
+  fileName,
+}: {
+  ufsUrl: string;
+  fileName: string;
+}) {
+  console.log("🧠 [transcribeUploadedFile] Started");
+  console.log("📦 Raw response:", { ufsUrl, fileName });
 
-  resp:{
-    serverData: { userId: string; file: any };
-  }[]
-  
-) {
-  if (!resp) {
+  if (!ufsUrl || !fileName) {
+    console.error("❌ Missing ufsUrl or fileName");
     return {
       success: false,
-      message: "File upload failed",
+      message: "Missing file URL or name",
       data: null,
     };
   }
 
-  const {
-    serverData :{
-      userId,
-      file: { url: fileUrl, name: fileName },
+  // ✅ MOCK transcription result
+  const transcriptions = {
+    text: "This is a mock transcription of the uploaded file.",
+  };
+
+  return {
+    success: true,
+    message: "Mock transcription successful!",
+    data: {
+      transcriptions,
+      userId: "mock-user-id", // Optional if you're not using it
     },
-  } = resp[0];
-
-  if (!fileUrl || !fileName){
-    return {
-      success: false,
-      message: "File upload failed",
-      data: null,
-    };
-
-  }
-  const response = await fetch(fileUrl);
-  try {
-    const transcriptions = await openai.audio.transcriptions.create({
-      model : 'whisper-1',
-      file: response,
-    });
-
-    console.log({ transcriptions});
-    return {
-      success : true,
-      message: "File uploaded successfully!",
-      data: { transcriptions, userId},
-    };
-  }
-  catch (error){
-
-    console.error('Error processing file', error);
-
-    if(error instanceof OpenAI.APIError && error.status === 413)
-    {
-      return {
-        succes: false,
-        message:
-        "File size exceeds the max limit of 20MB",
-
-        data : null,
-      };
-    }
-    return{
-      success: false,   
-      message: error instanceof Error ? error.
-      message : "Error processing file",
-      data: null,
-    };
-
-  }
-  
+  };
 }
+
 
 async function generateBlogPost ({
   transcriptions,
@@ -115,37 +189,76 @@ Here's the transcription to convert: $
         },
     ],
     model: "gpt-4o-mini",
-
   });
+  return completion.choices[0].message.content; 
+  // console.log(completion.choices[0]);
+  // const content = completion.choices.[0].message.content;
 }
+
+
+// export async function generateBlogPostAction({
+//   transcriptions,
+//   userId,
+
+// }: {
+//   transcriptions: { text: string };
+//   userId: string;
+// })  {
+
+//   const userPosts = []; 
+//   if(transcriptions){
+//     const blogPost =await generateBlogPost({
+
+//       transcriptions: transcriptions.text,
+//       userPosts: "",
+//     });
+
+//     console.log({ blogPost});
+//     if(!blogPost){
+//       return {
+//         success: false,
+//         message: "Blog post generation failed,please try again...",
+         
+//       };
+//     }
+//   }
+// }
 
 export async function generateBlogPostAction({
   transcriptions,
   userId,
-
 }: {
-  transcriptions: {text: string};
+  transcriptions: { text: string };
   userId: string;
-}){
+}) {
+  if (!transcriptions?.text) {
+    return {
+      success: false,
+      message: "No transcription available",
+    };
+  }
 
-  const userPosts = [];
-  if(transcriptions){
-    const blogPost =await generateBlogPost({
+  const userPosts = ""; // In production, fetch posts from DB for style matching
 
+  try {
+    const blogPost = await generateBlogPost({
       transcriptions: transcriptions.text,
       userPosts,
     });
 
-    console.log({ blogPost});
-    if(!blogPost){
-      return {
-        success: false,
-        message: "Blog post generation failed,please try again...",
-      };
-    }
+    return {
+      success: true,
+      message: "Blog post generated successfully",
+      data: blogPost,
+    };
+  } catch (error) {
+    console.error("🔥 Error generating blog post:", error);
+    return {
+      success: false,
+      message: "Blog generation failed",
+    };
   }
 }
-
 
 
 // "use server";
@@ -171,7 +284,7 @@ export async function generateBlogPostAction({
 //     };
 //   }
 
-//   /* ── pull values from top level, not nested file.url ───────────── */
+//   /* ── pull values from top level, not nested file.ufsUrl ───────────── */
 //   const { serverData, fileUrl, name: fileName } = resp[0];
 //   const userId = serverData?.userId ?? "unknown";
 

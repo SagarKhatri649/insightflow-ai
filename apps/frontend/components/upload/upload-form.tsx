@@ -67,6 +67,142 @@
 //   );
 // }
 
+// "use client";
+
+// import { z } from "zod";
+// import { Input } from "../ui/input";
+// import { Button } from "../ui/button";
+// import { Toaster, useToast } from "@/components/ui/sonner";
+// import { useUploadThing } from "@/utils/uploadthing";
+// import { transcribeUploadedFile } from "@/actions/upload-actions";
+// import { generateBlogPostAction } from "@/actions/upload-actions";
+
+// const schema = z.object({
+//   file: z
+//     .instanceof(File, { message: "Invalid file" })
+//     .refine(
+//       f => f.size <= 20 * 1024 * 1024,
+//       "File size must not exceed 20 MB"
+//     )
+//     .refine(
+//       f => f.type.startsWith("audio/") || f.type.startsWith("video/"),
+//       "File must be an audio or video file"
+//     ),
+// });
+
+// export default function UploadForm() {
+//   const { toast } = useToast();
+
+//   const { startUpload } = useUploadThing("videoOrAudioUploader", {
+//     onClientUploadComplete: () => {
+//       alert("uploaded successfully!");
+//     },
+//     onUploadError: () => {
+//       alert("error occurred while uploading");
+//     },
+//     onUploadBegin: ({ }) => {
+//       console.log("upload has begun for");
+//     },
+
+//   });
+
+//   /** client‑side submit handler */
+//   const handleTranscribe = async (
+//     e: React.FormEvent<HTMLFormElement>,
+//   ) => {
+//     e.preventDefault();
+
+//     const formData = new FormData(e.currentTarget);
+//     const file = formData.get("file") as File | null;
+
+//     ////////////////////////////
+//     const res = schema.safeParse({ file });
+
+//     if (!res.success) {
+//       toast("Something went wrong", {
+//         description:
+//           res.error.flatten().fieldErrors.file?.[0] ?? "Invalid file",
+//       })
+
+//     }
+//     if (file) {
+//       const resp: any = await startUpload([file]);
+//       console.log({ resp });
+
+//       if (!resp || resp.length === 0) {
+
+//         toast(
+//           "Something went wrong", {
+//           description: " Please use a different file",
+//           // variant: "destructive",
+//         });
+//         return;
+
+//       }
+//       toast(
+//         " Transcription is in progress..", {
+//         description: " Hang tight! Our digital wizards are sprinkling magic dust on your file",
+//       });
+
+//       const result = await transcribeUploadedFile(resp);
+
+//       const { data = null, message = null } = result || {};
+
+//       if (!result || (!data && !message)) {
+//         toast(
+//           "An unexpected error occurred",
+//           {
+//             description:
+//               "An erro occurred during transcription. please try again.",
+//           });
+
+//       }
+//       if (data) {
+//         toast(
+//           "Generating AI blog post..",
+//           {
+//             description:
+//               "Please wait while we generate your blog post",
+//           });
+
+//         await generateBlogPostAction({
+//           transcriptions: data.transcriptions,
+
+//           userId: data.userId
+//         });
+
+//       }
+
+//     }
+//     // // TODO: your upload / transcribe logic here
+//     // toast("Uploading…", { description: file!.name });
+//   };
+
+//   return (
+//     <div>
+//       {/* Mount once per page or in your root layout */}
+//       <Toaster />
+
+//       <form className="flex flex-col gap-6" onSubmit={handleTranscribe}>
+//         <div className="flex justify-end items-center gap-1.5">
+//           <Input
+//             id="file"
+//             name="file"
+//             type="file"
+//             accept="audio/*,video/*"
+//             required
+//           />
+//           <Button className="bg-purple-600" type="submit">
+//             Transcribe
+//           </Button>
+//         </div>
+//       </form>
+//     </div>
+//   );
+// }
+// /utils/uploadthing/core.ts
+
+// /components/shared/upload-form.tsx
 "use client";
 
 import { z } from "zod";
@@ -80,10 +216,7 @@ import { generateBlogPostAction } from "@/actions/upload-actions";
 const schema = z.object({
   file: z
     .instanceof(File, { message: "Invalid file" })
-    .refine(
-      f => f.size <= 20 * 1024 * 1024,
-      "File size must not exceed 20 MB"
-    )
+    .refine(f => f.size <= 20 * 1024 * 1024, "File size must not exceed 20 MB")
     .refine(
       f => f.type.startsWith("audio/") || f.type.startsWith("video/"),
       "File must be an audio or video file"
@@ -95,94 +228,92 @@ export default function UploadForm() {
 
   const { startUpload } = useUploadThing("videoOrAudioUploader", {
     onClientUploadComplete: () => {
-      alert("uploaded successfully!");
+      console.log("✅ Upload complete");
     },
     onUploadError: () => {
-      alert("error occurred while uploading");
+      console.error("❌ Upload error");
     },
-    onUploadBegin: ({ }) => {
-      console.log("upload has begun for");
+    onUploadBegin: () => {
+      console.log("📤 Upload started");
     },
-
   });
 
-  /** client‑side submit handler */
-  const handleTranscribe = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleTranscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const file = formData.get("file") as File | null;
 
-    ////////////////////////////
     const res = schema.safeParse({ file });
 
     if (!res.success) {
-      toast("Something went wrong", {
+      toast("Invalid file", {
         description:
-          res.error.flatten().fieldErrors.file?.[0] ?? "Invalid file",
-      })
-
-    }
-    if (file) {
-      const resp: any = await startUpload([file]);
-      console.log({ resp });
-
-      if (!resp || resp.length === 0) {
-
-        toast(
-          "Something went wrong", {
-          description: " Please use a different file",
-          // variant: "destructive",
-        });
-        return;
-
-      }
-      toast(
-        " Transcription is in progress..", {
-        description: " Hang tight! Our digital wizards are sprinkling magic dust on your file",
+          res.error.flatten().fieldErrors.file?.[0] ?? "Please try another file.",
       });
-
-      const result = await transcribeUploadedFile(resp);
-
-      const { data = null, message = null } = result || {};
-
-      if (!result || (!data && !message)) {
-        toast(
-          "An unexpected error occurred",
-          {
-            description:
-              "An erro occurred during transcription. please try again.",
-          });
-
-      }
-      if (data) {
-        toast(
-          "Generating AI blog post..",
-          {
-            description:
-              "Please wait while we generate your blog post",
-          });
-
-        await generateBlogPostAction({
-          transcriptions: data.transcriptions,
-
-          userId: data.userId
-        });
-
-      }
-
+      return;
     }
-    // // TODO: your upload / transcribe logic here
-    // toast("Uploading…", { description: file!.name });
+
+    if (!file) return;
+
+    toast("Uploading...", {
+      description: "Sending your file to UploadThing...",
+    });
+
+    const resp = await startUpload([file]);
+    console.log("📦 Upload response:", resp);
+
+    if (!resp || resp.length === 0) {
+      toast("Upload failed", {
+        description: "No response from UploadThing.",
+      });
+      return;
+    }
+
+    const uploadedFile = resp[0];
+
+    if (!uploadedFile.ufsUrl || !uploadedFile.name) {
+      toast("Malformed upload response", {
+        description: "Missing ufsUrl or file name in upload response.",
+      });
+      return;
+    }
+
+    toast("Transcribing...", {
+      description: "Sending to OpenAI Whisper...",
+    });
+
+    const result = await transcribeUploadedFile({
+      ufsUrl: uploadedFile.ufsUrl,
+      fileName: uploadedFile.name,
+    });
+
+    console.log("📝 Transcription result:", result);
+
+    if (!result?.success || !result.data) {
+      toast("Transcription failed", {
+        description: result.message ?? "Please try again.",
+      });
+      return;
+    }
+
+    toast("Generating blog post...", {
+      description: "Using your transcription and writing style...",
+    });
+
+    await generateBlogPostAction({
+      transcriptions: result.data.transcriptions,
+      userId: result.data.userId,
+    });
+
+    toast("✅ Done", {
+      description: "Your blog post has been generated!",
+    });
   };
 
   return (
     <div>
-      {/* Mount once per page or in your root layout */}
       <Toaster />
-
       <form className="flex flex-col gap-6" onSubmit={handleTranscribe}>
         <div className="flex justify-end items-center gap-1.5">
           <Input
@@ -200,4 +331,3 @@ export default function UploadForm() {
     </div>
   );
 }
-
