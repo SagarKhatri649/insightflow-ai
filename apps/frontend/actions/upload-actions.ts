@@ -108,10 +108,50 @@
 // }
 "use server";
 
+// import OpenAI from "openai";
+
+// const openai = new OpenAI({
+//   apiKey: process.env.OPEN_AI_DEMO_KEY,
+// });
+
+// export async function transcribeUploadedFile({
+//   ufsUrl,
+//   fileName,
+// }: {
+//   ufsUrl: string;
+//   fileName: string;
+// }) {
+//   console.log("🧠 [transcribeUploadedFile] Started");
+//   console.log("📦 Raw response:", { ufsUrl, fileName });
+
+//   if (!ufsUrl || !fileName) {
+//     console.error("❌ Missing ufsUrl or fileName");
+//     return {
+//       success: false,
+//       message: "Missing file URL or name",
+//       data: null,
+//     };
+//   }
+
+//   // ✅ MOCK transcription result
+//   const transcriptions = {
+//     text: "This is a mock transcription of the uploaded file.",
+//   };
+
+//   return {
+//     success: true,
+//     message: "Mock transcription successful!",
+//     data: {
+//       transcriptions,
+//       userId: "mock-user-id", // Optional if you're not using it
+//     },
+//   };
+// }
+
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_DEMO_KEY,
+  apiKey: process.env.OPEN_AI_DEMO_KEY, // Make sure this key is set!
 });
 
 export async function transcribeUploadedFile({
@@ -122,10 +162,11 @@ export async function transcribeUploadedFile({
   fileName: string;
 }) {
   console.log("🧠 [transcribeUploadedFile] Started");
-  console.log("📦 Raw response:", { ufsUrl, fileName });
+  console.log("📂 ufsUrl:", ufsUrl);
+  console.log("📂 fileName:", fileName);
 
   if (!ufsUrl || !fileName) {
-    console.error("❌ Missing ufsUrl or fileName");
+    console.error("❌ Missing file data.");
     return {
       success: false,
       message: "Missing file URL or name",
@@ -133,66 +174,97 @@ export async function transcribeUploadedFile({
     };
   }
 
-  // ✅ MOCK transcription result
-  const transcriptions = {
-    text: "This is a mock transcription of the uploaded file.",
-  };
+  try {
+    const response = await fetch(ufsUrl);
+    if (!response.ok) {
+      return {
+        success: false,
+        message: "Failed to fetch file from URL",
+        data: null,
+      };
+    }
 
-  return {
-    success: true,
-    message: "Mock transcription successful!",
-    data: {
-      transcriptions,
-      userId: "mock-user-id", // Optional if you're not using it
-    },
-  };
+    const blob = await response.blob();
+    const file = new File([blob], fileName, { type: blob.type });
+
+    const transcription = await openai.audio.transcriptions.create({
+      model: "whisper-1",
+      file: file,
+    });
+
+    console.log("📜 Transcription result:", transcription);
+
+    return {
+      success: true,
+      message: "Transcription completed!",
+      data: {
+        transcriptions: transcription,
+        userId: "mock-user-id", // or pass real userId if needed
+      },
+    };
+  } catch (error: any) {
+    console.error("❌ Error during transcription:", error);
+
+    if (error instanceof OpenAI.APIError && error.status === 429) {
+      return {
+        success: false,
+        message: "Rate limit exceeded. Check your usage & billing.",
+        data: null,
+      };
+    }
+
+    return {
+      success: false,
+      message: error.message ?? "Unknown error during transcription",
+      data: null,
+    };
+  }
 }
 
+async function generateBlogPost ({
+  transcriptions,
+  userPosts,
+}:{
+  transcriptions: string
+  userPosts: string,        
+}) {
 
-// async function generateBlogPost ({
-//   transcriptions,
-//   userPosts,
-// }:{
-//   transcriptions: string
-//   userPosts: string,        
-// }) {
-
-//   const completion = await openai.chat.completions.create({
-//      messages: [
-//         {
-//             role: "system",
-//             content:
-//              "You are a skilled content writer that converts audio transcriptions into well-structured, engaging blog posts in Markdown format.Create a comprehensive blog post with a catchy titile,introduction ,main body with multiple sections,and a conclusion. Analyze the user's writing style from their previous posts and new emulate their tone and style in the new post. Keep the tone casual and professional.",
-//         },
-//         {
-//           role: "user", content:"who won the world series in 2020?"
-//         },
-//         {
-//           role: "user",
-//           content: `Here are some of my  previous blog posts for reference:
+  const completion = await openai.chat.completions.create({
+     messages: [
+        {
+            role: "system",
+            content:
+             "You are a skilled content writer that converts audio transcriptions into well-structured, engaging blog posts in Markdown format.Create a comprehensive blog post with a catchy titile,introduction ,main body with multiple sections,and a conclusion. Analyze the user's writing style from their previous posts and new emulate their tone and style in the new post. Keep the tone casual and professional.",
+        },
+        {
+          role: "user", content:"who won the world series in 2020?"
+        },
+        {
+          role: "user",
+          content: `Here are some of my  previous blog posts for reference:
           
-//           ${userPosts}
-// Please convert the following transcription into a well-structured blog post using Markdown formatting.Follow this structure:
+          ${userPosts}
+Please convert the following transcription into a well-structured blog post using Markdown formatting.Follow this structure:
 
-// 1.Start with a SEO friendly catchy titile on the first line.
-// 2. Add two newlines after the title.
-// 3. write an engaging introduction paragraph.
-// 4. Create multiple sections for the main content,using appropriate headings(##, ###).
-// 5. Include relevant subheadings within sections if needed.
-// 6. Use bullet points or numbered lists where appropriate.
-// 7. Add a conclusion paragraph at the end.
-// 8. Ensure the content is informative, well-organized, and easy to read.
-// 9. Emulate my writing style, tone, and any recurring patterns you notice from my previous posts.
+1.Start with a SEO friendly catchy titile on the first line.
+2. Add two newlines after the title.
+3. write an engaging introduction paragraph.
+4. Create multiple sections for the main content,using appropriate headings(##, ###).
+5. Include relevant subheadings within sections if needed.
+6. Use bullet points or numbered lists where appropriate.
+7. Add a conclusion paragraph at the end.
+8. Ensure the content is informative, well-organized, and easy to read.
+9. Emulate my writing style, tone, and any recurring patterns you notice from my previous posts.
 
-// Here's the transcription to convert: $
-// {transcriptions}`,
-//         },
-//     ],
-//     model: "gpt-4o-mini",
-//   });
-//   return completion.choices[0].message.content; 
+Here's the transcription to convert: $
+{transcriptions}`,
+        },
+    ],
+    model: "gpt-4o-mini",
+  });
+  return completion.choices[0].message.content; 
   // console.log(completion.choices[0]);
-  // const content = completion.choices.[0].message.content;
+  // const content = completion.choices[0].message.content;
 }
 
 
