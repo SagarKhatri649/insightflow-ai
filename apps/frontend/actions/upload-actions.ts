@@ -108,6 +108,7 @@
 // }
 "use server";
 
+import { revalidatePath } from "next/cache";
 // import OpenAI from "openai";
 
 // const openai = new OpenAI({
@@ -221,6 +222,32 @@ export async function transcribeUploadedFile({
   }
 }
 
+ async function saveBlogPost(userId: string,title: string ,content:string){
+  try{
+    const sql = await getDbConnection();
+    const [insertedPost] = await sql`INSERT into posts (user_id, title, content) VALUES(${userId},${title}, ${content}) RETURNING id`;
+
+    return insertedPost.id;
+  } catch(error){
+    console.error("Error saving blog post" ,error);
+  }
+  
+
+}
+
+ async function getLatestPosts(userId: string){
+  try{
+    const sql = await getDbConnection();
+    const posts = await sql`SELECT content from posts  where user_id = ${userId} ORDER BY created_at DESC LIMIT 3`;
+
+    return posts.map((post) => post.content).join("\n\n");
+  } catch(error){
+    console.error("Error getting user blog posts" ,error);
+  }
+  
+
+}
+
 async function generateBlogPost ({
   transcriptions,
   userPosts,
@@ -310,8 +337,9 @@ export async function generateBlogPostAction({
     };
   }
 
-  const userPosts = ""; // In production, fetch posts from DB for style matching
+  const userPosts = (await getLatestPosts(userId)) ?? ""; // In production, fetch posts from DB for style matching
 
+  let postId = null; 
   try {
     const blogPost = await generateBlogPost({
       transcriptions: transcriptions.text,
@@ -329,7 +357,22 @@ export async function generateBlogPostAction({
       success: false,
       message: "Blog generation failed",
     };
+
+    const [title,...contentParts] = blogPost?.split("\n\n") || [];
+
+    // database connection
+    if(userId){
+      
+    const postId = await saveBlogPost(userId,title,blogPost);
+    }
+ 
   }
+
+  // navigate
+
+  revalidatePath(`/posts/${postId}`);
+  redirect{`/posts/${postId}`}
+
 }
 
 
