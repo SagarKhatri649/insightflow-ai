@@ -301,6 +301,7 @@ export default function UploadForm() {
       description: "Using your transcription and writing style...",
     });
 
+
     await generateBlogPostAction({
       transcriptions: result.data.transcriptions,
       userId: result.data.userId,
