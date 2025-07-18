@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from '../components/common/header';
 import Footer from '../components/common/footer';
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 // import { Component } from "lucide-react";
 
 const fontSans = FontSans({
@@ -16,6 +17,10 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "InsightFlow-AI: Multilingual Video Insight Platform",
   description: "InsightFlow-AI lets users upload or link Indian and English videos, generate summaries, create chapter-wise timestamps, ask questions with AI responses, and interact prompts.",
+
+  icons: {
+    icon: '/icon.ico'
+  }
 };
 
 export default function RootLayout({
@@ -31,6 +36,7 @@ export default function RootLayout({
           <div className="relative flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">{children}</main>
+            <Toaster />
             <Footer />
           </div>
         </body>
