@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Header() {
   // const isloogedIn = false;
   return (
-    <nav className="container flex items-center justify-between py-4 lg:px-8 py-2 mx-auto border-b border-gray-200 shadow-md">
+    <nav className="container flex items-center justify-between py-4 lg:px-8 py-2 mx-auto border-b border-gray-200 shadow-md  ">
       <div className="flex lg:flex-1">
         <Link href="/" className="flex items-center gap-2 lg:gap-2 shrink-0">
           {/* <FileVideo className="w-5 h-5 lg:w-8 lg:h-8 text-white-900 hover:rotate-12 transform transition duration-200 ease ease-in-out" /> */}
@@ -23,8 +23,11 @@ export default function Header() {
       </div>
 
       <div className="flex text-lg lg:justify-center gap-4 lg:gap-12 lg:items-center">
+
+        <Link href="/">Home</Link>
         <Link href="/#How To USE">How To Use </Link>
         <Link href="/#Pricing">Pricing</Link>
+        <Link href="/#Features">Features</Link>
         {/* 
         {isloogedIn && <Link href="/dashboard">Dashboard</Link>} */}
         <SignedIn>
@@ -62,8 +65,8 @@ export default function Header() {
           </div>
         </SignedIn>
         <SignedOut>
-          <div className="text-lg">
-            <Link href="/sign-in">Sign In</Link>
+          <div className="text-lg ">
+            <Link href="/sign-in" className="text-white font-semibold">Sign In</Link>
           </div>
         </SignedOut>
       </div>
