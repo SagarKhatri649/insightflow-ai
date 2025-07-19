@@ -1,6 +1,6 @@
 export default function HowItWorksSection() {
   return (
-    <section>
+    <section id="How To USE">
       <div className="text-center mb-16">
 
         <h2 className="font-bold text-xl uppercase mb-4 text-rose-500"> How to Use

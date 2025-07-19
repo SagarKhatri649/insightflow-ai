@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+ 
+
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -69,6 +71,7 @@
   body {
     font-family: Arial, Helvetica, sans-serif;
   }
+  
 }
 
 @layer base {
@@ -119,82 +122,51 @@
   --ring: 240 0% 100%;
   --radius: 0.5rem;
 } */
- :root {
-    /* base surfaces */
-    --background:            0   0% 100%;   /* white */
-    --foreground:            0   0%  10%;   /* near‑black text */
-
-    --card:                  0   0%  98%;   /* light card */
-    --card-foreground:       0   0%  10%;
-
-    --popover:               0   0% 100%;
-    --popover-foreground:    0   0%   5%;
-
-    /* brand colour – bright green */
-    --primary:             156  65%  45%;   /* #00cc66‑ish */
-    --primary-foreground:    0   0% 100%;   /* white text on green */
-
-    /* subtle green tint for secondary UI */
-    --secondary:           156  20%  90%;
-    --secondary-foreground:156  65%  25%;
-
-    /* greys for muted / disabled */
-    --muted:                 0   0%  90%;
-    --muted-foreground:      0   0%  40%;
-
-    /* accent = lighter green for hovers */
-    --accent:              156  50%  70%;
-    --accent-foreground:   156  65%  25%;
-
-    /* error / destructive */
-    --destructive:           0  70%  50%;
-    --destructive-foreground:0   0%  98%;
-
-    /* borders / inputs / focus ring */
-    --border:                0   0%  85%;
-    --input:                 0   0%  80%;
-    --ring:                156  65%  45%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    /* dark surfaces */
-    --background:            0   0%   6%;   /* near‑black */
-    --foreground:            0   0%  95%;   /* white text */
-
-    --card:                  0   0%  10%;
-    --card-foreground:       0   0%  95%;
-
-    --popover:               0   0%  10%;
-    --popover-foreground:    0   0%  95%;
-
-    /* same bright green brand */
-    --primary:             156  65%  45%;
-    --primary-foreground:    0   0%   0%;
-
-    /* dark secondary surface */
-    --secondary:             0   0%  15%;
-    --secondary-foreground:  0   0% 100%;
-
-    --muted:                 0   0%  25%;
-    --muted-foreground:      0   0%  60%;
-
-    --accent:              156  50%  25%;
-    --accent-foreground:     0   0%  95%;
-
-    --destructive:           0  70%  50%;
-    --destructive-foreground:0   0%  95%;
-
-    --border:                0   0%  20%;
-    --input:                 0   0%  20%;
-    --ring:                156  65%  45%;
-
-    --radius: 0.5rem;
-  }
-
  
- 
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 165 100% 45%; /* #00CC99 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 20% 96%; /* #F9FAFB */
+  --secondary-foreground: 0 0% 10%;
+  --muted: 240 5% 80%;
+  --muted-foreground: 0 0% 40%;
+  --accent: 165 100% 90%; /* #CCFFF2 */
+  --accent-foreground: 165 100% 25%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 210 20% 90%;
+  --input: 0 0% 93%;
+  --ring: 165 100% 45%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 0 0% 5%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 165 100% 45%; /* #00CC99 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 30%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 165 100% 25%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 25%;
+  --input: 0 0% 20%;
+  --ring: 165 100% 45%;
+}
 
 }
 
@@ -249,3 +221,13 @@
     max-width: 1400px;
   }
 }
+@layer components {
+  .header-dark {
+    background-color: hsl(300, 1%, 14%);
+    color: white;
+  }
+}
+
+/* .hero-section {
+  @apply bg-black text-white;
+} */

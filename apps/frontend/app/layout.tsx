@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="dark" >
-        <body className={`${fontSans.variable} font-sans antialiased bg-background text-foreground`}>
+        <body className={`${fontSans.variable} font-sans antialiased bg-background text-foreground scroll-smooth`}>
 
           <div className="relative flex min-h-screen flex-col">
             <Header />
