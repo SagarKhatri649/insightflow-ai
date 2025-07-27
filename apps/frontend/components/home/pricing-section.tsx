@@ -51,7 +51,7 @@ import { ArrowRight, CheckIcon } from 'lucide-react';
 type PriceType = {
   name: string;
   price: number;
-  description: string;
+  // description: string;
   items: string[];
   id: string;
   paymentLink: string;
@@ -61,28 +61,30 @@ const plans: PriceType[] = [
   {
     name: 'Basic',
     price: 2,
-    description: 'Perfect for occasional use',
-    items: ['Processing minutes', 'YouTube processing', 'Video timestamps'],
+    // description: 'Perfect for occasional use',
+    items: ['3 Transcriptions'],
     id: 'basic',
     paymentLink: '/checkout/basic',
   },
   {
     name: 'Pro',
     price: 10,
-    description: 'For power users and teams',
-    items: [
-      'Unlimited minutes',
-      'YouTube processing',
-      'Chat with your video',
-      'SEO tools',
-      'Prompts workspace',
-      'Timestamps & chapters',
-    ],
+    // description: 'For power users and teams',
+    // items: [
+    //   'Unlimited minutes',
+    //   'YouTube processing',
+    //   'Chat with your video',
+    //   'SEO tools',
+    //   'Prompts workspace',
+    //   'Timestamps & chapters',
+    // ],
+
+    items: ['Unlimited Transcriptions'],
     id: 'pro',
     paymentLink: '/checkout/pro',
   },
 ];
-function PricingCard({ name, price, description, items, id, paymentLink }: PriceType) {
+function PricingCard({ name, price, items, id, paymentLink }: PriceType) {
   const isPro = id === 'pro';
   return (
     <div
@@ -93,7 +95,7 @@ function PricingCard({ name, price, description, items, id, paymentLink }: Price
     >
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-bold text-white capitalize">{name}</h3>
-        <p className="text-sm text-gray-400">{description}</p>
+        {/* <p className="text-sm text-gray-400">{description}</p> */}
       </div>
 
       <div className="flex items-baseline mb-6">

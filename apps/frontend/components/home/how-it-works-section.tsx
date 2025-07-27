@@ -241,7 +241,7 @@ const steps = [
 export default function HowItWorksSection() {
   return (
     <section
-      id="how-to-use"
+      id="How TO Use"
       className="
         scroll-mt-24
         py-24 lg:py-32
