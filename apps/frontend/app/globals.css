@@ -226,8 +226,16 @@
     background-color: hsl(300, 1%, 14%);
     color: white;
   }
+
+  .bg-hero-gradient {
+    background: linear-gradient(180deg, #0f0f0f 0%, #000000 100%);
+  }
+  .hero-right {
+    @apply flex-1 flex justify-center lg:justify-end lg:items-center;
+  }
+  .hero-section {
+  @apply bg-black text-white;
+}
 }
 
-/* .hero-section {
-  @apply bg-black text-white;
-} */
+ 
