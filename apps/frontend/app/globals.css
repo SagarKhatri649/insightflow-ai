@@ -192,6 +192,7 @@
 
   button {
     @apply hover:cursor-pointer bg-rose-600 hover:bg-rose-700;
+
   }
 
   @keyframes gradient-x {
@@ -209,6 +210,12 @@
   .animate-gradient-x {
     animation: gradient-x 3s ease infinite;
   }
+
+  .markdown-content a {
+    @apply text-blue-600 hover:underline;
+  }
+
+
 }
 
 @utility container {
@@ -237,5 +244,6 @@
   @apply bg-black text-white;
 }
 }
+
 
  

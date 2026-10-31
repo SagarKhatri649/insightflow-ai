@@ -68,7 +68,7 @@ export default function Header() {
         {isloogedIn && <Link href="/dashboard">Dashboard</Link>} */}
           <SignedIn>
             {/* <Link href="/dashboard">Dashboard</Link> */}
-            <Link href="/dashboard" className="relative px-2 py-1 text-white group">
+            <Link href="/posts" className="relative px-2 py-1 text-white group">
               Dashboard
               <span className="absolute left-0 -bottom-0.5 h-0.5 w-0 bg-primary 
                      group-hover:w-full transition-all duration-300" />
@@ -97,9 +97,9 @@ export default function Header() {
         )} */}
 
           <SignedIn>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-4 items-center">
               <Link href="/upload">Upload Video</Link>
-              <div>Pro</div>
+              <div className="text-white">Pro</div>
               <SignedIn>
                 <UserButton />
               </SignedIn>
