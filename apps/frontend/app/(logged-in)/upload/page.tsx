@@ -57,7 +57,6 @@
 // }
 
 
-import UploadHeader from '@/components/upload/upload-header';
 import UploadForm from '@/components/upload/upload-form';
 
 export default function UploadPage() {
@@ -65,10 +64,9 @@ export default function UploadPage() {
     <section
       id="upload-hero"
       className="min-h-screen flex flex-col items-center justify-start
-                 bg-gradient-to-b from-gray-900 via-black to-gray-900 px-4 py-8"
+                 bg-white px-4 py-0"
     >
-      <div className="w-full max-w-4xl mx-auto space-y-2">
-        <UploadHeader />
+      <div className="w-full">
         <UploadForm />
       </div>
     </section>

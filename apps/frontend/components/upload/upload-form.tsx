@@ -621,6 +621,7 @@ import { useUploadThing } from '@/utils/uploadthing';
 import { generateBlogPostAction } from '@/actions/upload-actions';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import { Check, FileText, Lightbulb, Lock, Menu, Sparkles, Upload, Video, X } from 'lucide-react';
 
 const schema = z.object({
   file: z
@@ -695,36 +696,86 @@ export default function UploadForm() {
   return (
     <>
       <Toaster richColors position="top-center" />
-      <section className="py-4 px-4 ">
-        <div className="max-w-lg mx-auto bg-[rgba(255,255,255,0.04)] backdrop-blur-md
-                          p-8 rounded-2xl shadow-xl border border-teal-700/40">
-          <form onSubmit={handleTranscribe} className="space-y-6">
-            <label htmlFor="file" className="block text-lg font-semibold text-white">
-              Choose an audio or video file
-            </label>
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <Input
-                id="file" name="file" type="file" accept="audio/*,video/*"
-                required disabled={isProcessing}
-                onChange={e => setFileName(e.target.files?.[0]?.name || '')}
-                className="flex-1 bg-gray-700 border-gray-600 text-white
-                           placeholder-gray-500 focus:border-teal-400 focus:ring-2
-                           focus:ring-teal-400 rounded-lg"
-              />
-              <Button
-                type="submit" disabled={isProcessing}
-                className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2
-                           rounded-full transition disabled:opacity-50"
-              >
-                {isProcessing ? 'Processing…' : 'Upload & Transcribe'}
-              </Button>
-            </div>
-            {fileName && (
-              <p className="text-gray-400 text-sm">
-                Selected file: <span className="text-white font-medium">{fileName}</span>
-              </p>
-            )}
-          </form>
+      <section className="w-full px-4 py-8 sm:px-6 md:py-12">
+        <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
+          <div className="mb-7 max-w-2xl text-center">
+            <h1 className="mb-3 text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
+              Turn your video into clear insights
+            </h1>
+            <p className="text-base leading-[160%] text-[#5f6368]">
+              Upload an audio or video file and get a transcript, summary, and actionable insights in minutes.
+            </p>
+          </div>
+          <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8">
+            <form onSubmit={handleTranscribe}>
+              <div className="flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-colors hover:bg-[#e6fbf2] sm:p-10">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm">
+                  <Upload className="h-6 w-6" />
+                </div>
+                <h2 className="mb-2 text-center text-lg font-bold text-[#064e3b]">Upload your audio or video</h2>
+                <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]">
+                  <span>Drag and drop a file here, or</span>
+                  <label htmlFor="file" className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2">
+                    Browse files
+                  </label>
+                  <span>from your computer</span>
+                </div>
+                <p className="mt-1 text-center text-sm text-[#5f6368]">Audio or video files up to 20MB</p>
+                <Input
+                  id="file" name="file" type="file" accept="audio/*,video/*"
+                  required disabled={isProcessing}
+                  onChange={e => setFileName(e.target.files?.[0]?.name || '')}
+                  className="sr-only"
+                />
+                {fileName && (
+                  <div className="mt-6 flex w-full max-w-xl items-center justify-between rounded-xl border border-[#dee1e6] bg-white p-3.5 shadow-sm sm:p-4">
+                    <div className="flex min-w-0 items-center space-x-3 sm:space-x-4">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#064e3b] text-white">
+                        <Video className="h-5 w-5 text-[#10b981]" />
+                      </div>
+                      <div className="min-w-0 text-left">
+                        <p className="truncate font-semibold text-[#064e3b]">{fileName}</p>
+                        <p className="text-xs text-[#5f6368]">Selected audio or video file</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-shrink-0 items-center space-x-2">
+                      <span className="inline-flex items-center rounded-md border border-[#a7f3d0] bg-[#ecfdf5] px-2.5 py-1 text-xs font-medium text-[#064e3b]">
+                        <Check className="mr-1 h-3.5 w-3.5 text-[#10b981]" />
+                        Ready
+                      </span>
+                      <button aria-label="Remove file" className="rounded-md border border-transparent p-1.5 text-[#979797] transition-colors hover:border-[#dee1e6] hover:text-[#5f6368] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2" type="button">
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-3">
+                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]"><FileText className="h-4 w-4 text-[#5f6368]" /><span>Transcript</span></div>
+                  <div className="space-y-2"><div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" /><div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" /></div>
+                </div>
+                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]"><Menu className="h-4 w-4 text-[#5f6368]" /><span>AI Summary</span></div>
+                  <div className="space-y-2"><div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" /><div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" /></div>
+                </div>
+                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]"><Lightbulb className="h-4 w-4 text-[#5f6368]" /><span>Actionable Takeaways</span></div>
+                  <div className="space-y-2"><div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" /><div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" /></div>
+                </div>
+              </div>
+              <div className="mt-7 flex flex-col items-center justify-center">
+                <Button type="submit" disabled={isProcessing} className="flex w-full items-center justify-center space-x-2.5 whitespace-nowrap rounded-lg bg-[#064e3b] px-7 py-3 font-bold text-white shadow-sm transition-colors hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto">
+                  <Sparkles className="h-4 w-4 text-[#10b981]" />
+                  <span>{isProcessing ? 'Processing…' : 'Upload and Generate Insights'}</span>
+                </Button>
+                <div className="mt-3 flex items-center space-x-1.5 text-xs text-[#5f6368]">
+                  <Lock className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>Your file stays private. Processing starts on click.</span>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
     </>

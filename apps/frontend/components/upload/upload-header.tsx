@@ -121,63 +121,31 @@
 // }
 //////////////////////////////////////////////////////////////////////
 // components/UploadHeader.tsx
-import { Badge } from '@/components/ui/badge';
-import { Sparkles, Film, ArrowDownCircle } from 'lucide-react';
+import { Play } from 'lucide-react';
 
 export default function UploadHeader() {
   return (
-    <div
-      className="relative z-10 py-4 px-4 flex flex-col items-center text-center space-y-2
-                 max-w-4xl mx-auto bg-[rgba(255,255,255,0.03)] backdrop-blur-md rounded-2xl
-                 shadow-2xl overflow-hidden"
-    >
-      {/* Top badge with hover scaling */}
-      <div
-        className="group inline-block p-[px] rounded-full bg-gradient-to-r
-                   from-teal-400 via-emerald-400 to-cyan-400 hover:scale-105 transition-transform mb-4 mt-2"
-      >
-        <Badge
-          variant="secondary"
-          className="flex items-center px-6 py-2 bg-gray-900 bg-opacity-80 text-white
-                     rounded-full font-semibold hover:bg-opacity-90 transition-colors"
-        >
-          <Sparkles className="w-5 h-5 mr-2 text-teal-300 animate-pulse" />
-          AI-Powered Content Creation
-        </Badge>
+    <header className="w-full border-b border-[#f1f3f5] bg-white">
+      <div className="mx-auto flex min-h-[68px] max-w-7xl flex-col items-center justify-center gap-3 px-4 py-3 sm:h-[68px] sm:flex-row sm:justify-between sm:gap-0 sm:px-6 lg:px-12">
+        <div className="flex items-center space-x-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#064e3b] text-white shadow-sm">
+            <Play className="h-4 w-4 fill-[#10b981] text-[#10b981]" />
+          </div>
+          <span className="font-bold tracking-tight text-[#064e3b]">InsightFlow</span>
+        </div>
+        <div className="flex items-center justify-center space-x-2" aria-label="Upload progress">
+          <div className="flex items-center space-x-2 rounded-full bg-[#064e3b] px-3.5 py-1.5 text-white shadow-sm">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-[#064e3b]">1</span>
+            <span className="whitespace-nowrap pr-1 text-sm font-medium">Upload</span>
+          </div>
+          <div className="h-px w-8 bg-[#dee1e6]" />
+          <div className="flex items-center space-x-2 rounded-full border border-[#dee1e6] bg-white px-3.5 py-1.5 text-[#5f6368]">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#dee1e6] text-xs font-medium">2</span>
+            <span className="whitespace-nowrap pr-1 text-sm font-medium">Insights</span>
+          </div>
+        </div>
+        <div className="hidden w-24 sm:block" aria-hidden="true" />
       </div>
-
-      {/* Main headline with built-in animate-in classes */}
-      <h1
-        className="max-w-3xl text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white
-                   animate-in fade-in slide-in-from-bottom"
-      >
-        <span className="inline-flex items-center space-x-2">
-          <Film className="w-8 h-8 text-teal-400 animate-bounce" />
-          <span>Start Uploading</span>
-        </span>
-        <br />
-        <span className="relative inline-block">
-          <span className="px-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">
-            Your YouTube Video Link
-          </span>
-          <span
-            className="absolute inset-0 transform -skew-y-2 bg-teal-600/20 rounded-lg"
-            aria-hidden="true"
-          />
-        </span>
-      </h1>
-
-      {/* Subheading with slight delay */}
-      <p
-        className="mt-2 max-w-2xl text-lg text-gray-400
-                   animate-in fade-in slide-in-from-bottom delay-150"
-      >
-        Drop a YouTube URL or upload your video file to instantly unlock
-        AI-generated summaries, chapters, and smart Q&A—no installs required.
-      </p>
-
-      {/* Down-arrow icon */}
-      <ArrowDownCircle className="mt-4 w-6 h-6 text-cyan-400 animate-bounce" />
-    </div>
+    </header>
   );
 }
