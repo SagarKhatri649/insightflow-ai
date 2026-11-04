@@ -1,22 +1,18 @@
 import HeroSection from '../components/home/hero-section';
-import DemoSection from '@/components/home/demo-section';
+import FeaturesSection from '@/components/home/features-section';
 import HowItWorksSection from '@/components/home/how-it-works-section';
-import PricingSection from '@/components/home/pricing-section';
 import CTASection from '@/components/home/cta-section';
+import WhoItsForSection from '@/components/home/who-its-for-section';
 
 export default function Home() {
   return (
 
-    <div className="relative w-full ">
-      {/* <BgGradient/> */}
-
-      <div className="relative w-full">
-        <HeroSection />
-        <DemoSection />
-        <HowItWorksSection />
-        <PricingSection />
-        <CTASection />
-      </div>
+    <div className="relative w-full">
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <WhoItsForSection />
+      <CTASection />
     </div>
 
   );

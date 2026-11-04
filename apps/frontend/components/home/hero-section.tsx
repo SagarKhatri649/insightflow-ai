@@ -1,327 +1,83 @@
-// import { Badge } from "../ui/badge";
-// import { Button } from "../ui/button";
-// import { ArrowRight, Sparkles } from "lucide-react";
-// import Link from 'next/link';
-
-
-// export default function HeroSection() {
-//   return (
-//     <section className="bg-hero-gradient text-white w-full">
-//       <div className="container mx-auto flex flex-col lg:flex-row items-center gap-12 transition-all animate-in px-4 sm:px-6 lg:px-8">
-//         {/* Left Column: Text & CTA */}
-//         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-//           {/* Badge */}
-//           <Link href="/#Features">
-//             <div className="group relative p-[1px] overflow-hidden rounded-full bg-gradient-to-r from-blue-200 via-sky-300 to-blue-400 animate-gradient-x shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition duration-300">
-
-
-//               <Badge
-//                 variant={'secondary'} className="flex items-center px-6 py-2 bg-white text-blue-900 rounded-full text-sm font-semibold transition-colors duration-200 group-hover:bg-blue-100">
-
-//                 <Sparkles className="h-5 w-5 mr-2 text-sky-600 animate-pulse" />
-
-//                 <span >Powered by AI</span>
-
-//               </Badge>
-
-//             </div>
-//           </Link>
-
-//           {/* <h1 className="font-bold py-6 text-center">Know what’s inside — without watching the whole video.</h1>
-
-//         <h2 className="text-lg sm:text-xl lg:text-2xl text-center px-4 lg:px-0 lg:max-w-4xl text-gray-300">Process Indian and English videos to generate English summaries, smart Q&A, and metadata across education, business, and more.</h2> */}
-
-//           {/* Headline */}
-//           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center py-6 leading-tight text-balance">
-//             Know <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500">what’s inside</span> — without watching the whole video.
-//           </h1>
-
-//           <p className="text-base sm:text-xl lg:text-2xl text-center px-4 lg:px-0 lg:max-w-3xl text-white/80 text-balance">
-//             Upload your video. Instantly get smart summaries, AI-generated questions, and metadata — in clear, fluent English. Great for educators, founders, students, and teams.
-//           </p>
-//           <div>
-//             {/* <Button
-//             variant={'link'}
-//             className="text-white mt-8 text-base sm:text-lg lg:text-2xl rounded-full px-8 sm:px-10 lg:px-12 sm:py-7 lg:py-8 lg:mt-16 bg-linear-to-r  from-slate-500 to-rose-500 hover:from-rose-500 hover:to-slate-500 hover:no-underline font-bold shadow-lg transition-all duration-300"> */}
-
-//             {/* CTA Button */}
-//             <Button
-//               className="
-//       mt-8 sm:mt-10 lg:mt-16
-//       text-sm sm:text-base lg:text-lg
-//       px-6 sm:px-8 lg:px-12
-//       py-3 sm:py-4 lg:py-5
-//       rounded-full
-//       font-semibold
-//       bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400
-//       text-white
-//       shadow-lg
-//       hover:brightness-110 hover:scale-[1.03]
-//       transition duration-300
-//       flex items-center gap-2
-//     "
-//             >
-//               <Link href="/#Pricing" className="flex gap-2 items-center">
-//                 <span>Try Now</span>
-//                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
-//               </Link>
-//             </Button>
-//           </div>
-//         </div>
-//         {/* Right Column: Visual Mockup */}
-//         <div className="flex-1">
-//           <img
-//             src="/hero-mockup.png"
-//             alt="InsightFlow App Preview"
-//             className="w-full h-auto rounded-2xl shadow-2xl"
-//           />
-//         </div>
-
-//       </div>
-//     </section >
-//   );
-// }
-// import { Badge } from "../ui/badge";
-// import { Button } from "../ui/button";
-// import { ArrowRight, Sparkles } from "lucide-react";
-// import Link from "next/link";
-// import Image from "next/image";
-
-// export default function HeroSection() {
-//   return (
-//     <section className="hero-section pt-24 pb-20">
-//       <div className="container mx-auto flex flex-col lg:flex-row items-center gap-12 px-4 sm:px-6 lg:px-8">
-
-//         {/* Left Column */}
-//         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-
-//           {/* 1. Badge: aligned to left with bottom margin */}
-//           <div className="self-start mb-4">
-//             <Link href="/#Features">
-//               <div className="group inline-block p-[1px] rounded-full bg-gradient-to-r from-blue-200 via-sky-300 to-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition duration-300">
-//                 <Badge
-//                   variant="secondary"
-//                   className="flex items-center px-5 py-2 bg-white text-blue-900 rounded-full text-sm font-semibold transition-colors duration-200 group-hover:bg-blue-100"
-//                 >
-//                   <Sparkles className="h-4 w-4 mr-2 text-sky-600 animate-pulse" />
-//                   Powered by AI
-//                 </Badge>
-//               </div>
-//             </Link>
-//           </div>
-
-//           {/* 2. Headline: constrained width, tight leading */}
-//           <h1 className="max-w-lg text-4xl sm:text-5xl lg:text-6xl leading-tight">
-//             Know{" "}
-//             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 drop-shadow-sm">
-//               what’s inside
-//             </span>{" "}
-//             — without watching the whole video.
-//           </h1>
-
-//           {/* 3. Subheading: better contrast & controlled width */}
-//           <p className="max-w-lg text-lg sm:text-xl lg:text-2xl text-white/80 mx-auto lg:mx-0">
-//             Upload your video and get AI-powered summaries, Q&A, and timestamps in seconds. Perfect for educators, creators, and teams.
-//           </p>
-
-//           {/* 4. CTA Button: spaced, centered on mobile, aligned left on desktop */}
-//           <div className="w-full flex justify-center lg:justify-start mt-8">
-//             <Link href="/#Pricing">
-//               <Button
-//                 className="
-//                   text-sm sm:text-base lg:text-lg
-//                   px-8 sm:px-10 lg:px-12
-//                   py-3 sm:py-4 lg:py-5
-//                   rounded-full font-semibold
-//                   bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400
-//                   text-white shadow-lg
-//                   hover:brightness-110 hover:scale-105 active:scale-95
-//                   transition duration-300 ease-in-out
-//                   flex items-center gap-2
-
-//                 "
-//               >
-//                 Try Now
-//                 <ArrowRight className="w-5 h-5 animate-pulse" />
-//               </Button>
-//             </Link>
-//           </div>
-//         </div>
-
-//         {/* Right Column: Mockup */}
-//         <div className="flex-1 flex justify-center lg:justify-end mt-12 lg:mt-0">
-//           <div className="w-full max-w-md lg:max-w-lg relative">
-//             <div className="flex-1 flex justify-center lg:justify-end lg:items-center mt-12 lg:mt-0">
-//               <img
-//                 src="/hero-mockup.png"
-//                 srcSet="/hero-mockup.png 1x, /hero-mockup@2x.png 2x"
-//                 alt="AI-powered video summary mockup"
-//                 className="w-full max-w-md lg:max-w-lg"
-//               />
-//             </div>
-//             {/* optional color overlay on hover */}
-//             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-sky-500/20 to-blue-500/10 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-//           </div>
-//         </div>
-
-//       </div>
-//     </section>
-//   );
-// }
-
-// import { Badge } from "../ui/badge";
-// import { Button } from "../ui/button";
-// import { ArrowRight, Sparkles } from "lucide-react";
-// import Link from "next/link";
-// import Image from "next/image";
-
-// export default function HeroSection() {
-//   return (
-//     <section className="pt-24 pb-20">
-//       <div className="container mx-auto flex flex-col lg:flex-row items-center gap-12 px-4 sm:px-6 lg:px-8">
-
-//         {/* Left Column */}
-//         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-
-//           {/* Badge */}
-//           <div className="self-start mb-4">
-//             <Link href="/#Features">
-//               <div className="group inline-block p-[1px] rounded-full bg-gradient-to-r from-blue-200 via-sky-300 to-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition duration-300">
-//                 <Badge
-//                   variant="secondary"
-//                   className="flex items-center px-5 py-2 bg-white text-blue-900 rounded-full text-sm font-semibold transition-colors duration-200 group-hover:bg-blue-100"
-//                 >
-//                   <Sparkles className="h-4 w-4 mr-2 text-sky-600 animate-pulse" />
-//                   Powered by AI
-//                 </Badge>
-//               </div>
-//             </Link>
-//           </div>
-
-//           {/* Headline */}
-//           <h1 className="max-w-lg text-4xl sm:text-5xl lg:text-6xl leading-tight">
-//             Know{" "}
-//             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 drop-shadow-sm">
-//               what’s inside
-//             </span>{" "}
-//             — without watching the whole video.
-//           </h1>
-
-//           {/* Subheading */}
-//           <p className="max-w-lg text-lg sm:text-xl lg:text-2xl text-white/80 mx-auto lg:mx-0">
-//             Upload your video and get AI-powered summaries, Q&A, and timestamps in seconds. Perfect for educators, creators, and teams.
-//           </p>
-
-//           {/* CTA Button */}
-//           <div className="w-full flex justify-center lg:justify-start mt-8">
-//             <Link href="/#Pricing">
-//               <Button
-//                 className="
-//                   text-sm sm:text-base lg:text-lg
-//                   px-8 sm:px-10 lg:px-12
-//                   py-3 sm:py-4 lg:py-5
-//                   rounded-full font-semibold
-//                   bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400
-//                   text-white shadow-lg
-//                   hover:brightness-110 hover:scale-105 active:scale-95
-//                   transition duration-300 ease-in-out
-//                   flex items-center gap-2
-//                 "
-//               >
-//                 Try Now
-//                 <ArrowRight className="w-5 h-5 animate-pulse" />
-//               </Button>
-//             </Link>
-//           </div>
-//         </div>
-
-//         {/* Right Column: Mockup */}
-//         <div className="flex-1 flex justify-center lg:justify-end lg:items-center mt-12 lg:mt-0">
-//           <img
-//             src="/hero-mockup.png"
-//             srcSet="/hero-mockup.png 1x, /hero-mockup@2x.png 2x"
-//             alt="AI-powered video summary mockup"
-//             className="w-full max-w-md lg:max-w-lg shadow-2xl"
-//           />
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, Check, FileVideo, Play, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-    <section className="pt-24 pb-20 bg-gradient-to-b from-black via-gray-900 to-black">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center gap-16 px-4 sm:px-6 lg:px-8">
-
-        {/* Left Column */}
-        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
-
-          {/* Badge */}
-          <div className="self-start mb-6">
-            <Link href="/#Features">
-              <div className="group inline-block p-[1px] rounded-full bg-gradient-to-r from-blue-200 via-sky-300 to-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_28px_rgba(59,130,246,0.5)] transition duration-300">
-                <Badge
-                  variant="secondary"
-                  className="flex items-center px-4 py-2 bg-white text-blue-900 rounded-full text-sm font-semibold transition-colors duration-200 group-hover:bg-blue-100"
-                >
-                  <Sparkles className="h-4 w-4 mr-2 text-sky-600 animate-pulse" />
-                  Powered by AI
-                </Badge>
-              </div>
-            </Link>
-          </div>
-
-          {/* Headline */}
-          <h1 className="max-w-2xl text-4xl sm:text-5xl lg:text-6xl leading-tight lg:max-w-2xl">
-            Know{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 drop-shadow-sm">
-              what’s inside
-            </span>{" "}
-            — without watching the whole video.
+    <section className="bg-[#064e3b] py-16 text-white md:py-24">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-10 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-5">
+          <Link
+            href="/#Features"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-white"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Powered by AI
+          </Link>
+          <h1 className="max-w-2xl text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-5xl lg:text-[52px]">
+            Know <span className="text-[#10b981]">what&apos;s inside</span> —
+            without watching the whole video.
           </h1>
-
-          {/* Subheading */}
-          <p className="max-w-lg text-lg sm:text-xl lg:text-2xl text-white/80 mx-auto lg:mx-0">
-            Upload your video and get AI-powered summaries, Q&A, and timestamps in seconds. Perfect for educators, creators, and teams.
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-[#ecfdf5] md:text-lg">
+            Upload your video and get AI-powered summaries, Q&amp;A, and
+            timestamps in seconds. Perfect for educators, creators, and teams.
           </p>
-
-          {/* CTA */}
-          <div className="w-full flex flex-col items-center lg:items-start gap-2">
-            <Link href="/#Pricing">
-              <Button
-                className="
-                  text-sm sm:text-base lg:text-lg
-                  px-8 sm:px-10 lg:px-12
-                  py-3 sm:py-4 lg:py-5
-                  rounded-full font-semibold
-                  bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400
-                  text-white shadow-lg
-                  hover:brightness-110 hover:scale-105 active:scale-95
-                  transition duration-300 ease-in-out
-                  flex items-center gap-2
-                "
-              >
-                Try Now
-                <ArrowRight className="w-5 h-5 animate-pulse" />
-              </Button>
+          <div className="mt-8">
+            <Link
+              href="/upload"
+              className="group inline-flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-white px-6 py-3.5 text-base font-bold text-[#064e3b] shadow-lg transition hover:bg-[#ecfdf5]"
+            >
+              Try Now
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
-            <span className="text-sm text-white/60">No credit card required</span>
           </div>
         </div>
 
-        {/* Right Column */}
-        <div className="flex-1 flex justify-center lg:justify-end lg:items-center mt-12 lg:mt-0">
-          <img
-            src="/hero-mockup.png"
-            srcSet="/hero-mockup.png 1x, /hero-mockup@2x.png 2x"
-            alt="AI-powered video summary mockup"
-            className="w-full max-w-md lg:max-w-lg drop-shadow-lg"
-          />
+        <div className="lg:col-span-7">
+          <div className="mx-auto max-w-2xl rounded-xl border border-white/15 bg-white/24 p-4 shadow-2xl backdrop-blur-sm sm:p-5">
+            <div className="flex items-center justify-between border-b border-white/15 pb-3 text-sm font-semibold">
+              <span className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[#10b981]" />
+                InsightFlow
+              </span>
+              <span className="rounded-full bg-white/10 px-2 py-1 text-[10px] uppercase tracking-wide">
+                AI-powered
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-5">
+              <div className="flex min-h-40 flex-col items-center justify-center rounded-lg bg-white/25 p-4 text-center sm:col-span-2">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
+                  <Play className="h-5 w-5 fill-white" />
+                </div>
+                <span className="text-xs font-semibold">AI Transcription</span>
+                <span className="mt-1 text-[11px] text-[#ecfdf5]">Watch less, understand more</span>
+              </div>
+              <div className="space-y-3 sm:col-span-3">
+                <div className="rounded-lg bg-white/25 p-4">
+                  <div className="flex items-center gap-2 text-xs font-semibold">
+                    <FileVideo className="h-4 w-4 text-[#10b981]" />
+                    Instant AI Summaries
+                  </div>
+                  <div className="mt-3 h-2 rounded-full bg-white/20" />
+                  <div className="mt-2 h-2 w-4/5 rounded-full bg-white/20" />
+                </div>
+                <div className="rounded-lg bg-white/25 p-4">
+                  <div className="flex items-center gap-2 text-xs font-semibold">
+                    <Check className="h-4 w-4 text-[#10b981]" />
+                    Easy Export &amp; Share
+                  </div>
+                  <p className="mt-2 text-[11px] leading-relaxed text-[#ecfdf5]">
+                    Get clear, fluent English insights in seconds.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 rounded-lg bg-white/25 p-4">
+              <div className="mb-3 text-xs font-semibold">99%+ Accurate Transcripts</div>
+              <div className="h-2 rounded-full bg-white/20" />
+              <div className="mt-2 h-2 w-11/12 rounded-full bg-white/20" />
+              <div className="mt-2 h-2 w-3/4 rounded-full bg-white/20" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
