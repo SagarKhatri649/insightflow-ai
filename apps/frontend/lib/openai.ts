@@ -1,25 +1,13 @@
-// import OpenAI from "openai";
 
-// if (!process.env.OPENAI_API_KEY) {
-//   throw new Error("❌ OPENAI_API_KEY is missing in environment variables.");
-// }
+import OpenAI from 'openai';
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
-
-// export default openai;
-
-
-import OpenAI from "openai";
-
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("❌ OPENAI_API_KEY is missing in environment variables.");
+if (!process.env.GROQ_API_KEY) {
+  throw new Error('GROQ_API_KEY is missing in environment variables.');
 }
-console.log("✅ OPENAI_API_KEY loaded:", process.env.OPENAI_API_KEY.slice(0,8) + "…");
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: 'https://api.groq.com/openai/v1',
 });
 
 export default openai;

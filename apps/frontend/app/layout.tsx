@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 as FontSans } from "next/font/google";
 import "./globals.css";
 import { Source_Sans_3 } from 'next/font/google';
 
@@ -15,11 +14,6 @@ const sourceSans = Source_Sans_3({
   weight: ['400', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
-});
-const fontSans = FontSans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ['200', '300', '400', '500', '600', '700', '800', '900']
 });
 
 export const metadata: Metadata = {
@@ -45,7 +39,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${sourceSans.variable} dark`} >
-        <body className={`${fontSans.variable}  font-sans antialiased bg-background text-foreground scroll-smooth`} >
+        <body className={`${sourceSans.variable} font-sans antialiased bg-background text-foreground scroll-smooth`} >
 
           <div className="relative flex min-h-screen flex-col">
             <Header />

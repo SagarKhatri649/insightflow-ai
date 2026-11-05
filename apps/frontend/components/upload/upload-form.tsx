@@ -1,615 +1,4 @@
 
-// "use client";
-
-// import { z } from "zod";
-// import { Input } from "../ui/input";
-// import { Button } from "../ui/button";
-// import { Toaster, useToast } from "@/components/ui/sonner";
-// import { useUploadThing } from "@/utils/uploadthing";
-// import { transcribeUploadedFile } from "@/actions/upload-actions";
-// import { generateBlogPostAction } from "@/actions/upload-actions";
-
-// const schema = z.object({
-//   file: z
-//     .instanceof(File, { message: "Invalid file" })
-//     .refine(
-//       f => f.size <= 20 * 1024 * 1024,
-//       "File size must not exceed 20 MB"
-//     )
-//     .refine(
-//       f => f.type.startsWith("audio/") || f.type.startsWith("video/"),
-//       "File must be an audio or video file"
-//     ),
-// });
-
-// export default function UploadForm() {
-//   const { toast } = useToast();
-
-//   const { startUpload } = useUploadThing("videoOrAudioUploader", {
-//     onClientUploadComplete: () => {
-//       alert("uploaded successfully!");
-//     },
-//     onUploadError: () => {
-//       alert("error occurred while uploading");
-//     },
-//     onUploadBegin: ({ }) => {
-//       console.log("upload has begun for");
-//     },
-
-//   });
-
-//   /** client‑side submit handler */
-//   const handleTranscribe = async (
-//     e: React.FormEvent<HTMLFormElement>,
-//   ) => {
-//     e.preventDefault();
-
-//     const formData = new FormData(e.currentTarget);
-//     const file = formData.get("file") as File | null;
-
-//     ////////////////////////////
-//     const res = schema.safeParse({ file });
-
-//     if (!res.success) {
-//       toast("Something went wrong", {
-//         description:
-//           res.error.flatten().fieldErrors.file?.[0] ?? "Invalid file",
-//       })
-
-//     }
-//     if (file) {
-//       const resp: any = await startUpload([file]);
-//       console.log({ resp });
-
-//       if (!resp || resp.length === 0) {
-
-//         toast(
-//           "Something went wrong", {
-//           description: " Please use a different file",
-//           // variant: "destructive",
-//         });
-//         return;
-
-//       }
-//       toast(
-//         " Transcription is in progress..", {
-//         description: " Hang tight! Our digital wizards are sprinkling magic dust on your file",
-//       });
-
-//       const result = await transcribeUploadedFile(resp);
-
-//       const { data = null, message = null } = result || {};
-
-//       if (!result || (!data && !message)) {
-//         toast(
-//           "An unexpected error occurred",
-//           {
-//             description:
-//               "An erro occurred during transcription. please try again.",
-//           });
-
-//       }
-//       if (data) {
-//         toast(
-//           "Generating AI blog post..",
-//           {
-//             description:
-//               "Please wait while we generate your blog post",
-//           });
-
-//         await generateBlogPostAction({
-//           transcriptions: data.transcriptions,
-
-//           userId: data.userId
-//         });
-
-//         toast(
-//           "Woohoo! Your AI Insight is created!",
-//           {
-//             description:
-//               "Time to Click on it and download it",
-//           });
-
-
-//       }
-
-//     }
-//     // // TODO: your upload / transcribe logic here
-//     // toast("Uploading…", { description: file!.name });
-//   };
-
-//   return (
-//     <div>
-//       {/* Mount once per page or in your root layout */}
-//       <Toaster />
-
-//       <form className="flex flex-col gap-6" onSubmit={handleTranscribe}>
-//         <div className="flex justify-end items-center gap-1.5">
-//           <Input
-//             id="file"
-//             name="file"
-//             type="file"
-//             accept="audio/*,video/*"
-//             required
-//           />
-//           <Button className="bg-purple-600" type="submit">
-//             Transcribe
-//           </Button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// "use client";
-
-// import { z } from "zod";
-// import { useState } from "react";
-// import { Input } from "../ui/input";
-// import { Button } from "../ui/button";
-// import { Toaster, useToast } from "@/components/ui/sonner";
-// import { useUploadThing } from "@/utils/uploadthing";
-
-// const schema = z.object({
-//   file: z
-//     .instanceof(File, { message: "Invalid file" })
-//     .refine((f) => f.size <= 20 * 1024 * 1024, "File must be ≤20 MB")
-//     .refine(
-//       (f) => f.type.startsWith("audio/") || f.type.startsWith("video/"),
-//       "Must be an audio or video file"
-//     ),
-// });
-
-// export default function UploadForm() {
-//   const { toast } = useToast();
-//   const [fileName, setFileName] = useState<string | null>(null);
-//   const [transcript, setTranscript] = useState<string | null>(null);
-
-//   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-//     const f = e.target.files?.[0] ?? null;
-//     setFileName(f ? f.name : null);
-//     setTranscript(null);
-//   }
-
-//   const { startUpload } = useUploadThing("videoOrAudioUploader", {
-//     onUploadBegin: () => console.log("📤 Upload started"),
-//     onClientUploadComplete: () => console.log("✅ Upload complete"),
-//     onUploadError: () => console.error("❌ Upload error"),
-//   });
-
-//   const handleTranscribe = async (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-
-//     const formData = new FormData(e.currentTarget);
-//     const file = formData.get("file") as File | null;
-//     const parse = schema.safeParse({ file });
-//     if (!parse.success || !file) {
-//       return toast("Invalid file", {
-//         description:
-//           parse.error.flatten().fieldErrors.file?.[0] ||
-//           "Please select a valid file.",
-//       });
-//     }
-
-//     toast("Uploading…", { description: "Sending file to server…" });
-//     const [uploaded] = await startUpload([file]);
-//     if (!uploaded) {
-//       return toast("Upload failed", { description: "No response from uploader." });
-//     }
-
-//     toast("Transcribing…", { description: "Generating transcript…" });
-//     const res = await fetch("/api/transcribe", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         ufsUrl: uploaded.ufsUrl,
-//         fileName: uploaded.name,
-//       }),
-//     });
-//     const result = await res.json();
-//     if (!result.success || !result.data) {
-//       return toast("Transcription failed", {
-//         description: result.message || "Please try again.",
-//       });
-//     }
-
-//     setTranscript(result.data.transcriptions.text);
-//     toast("✅ Transcript ready!", { description: "See it below." });
-//   };
-
-//   return (
-//     <>
-//       <Toaster richColors position="top-center" />
-
-//       {/* Upload Form Section */}
-//       <section className="py-16 px-4 bg-gradient-to-b from-black via-gray-900 to-black">
-//         <div className="max-w-lg mx-auto bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
-//           <form onSubmit={handleTranscribe} className="space-y-4">
-//             <label htmlFor="file" className="block text-lg font-semibold text-white">
-//               Choose Audio or Video File
-//             </label>
-
-//             <div className="flex items-center gap-4">
-//               <Input
-//                 id="file"
-//                 name="file"
-//                 type="file"
-//                 accept="audio/*,video/*"
-//                 required
-//                 onChange={handleFileChange}
-//                 className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:border-teal-400 focus:ring-2 focus:ring-teal-400"
-//               />
-//               <Button
-//                 type="submit"
-//                 className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-full transition"
-//               >
-//                 Transcribe
-//               </Button>
-//             </div>
-
-//             {fileName && (
-//               <p className="text-gray-400 text-sm">
-//                 Selected file:{" "}
-//                 <span className="text-white">{fileName}</span>
-//               </p>
-//             )}
-//           </form>
-//         </div>
-//       </section>
-
-//       {/* Transcript Result Section */}
-//       {transcript && (
-//         <section className="py-16 px-4 bg-black">
-//           <div className="max-w-4xl mx-auto bg-gray-900/80 p-10 rounded-2xl shadow-2xl border border-gray-700">
-//             <h2 className="text-2xl font-bold text-teal-400 mb-6">Transcript</h2>
-//             <div className="text-gray-100 text-base leading-relaxed whitespace-pre-wrap max-h-[50vh] overflow-y-auto">
-//               {transcript}
-//             </div>
-//           </div>
-//         </section>
-//       )}
-//     </>
-//   );
-// }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// "use client";
-
-// import { z } from "zod";
-// import { useState } from "react";
-// import { Input } from "../ui/input";
-// import { Button } from "../ui/button";
-// import { Toaster, useToast } from "@/components/ui/sonner";
-// import { useUploadThing } from "@/utils/uploadthing";
-// import { transcribeUploadedFile } from "@/actions/upload-actions";
-// import { generateBlogPostAction } from "@/actions/upload-actions";
-
-// const schema = z.object({
-//   file: z
-//     .instanceof(File, { message: "Invalid file" })
-//     .refine(f => f.size <= 20 * 1024 * 1024, "File size must not exceed 20 MB")
-//     .refine(
-//       f => f.type.startsWith("audio/") || f.type.startsWith("video/"),
-//       "File must be an audio or video file"
-//     ),
-// });
-
-// export default function UploadForm() {
-//   const { toast } = useToast();
-//   const [fileName, setFileName] = useState<string | null>(null);
-//   const [transcript, setTranscript] = useState<string | null>(null);
-
-//   const { startUpload } = useUploadThing("videoOrAudioUploader", {
-//     onClientUploadComplete: () => {
-//       alert("uploaded successfully!");
-//     },
-//     onUploadError: () => {
-//       alert("error occurred while uploading");
-//     },
-//     onUploadBegin: ({ }) => {
-//       console.log("upload has begun for");
-//     },
-//   });
-
-//   const handleTranscribe = async (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-
-//     const formData = new FormData(e.currentTarget);
-//     const file = formData.get("file") as File | null;
-
-//     const res = schema.safeParse({ file });
-
-//     if (!res.success) {
-//       toast("Something went wrong", {
-//         description:
-//           res.error.flatten().fieldErrors.file?.[0] ?? "Invalid file",
-//       });
-//       return;
-//     }
-
-//     if (file) {
-//       const resp: any = await startUpload([file]);
-//       console.log("📦 Upload response:", resp);
-
-//       if (!resp || resp.length === 0) {
-//         toast("Something went wrong", {
-//           description: " Please use a different file",
-//         });
-//         return;
-//       }
-
-//       console.log("📦 Upload response:", JSON.stringify(resp, null, 2));
-
-//       const uploaded = resp?.[0];
-
-//       const ufsUrl = uploaded?.ufsUrl;
-//       const fileName = uploaded?.name;
-
-
-//       if (!ufsUrl || !fileName) {
-//         toast("Missing upload data", {
-//           description: "Upload succeeded but URL or filename is missing.",
-//         });
-//         return;
-//       }
-
-//       toast("Transcription is in progress..", {
-//         description:
-//           "Hang tight! Our digital wizards are sprinkling magic dust on your file",
-//       });
-
-//       const result = await transcribeUploadedFile({
-//         ufsUrl,
-//         fileName,
-//       });
-
-//       const { data = null, message = null } = result || {};
-
-//       if (!result || (!data && !message)) {
-//         toast("An unexpected error occurred", {
-//           description: "An error occurred during transcription. Please try again.",
-//         });
-//         return;
-//       }
-
-//       if (data) {
-//         setTranscript(data.transcriptions?.text || "");
-//         toast("Generating AI blog post..", {
-//           description: "Please wait while we generate your blog post",
-//         });
-
-//         await generateBlogPostAction({
-//           transcriptions: data.transcriptions,
-//           userId: data.userId,
-//         });
-
-//         toast("Woohoo! Your AI Insight is created!", {
-//           description: "Time to Click on it and download it",
-//         });
-//       }
-//     }
-//   };
-
-
-//   return (
-//     <>
-//       <Toaster richColors position="top-center" />
-
-//       {/* Upload Form Section */}
-//       <section className="py-16 px-4 bg-gradient-to-b from-black via-gray-900 to-black">
-//         <div className="max-w-lg mx-auto bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
-//           <form onSubmit={handleTranscribe} className="space-y-4">
-//             <label htmlFor="file" className="block text-lg font-semibold text-white">
-//               Choose Audio or Video File
-//             </label>
-
-//             <div className="flex items-center gap-4">
-//               <Input
-//                 id="file"
-//                 name="file"
-//                 type="file"
-//                 accept="audio/*,video/*"
-//                 required
-//                 onChange={(e) =>
-//                   setFileName(e.target.files?.[0]?.name ?? null)
-//                 }
-//                 className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:border-teal-400 focus:ring-2 focus:ring-teal-400"
-//               />
-//               <Button
-//                 type="submit"
-//                 className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-full transition"
-//               >
-//                 Transcribe
-//               </Button>
-//             </div>
-
-//             {fileName && (
-//               <p className="text-gray-400 text-sm">
-//                 Selected file:{" "}
-//                 <span className="text-white">{fileName}</span>
-//               </p>
-//             )}
-//           </form>
-//         </div>
-//       </section>
-
-//       {/* Transcript Result Section */}
-//       {transcript && (
-//         <section className="py-16 px-4 bg-black">
-//           <div className="max-w-4xl mx-auto bg-gray-900/80 p-10 rounded-2xl shadow-2xl border border-gray-700">
-//             <h2 className="text-2xl font-bold text-teal-400 mb-6">Transcript</h2>
-//             <div className="text-gray-100 text-base leading-relaxed whitespace-pre-wrap max-h-[50vh] overflow-y-auto">
-//               {transcript}
-//             </div>
-//           </div>
-//         </section>
-//       )}
-//     </>
-//   );
-// }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// components/UploadForm.tsx
-// components/UploadForm.tsx
-// components/UploadForm.tsx
-// 'use client';
-
-// import { z } from 'zod';
-// import { useState, useRef, useEffect } from 'react';
-// import { Input } from '@/components/ui/input';
-// import { Button } from '@/components/ui/button';
-// import { Toaster, useToast } from '@/components/ui/sonner';
-// import { useUploadThing } from '@/utils/uploadthing';
-// import { generateBlogPostAction } from '@/actions/upload-actions';
-// import { useRouter } from 'next/navigation';
-// import { useUser } from '@clerk/nextjs';
-
-// const schema = z.object({
-//   file: z
-//     .instanceof(File)
-//     .refine(f => f.size <= 20 * 1024 * 1024, 'File must be ≤20 MB')
-//     .refine(
-//       f => f.type.startsWith('audio/') || f.type.startsWith('video/'),
-//       'Must be an audio or video file'
-//     ),
-// });
-
-// export default function UploadForm() {
-//   const { toast } = useToast();
-//   const { user } = useUser();
-//   const router = useRouter();
-
-//   const [fileName, setFileName] = useState<string>('');
-//   const [isProcessing, setIsProcessing] = useState(false);
-
-//   // Track mounted state to avoid setting state after unmount
-//   const isMounted = useRef(true);
-//   useEffect(() => {
-//     return () => {
-//       isMounted.current = false;
-//     };
-//   }, []);
-
-//   const { startUpload } = useUploadThing('videoOrAudioUploader', {
-//     onClientUploadBegin: () => toast('Upload started'),
-//     onClientUploadComplete: () => toast.success('Upload complete'),
-//     onClientUploadError: () => toast.error('Upload error'),
-//   });
-
-//   const handleTranscribe = async (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     if (!user) {
-//       toast.error('Please sign in first');
-//       return;
-//     }
-
-//     const input = e.currentTarget.elements.namedItem('file') as HTMLInputElement;
-//     const file = input.files?.[0] ?? null;
-
-//     // 1) Validate
-//     const parsed = schema.safeParse({ file });
-//     if (!parsed.success) {
-//       toast.error(parsed.error.flatten().fieldErrors.file?.[0]!);
-//       return;
-//     }
-
-//     setFileName(file.name);
-//     setIsProcessing(true);
-
-//     try {
-//       // 2) Transcribe
-//       toast('Transcribing…');
-//       const form = new FormData();
-//       form.append('file', file, file.name);
-//       form.append('userId', user.id);
-
-//       const res = await fetch('/api/transcribe', {
-//         method: 'POST',
-//         body: form,
-//       });
-//       const result = await res.json();
-//       if (!res.ok || !result.success) {
-//         throw new Error(result.message || `Transcription failed (${res.status})`);
-//       }
-
-//       // 3) Store the file after transcription
-//       const uploadResults = await startUpload([file]);
-//       const uploaded = Array.isArray(uploadResults) ? uploadResults[0] : undefined;
-//       if (!uploaded?.url) {
-//         throw new Error('File storage failed');
-//       }
-
-//       // 4) Generate blog post
-//       toast('Generating post…');
-//       const postResult = await generateBlogPostAction({
-//         transcriptions: { text: result.data.transcriptions.text },
-//         userId: user.id,
-//       });
-//       if (!postResult.success || !postResult.postId) {
-//         throw new Error(postResult.message || 'Post creation failed');
-//       }
-
-//       // 5) Stop processing and redirect
-//       if (isMounted.current) {
-//         setIsProcessing(false);
-//       }
-//       toast.success('All done! Redirecting…');
-//       router.push(`/posts/${postResult.postId}`);
-//     } catch (err: any) {
-//       console.error('handleTranscribe error:', err);
-//       toast.error(err.message || 'Something went wrong');
-//       if (isMounted.current) {
-//         setIsProcessing(false);
-//       }
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Toaster richColors position="top-center" />
-//       <section className="py-16 px-4 bg-gradient-to-b from-black via-gray-900 to-black">
-//         <div className="max-w-lg mx-auto bg-gray-800/60 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
-//           <form onSubmit={handleTranscribe} className="space-y-4">
-//             <label htmlFor="file" className="block text-lg font-semibold text-white">
-//               Choose Audio or Video File
-//             </label>
-//             <div className="flex items-center gap-4">
-//               <Input
-//                 id="file"
-//                 name="file"
-//                 type="file"
-//                 accept="audio/*,video/*"
-//                 required
-//                 disabled={isProcessing}
-//                 onChange={(e) => setFileName(e.target.files?.[0]?.name || '')}
-//                 className="flex-1 bg-gray-700 border-gray-600 text-white placeholder-gray-500 focus:border-teal-400 focus:ring-2 focus:ring-teal-400"
-//               />
-//               <Button
-//                 type="submit"
-//                 disabled={isProcessing}
-//                 className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-full transition disabled:opacity-50"
-//               >
-//                 {isProcessing ? 'Processing…' : 'Upload & Transcribe'}
-//               </Button>
-//             </div>
-//             {fileName && (
-//               <p className="text-gray-400 text-sm">
-//                 Selected file: <span className="text-white">{fileName}</span>
-//               </p>
-//             )}
-//           </form>
-//         </div>
-//       </section>
-//     </>
-//   );
-// }
-
-
-
 'use client';
 
 import { z } from 'zod';
@@ -639,9 +28,11 @@ export default function UploadForm() {
   const router = useRouter();
 
   const [fileName, setFileName] = useState<string>('');
+  const [transcript, setTranscript] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   const isMounted = useRef(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => () => { isMounted.current = false; }, []);
 
   const { startUpload } = useUploadThing('videoOrAudioUploader', {
@@ -671,6 +62,7 @@ export default function UploadForm() {
       const res = await fetch('/api/transcribe', { method: 'POST', body: form });
       const result = await res.json();
       if (!res.ok || !result.success) throw new Error(result.message || `Transcription failed (${res.status})`);
+      setTranscript(result.data.transcriptions.text);
 
       const uploadResults = await startUpload([file]);
       const uploaded = Array.isArray(uploadResults) ? uploadResults[0] : undefined;
@@ -693,6 +85,14 @@ export default function UploadForm() {
     }
   };
 
+  const handleRemoveFile = () => {
+    if (isProcessing) return;
+    setFileName('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <>
       <Toaster richColors position="top-center" />
@@ -709,9 +109,13 @@ export default function UploadForm() {
           <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8">
             <form onSubmit={handleTranscribe}>
               <div className="flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-colors hover:bg-[#e6fbf2] sm:p-10">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm">
+                <label
+                  htmlFor="file"
+                  aria-label="Choose an audio or video file"
+                  className="mb-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-colors hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2"
+                >
                   <Upload className="h-6 w-6" />
-                </div>
+                </label>
                 <h2 className="mb-2 text-center text-lg font-bold text-[#064e3b]">Upload your audio or video</h2>
                 <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]">
                   <span>Drag and drop a file here, or</span>
@@ -724,6 +128,7 @@ export default function UploadForm() {
                 <Input
                   id="file" name="file" type="file" accept="audio/*,video/*"
                   required disabled={isProcessing}
+                  ref={fileInputRef}
                   onChange={e => setFileName(e.target.files?.[0]?.name || '')}
                   className="sr-only"
                 />
@@ -741,9 +146,15 @@ export default function UploadForm() {
                     <div className="flex flex-shrink-0 items-center space-x-2">
                       <span className="inline-flex items-center rounded-md border border-[#a7f3d0] bg-[#ecfdf5] px-2.5 py-1 text-xs font-medium text-[#064e3b]">
                         <Check className="mr-1 h-3.5 w-3.5 text-[#10b981]" />
-                        Ready
+                        Ready to process
                       </span>
-                      <button aria-label="Remove file" className="rounded-md border border-transparent p-1.5 text-[#979797] transition-colors hover:border-[#dee1e6] hover:text-[#5f6368] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2" type="button">
+                      <button
+                        aria-label="Remove file"
+                        className="rounded-md border border-transparent p-1.5 text-[#979797] transition-colors hover:border-[#dee1e6] hover:text-[#5f6368] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        type="button"
+                        disabled={isProcessing}
+                        onClick={handleRemoveFile}
+                      >
                         <X className="h-4 w-4" />
                       </button>
                     </div>
@@ -776,6 +187,14 @@ export default function UploadForm() {
               </div>
             </form>
           </div>
+          {transcript && (
+            <section className="mt-6 w-full rounded-xl border border-[#dee1e6] bg-white p-5 shadow-sm sm:p-6">
+              <h2 className="mb-3 text-lg font-bold text-[#064e3b]">Full Transcription</h2>
+              <div className="max-h-96 overflow-y-auto whitespace-pre-wrap rounded-lg bg-[#f8faf9] p-4 text-sm leading-7 text-[#3c4043]">
+                {transcript}
+              </div>
+            </section>
+          )}
         </div>
       </section>
     </>
