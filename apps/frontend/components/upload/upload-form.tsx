@@ -108,11 +108,11 @@ export default function UploadForm() {
           </div>
           <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8">
             <form onSubmit={handleTranscribe}>
-              <div className="flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-colors hover:bg-[#e6fbf2] sm:p-10">
+              <div className="group flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm sm:p-10">
                 <label
                   htmlFor="file"
                   aria-label="Choose an audio or video file"
-                  className="mb-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-colors hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2"
+                  className="mb-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2"
                 >
                   <Upload className="h-6 w-6" />
                 </label>
@@ -133,7 +133,7 @@ export default function UploadForm() {
                   className="sr-only"
                 />
                 {fileName && (
-                  <div className="mt-6 flex w-full max-w-xl items-center justify-between rounded-xl border border-[#dee1e6] bg-white p-3.5 shadow-sm sm:p-4">
+                  <div className="mt-6 flex w-full max-w-xl animate-in fade-in slide-in-from-bottom-2 items-center justify-between rounded-xl border border-[#dee1e6] bg-white p-3.5 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-4">
                     <div className="flex min-w-0 items-center space-x-3 sm:space-x-4">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#064e3b] text-white">
                         <Video className="h-5 w-5 text-[#10b981]" />

@@ -8,7 +8,7 @@ export default function HeroSection() {
         <div className="lg:col-span-5">
           <Link
             href="/#Features"
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-white"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-widest text-white transition-all duration-200 hover:border-white/40 hover:bg-white/15 hover:shadow-md"
           >
             <Sparkles className="h-3.5 w-3.5" />
             Powered by AI
@@ -24,7 +24,7 @@ export default function HeroSection() {
           <div className="mt-8">
             <Link
               href="/upload"
-              className="group inline-flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-white px-6 py-3.5 text-base font-bold text-[#064e3b] shadow-lg transition hover:bg-[#ecfdf5]"
+              className="group inline-flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-white px-6 py-3.5 text-base font-bold text-[#064e3b] shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ecfdf5] hover:shadow-xl active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 focus-visible:ring-offset-[#064e3b]"
             >
               Try Now
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -33,7 +33,7 @@ export default function HeroSection() {
         </div>
 
         <div className="lg:col-span-7">
-          <div className="mx-auto max-w-2xl rounded-xl border border-white/15 bg-white/24 p-4 shadow-2xl backdrop-blur-sm sm:p-5">
+          <div className="mx-auto max-w-2xl rounded-xl border border-white/15 bg-white/24 p-4 shadow-2xl backdrop-blur-sm transition-transform duration-500 hover:-translate-y-1 sm:p-5">
             <div className="flex items-center justify-between border-b border-white/15 pb-3 text-sm font-semibold">
               <span className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#10b981]" />

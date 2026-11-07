@@ -29,9 +29,9 @@ export default function FeaturesSection() {
           {benefits.map(({ Icon, label }) => (
             <div
               key={label}
-              className="flex items-center gap-3 rounded-xl border border-[#dee1e6] bg-white p-5 text-[#202124] shadow-sm"
+              className="group flex items-center gap-3 rounded-xl border border-[#dee1e6] bg-white p-5 text-[#202124] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-[#a7f3d0] hover:shadow-md"
             >
-              <Icon className="h-5 w-5 shrink-0 text-[#10b981]" />
+              <Icon className="h-5 w-5 shrink-0 text-[#10b981] transition-transform duration-200 group-hover:scale-110" />
               <span className="font-semibold">{label}</span>
             </div>
           ))}

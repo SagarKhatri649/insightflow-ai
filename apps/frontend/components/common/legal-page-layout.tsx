@@ -32,7 +32,7 @@ export default function LegalPageLayout({
             Last updated · {updated}
           </p>
         </header>
-        <div className="mt-10 max-w-3xl text-[15px] leading-7 text-[#3c4043] sm:mt-12 sm:text-base sm:leading-8 [&_a]:font-semibold [&_a]:text-[#064e3b] [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:leading-7 [&_h2]:tracking-[-0.01em] [&_h2]:text-[#064e3b] [&_h2:first-child]:mt-0 [&_li]:pl-2 [&_li]:leading-7 [&_li]:marker:text-[#10b981] [&_ol]:my-5 [&_ol]:space-y-2 [&_p]:my-5 [&_p:first-child]:mt-0 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6">
+        <div className="mt-10 max-w-3xl text-[15px] leading-7 text-[#3c4043] sm:mt-12 sm:text-base sm:leading-8 [&_a]:font-semibold [&_a]:text-[#064e3b] [&_a]:underline [&_a]:underline-offset-4 [&_a]:transition-colors [&_a]:duration-200 [&_a:hover]:text-[#10b981] [&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:leading-7 [&_h2]:tracking-[-0.01em] [&_h2]:text-[#064e3b] [&_h2:first-child]:mt-0 [&_li]:pl-2 [&_li]:leading-7 [&_li]:marker:text-[#10b981] [&_ol]:my-5 [&_ol]:space-y-2 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6">
           {children}
         </div>
       </div>

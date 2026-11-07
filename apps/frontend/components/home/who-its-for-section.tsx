@@ -16,7 +16,7 @@ export default function WhoItsForSection() {
           {audiences.map((audience) => (
             <div
               key={audience}
-              className="rounded-lg border border-[#dee1e6] bg-white px-5 py-4 text-center font-semibold text-[#202124] shadow-sm"
+              className="rounded-lg border border-[#dee1e6] bg-white px-5 py-4 text-center font-semibold text-[#202124] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-[#a7f3d0] hover:bg-[#ecfdf5] hover:shadow-md"
             >
               {audience}
             </div>

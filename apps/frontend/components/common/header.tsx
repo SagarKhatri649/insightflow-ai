@@ -21,21 +21,21 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 md:px-10">
-        <Link href="/" aria-label="InsightFlow Home" className="flex items-center gap-3">
+        <Link href="/" aria-label="InsightFlow Home" className="group flex items-center gap-3">
           <img
             src="/breeze.svg"
             alt="InsightFlow Logo"
-            className="h-8 w-8"
+            className="h-8 w-8 transition-transform duration-200 group-hover:scale-105"
           />
           <span className="text-xl font-bold tracking-tight text-[#064e3b]">InsightFlow</span>
         </Link>
 
         <div className="hidden items-center gap-6 text-sm font-semibold text-[#3c4043] md:flex">
-          <Link href="/" className="transition-colors hover:text-[#064e3b]">Home</Link>
-          <Link href="/#how-to-use" className="transition-colors hover:text-[#064e3b]">How To Use</Link>
-          <Link href="/#Features" className="transition-colors hover:text-[#064e3b]">Features</Link>
+          <Link href="/" className="rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-[#ecfdf5] hover:text-[#064e3b] hover:shadow-sm">Home</Link>
+          <Link href="/#how-to-use" className="rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-[#ecfdf5] hover:text-[#064e3b] hover:shadow-sm">How To Use</Link>
+          <Link href="/#Features" className="rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-[#ecfdf5] hover:text-[#064e3b] hover:shadow-sm">Features</Link>
           <SignedIn>
-            <Link href="/posts" className="transition-colors hover:text-[#064e3b]">Dashboard</Link>
+            <Link href="/posts" className="rounded-md px-2 py-1.5 transition-all duration-200 hover:bg-[#ecfdf5] hover:text-[#064e3b] hover:shadow-sm">Dashboard</Link>
           </SignedIn>
         </div>
 
@@ -43,7 +43,7 @@ export default function Header() {
           <SignedIn>
             <Link
               href="/upload"
-              className="hidden items-center gap-2 rounded-lg bg-[#064e3b] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#04382b] sm:inline-flex"
+              className="hidden items-center gap-2 rounded-lg bg-[#064e3b] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#04382b] hover:shadow-md active:translate-y-0 sm:inline-flex"
             >
               Upload Video
               <ArrowUpRight className="h-4 w-4" />
@@ -52,7 +52,7 @@ export default function Header() {
             <UserButton />
           </SignedIn>
           <SignedOut>
-            <Link href="/sign-in" className="text-sm font-semibold text-[#064e3b]">Sign In</Link>
+            <Link href="/sign-in" className="rounded-lg bg-[#064e3b] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#04382b] hover:shadow-md active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2">Sign In</Link>
           </SignedOut>
         </div>
       </div>

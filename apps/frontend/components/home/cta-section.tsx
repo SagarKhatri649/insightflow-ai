@@ -5,7 +5,7 @@ export default function CTASection() {
   return (
     <section className="bg-[#064e3b] py-20 md:py-24">
       <div className="mx-auto max-w-5xl px-6 md:px-10">
-        <div className="relative flex flex-col items-center overflow-hidden rounded-2xl border border-white/15 bg-white/24 p-10 text-center shadow-lg backdrop-blur-sm md:p-14">
+        <div className="relative flex flex-col items-center overflow-hidden rounded-2xl border border-white/15 bg-white/24 p-10 text-center shadow-lg backdrop-blur-sm transition-shadow duration-300 hover:shadow-2xl md:p-14">
           <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full border border-white/10 bg-white/5" />
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-48 w-48 rounded-full border border-white/10 bg-white/5" />
           <div className="relative">
@@ -21,7 +21,7 @@ export default function CTASection() {
             </p>
             <Link
               href="/upload"
-              className="group inline-flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-white px-7 py-3.5 text-base font-bold text-[#064e3b] shadow-lg transition hover:bg-[#ecfdf5] hover:shadow-xl"
+              className="group inline-flex items-center gap-2.5 whitespace-nowrap rounded-lg bg-white px-7 py-3.5 text-base font-bold text-[#064e3b] shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#ecfdf5] hover:shadow-xl active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 focus-visible:ring-offset-[#064e3b]"
             >
               Upload a Video
               <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

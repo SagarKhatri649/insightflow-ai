@@ -7,9 +7,9 @@ export default function Footer() {
         <p className="font-medium">© {new Date().getFullYear()} InsightFlow. All rights reserved.</p>
         <p className="font-normal text-emerald-300/80">Built with for creators, educators, and innovators.</p>
         <nav className="flex flex-wrap justify-center gap-6 text-emerald-100/80 sm:justify-end">
-          <Link href="/privacy" className="transition hover:text-white">Privacy</Link>
-          <Link href="/terms" className="transition hover:text-white">Terms</Link>
-          <Link href="/contact" className="transition hover:text-white">Contact</Link>
+          <Link href="/privacy" className="transition-all duration-200 hover:text-white hover:underline hover:underline-offset-4">Privacy</Link>
+          <Link href="/terms" className="transition-all duration-200 hover:text-white hover:underline hover:underline-offset-4">Terms</Link>
+          <Link href="/contact" className="transition-all duration-200 hover:text-white hover:underline hover:underline-offset-4">Contact</Link>
         </nav>
       </div>
     </footer>
