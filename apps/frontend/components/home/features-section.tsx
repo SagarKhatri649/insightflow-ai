@@ -1,13 +1,20 @@
-import { Brain, Check, Clock3, FileDown, FileText, MessageCircle, Zap } from 'lucide-react';
+import {
+  Brain,
+  Check,
+  Clock3,
+  FileDown,
+  MessageCircle,
+  Zap,
+} from "lucide-react";
 
 export default function FeaturesSection() {
   const benefits = [
-    { Icon: Zap, label: 'Instant AI Summaries' },
-    { Icon: Check, label: '99%+ Accurate Transcripts' },
-    { Icon: Brain, label: 'Key-insights' },
-    { Icon: Clock3, label: 'Smart TimeStamps' },
-    { Icon: MessageCircle, label: 'AI-powered Q&A' },
-    { Icon: FileDown, label: 'PDF Export & Download' },
+    { Icon: Zap, label: "Instant AI Summaries" },
+    { Icon: Check, label: "99%+ Accurate Transcripts" },
+    { Icon: Brain, label: "Key-insights" },
+    { Icon: Clock3, label: "Smart TimeStamps" },
+    { Icon: MessageCircle, label: "AI-powered Q&A" },
+    { Icon: FileDown, label: "PDF Export & Download" },
   ];
 
   return (

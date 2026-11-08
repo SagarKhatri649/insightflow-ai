@@ -88,22 +88,22 @@ module.exports = {
       // Custom keyframes for Reveal Animations
       keyframes: {
         fadeSlideIn: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         bounceArrow: {
-          '0%, 100%': { transform: 'translateY(0)', opacity: '.8' },
-          '50%': { transform: 'translateY(8px)', opacity: '1' },
+          "0%, 100%": { transform: "translateY(0)", opacity: ".8" },
+          "50%": { transform: "translateY(8px)", opacity: "1" },
         },
       },
       animation: {
-        fadeSlideIn: 'fadeSlideIn 0.8s ease-out forwards',
-        fadeIn: 'fadeIn 1.2s ease-out forwards',
-        bounceArrow: 'bounceArrow 1.5s infinite 1.4s',
+        fadeSlideIn: "fadeSlideIn 0.8s ease-out forwards",
+        fadeIn: "fadeIn 1.2s ease-out forwards",
+        bounceArrow: "bounceArrow 1.5s infinite 1.4s",
       },
     },
   },

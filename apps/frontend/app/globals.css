@@ -1,14 +1,13 @@
-@import 'tailwindcss';
- 
+@import "tailwindcss";
+
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
- 
-
 @theme {
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans:
+    var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -82,14 +81,10 @@
       transition-duration: 0.01ms !important;
     }
   }
-  
 }
 
 @layer base {
-  
-
-
- /* :root  {
+  /* :root  {
   --background: 240 100% 95%;
   --foreground: 240 5% 0%;
   --card: 240 50% 90%;
@@ -133,52 +128,51 @@
   --ring: 240 0% 100%;
   --radius: 0.5rem;
 } */
- 
-:root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 10%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 10%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
-  --primary: 165 100% 45%; /* #00CC99 */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 210 20% 96%; /* #F9FAFB */
-  --secondary-foreground: 0 0% 10%;
-  --muted: 240 5% 80%;
-  --muted-foreground: 0 0% 40%;
-  --accent: 165 100% 90%; /* #CCFFF2 */
-  --accent-foreground: 165 100% 25%;
-  --destructive: 0 100% 50%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 210 20% 90%;
-  --input: 0 0% 93%;
-  --ring: 165 100% 45%;
-  --radius: 0.5rem;
-}
 
-.dark {
-  --background: 0 0% 5%;
-  --foreground: 0 0% 95%;
-  --card: 0 0% 10%;
-  --card-foreground: 0 0% 95%;
-  --popover: 0 0% 10%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 165 100% 45%; /* #00CC99 */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 15%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 0 0% 30%;
-  --muted-foreground: 0 0% 70%;
-  --accent: 165 100% 25%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 100% 45%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 25%;
-  --input: 0 0% 20%;
-  --ring: 165 100% 45%;
-}
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 165 100% 45%; /* #00CC99 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%; /* #F9FAFB */
+    --secondary-foreground: 0 0% 10%;
+    --muted: 240 5% 80%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 165 100% 90%; /* #CCFFF2 */
+    --accent-foreground: 165 100% 25%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 20% 90%;
+    --input: 0 0% 93%;
+    --ring: 165 100% 45%;
+    --radius: 0.5rem;
+  }
 
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 165 100% 45%; /* #00CC99 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 30%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 165 100% 25%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 25%;
+    --input: 0 0% 20%;
+    --ring: 165 100% 45%;
+  }
 }
 
 @layer base {
@@ -203,7 +197,6 @@
 
   button {
     @apply hover:cursor-pointer bg-rose-600 hover:bg-rose-700;
-
   }
 
   @keyframes gradient-x {
@@ -225,8 +218,6 @@
   .markdown-content a {
     @apply text-blue-600 hover:underline;
   }
-
-
 }
 
 @utility container {
@@ -252,9 +243,6 @@
     @apply flex-1 flex justify-center lg:justify-end lg:items-center;
   }
   .hero-section {
-  @apply bg-black text-white;
+    @apply bg-black text-white;
+  }
 }
-}
-
-
- 

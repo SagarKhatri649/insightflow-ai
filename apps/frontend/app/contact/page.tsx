@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import LegalPageLayout from '@/components/common/legal-page-layout';
+import Link from "next/link";
+import LegalPageLayout from "@/components/common/legal-page-layout";
 
 export const metadata = {
-  title: 'Contact InsightFlow',
-  description: 'Get help with your InsightFlow account, uploads, and workspace.',
+  title: "Contact InsightFlow",
+  description:
+    "Get help with your InsightFlow account, uploads, and workspace.",
 };
 
 export default function ContactPage() {
@@ -34,8 +35,9 @@ export default function ContactPage() {
             Helpful details
           </p>
           <p className="text-sm leading-7 text-[#5f6368]">
-            Include the account email you use with InsightFlow, the workspace item involved, and
-            any error message that appeared. Please do not send passwords or API keys.
+            Include the account email you use with InsightFlow, the workspace
+            item involved, and any error message that appeared. Please do not
+            send passwords or API keys.
           </p>
         </div>
       </div>
@@ -51,8 +53,11 @@ export default function ContactPage() {
 
       <h2>Explore InsightFlow</h2>
       <p>
-        If you are ready to try the product, you can return to the{' '}
-        <Link href="/" className="font-semibold text-[#064e3b] underline underline-offset-4">
+        If you are ready to try the product, you can return to the{" "}
+        <Link
+          href="/"
+          className="font-semibold text-[#064e3b] underline underline-offset-4"
+        >
           InsightFlow home page
         </Link>
         .

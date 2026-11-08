@@ -1,5 +1,11 @@
 export default function WhoItsForSection() {
-  const audiences = ['Students', 'Professionals', 'Content creators', 'Researchers', 'Teams'];
+  const audiences = [
+    "Students",
+    "Professionals",
+    "Content creators",
+    "Researchers",
+    "Teams",
+  ];
 
   return (
     <section className="bg-white py-20 md:py-24">

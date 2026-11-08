@@ -1,48 +1,55 @@
+"use server";
 
-'use server';
-
+import { currentUser } from "@clerk/nextjs/server";
 import getDbConnection from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import {redirect} from "next/navigation";
-export async function updatePostActions(data : {
+
+export async function updatePostActions(data: {
   postId: string;
   content: string;
 }) {
-  const {postId,content} = data;
+  const { postId, content } = data;
 
-  console.log({content});
+  console.log({ content });
   const user = await currentUser();
-  if(!user) {
-
-    redirect("/sign-in");
+  if (!user) {
+    return {
+      success: false,
+    };
   }
 
-  try{
-    
-    const sql  = await getDbConnection();
+  try {
+    const sql = await getDbConnection();
 
-    const [title,...contentParts] = content?.split("\n\n") || [];
+    const [title, ...contentParts] = content?.split("\n\n") || [];
 
-    console.log({title});
+    console.log({ title });
     const updatedTitle = title.split("#")[1].trim();
     console.log(updatedTitle);
 
-    await sql`UPDATE posts SET content = ${content } , title = ${updatedTitle} where id = ${postId}`;
-  }catch(error){
+    const updatedPosts = await sql`
+      UPDATE posts
+      SET content = ${content}, title = ${updatedTitle}
+      WHERE id = ${postId} AND user_id = ${user.id}
+      RETURNING id
+    `;
 
-    console.error("Error occurred in updating the post",postId);
+    if (updatedPosts.length === 0) {
+      return {
+        success: false,
+      };
+    }
+  } catch (error) {
+    console.error("Error occurred in updating the post", postId);
 
-    return{
+    return {
       success: false,
     };
   }
 
   revalidatePath(`/posts/${postId}`);
 
-  return  {
-    success:true,
+  return {
+    success: true,
   };
-  
-  
-  
 }

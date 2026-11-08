@@ -1,5 +1,3 @@
-  
-
 import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
@@ -24,13 +22,13 @@ export const ourFileRouter = {
       console.log("✅ Upload complete for userId:", metadata.userId);
       console.log("🔗 ufsUrl:", file.ufsUrl);
 
-    return {
-  userId: metadata.userId,
-  file: {
-    ufsUrl: file.ufsUrl,
-    name: file.name,
-  },
-};
+      return {
+        userId: metadata.userId,
+        file: {
+          ufsUrl: file.ufsUrl,
+          name: file.name,
+        },
+      };
     }),
 } satisfies FileRouter;
 

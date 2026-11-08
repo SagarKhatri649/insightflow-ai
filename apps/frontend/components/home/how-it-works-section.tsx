@@ -1,31 +1,35 @@
-'use client';
+"use client";
 
-import { Brain, Sparkles, Upload } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Brain, Sparkles, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 
 const steps = [
   {
     Icon: Upload,
-    title: 'Upload Your Video',
-    description: 'Upload lectures, meetings, tutorials, or presentations from your device.',
+    title: "Upload Your Video",
+    description:
+      "Upload lectures, meetings, tutorials, or presentations from your device.",
   },
   {
     Icon: Brain,
-    title: 'Generate Insights',
+    title: "Generate Insights",
     description:
-      'Let AI transcribe your video and create summaries, timestamps, and key insights.',
+      "Let AI transcribe your video and create summaries, timestamps, and key insights.",
   },
   {
     Icon: Sparkles,
-    title: 'Review and Share',
+    title: "Review and Share",
     description:
-      'Review the transcript, Q&A, and summaries, then export or share your results.',
+      "Review the transcript, Q&A, and summaries, then export or share your results.",
   },
 ];
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-to-use" className="scroll-mt-24 border-y border-gray-100 bg-[#f8faf9] py-20 md:py-24">
+    <section
+      id="how-to-use"
+      className="scroll-mt-24 border-y border-gray-100 bg-[#f8faf9] py-20 md:py-24"
+    >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="mb-12 max-w-3xl">
           <div className="mb-3 text-xs font-bold uppercase tracking-wider text-[#064e3b]">

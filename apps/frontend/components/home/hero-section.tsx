@@ -1,5 +1,5 @@
-import { ArrowRight, Check, FileVideo, Play, Sparkles } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowRight, Check, FileVideo, Play, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -49,7 +49,9 @@ export default function HeroSection() {
                   <Play className="h-5 w-5 fill-white" />
                 </div>
                 <span className="text-xs font-semibold">AI Transcription</span>
-                <span className="mt-1 text-[11px] text-[#ecfdf5]">Watch less, understand more</span>
+                <span className="mt-1 text-[11px] text-[#ecfdf5]">
+                  Watch less, understand more
+                </span>
               </div>
               <div className="space-y-3 sm:col-span-3">
                 <div className="rounded-lg bg-white/25 p-4">
@@ -72,7 +74,9 @@ export default function HeroSection() {
               </div>
             </div>
             <div className="mt-3 rounded-lg bg-white/25 p-4">
-              <div className="mb-3 text-xs font-semibold">99%+ Accurate Transcripts</div>
+              <div className="mb-3 text-xs font-semibold">
+                99%+ Accurate Transcripts
+              </div>
               <div className="h-2 rounded-full bg-white/20" />
               <div className="mt-2 h-2 w-11/12 rounded-full bg-white/20" />
               <div className="mt-2 h-2 w-3/4 rounded-full bg-white/20" />

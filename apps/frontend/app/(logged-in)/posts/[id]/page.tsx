@@ -1,19 +1,18 @@
- 
-import { redirect } from 'next/navigation';
-import { currentUser } from '@clerk/nextjs/server';
-import getDbConnection from '@/lib/db';
-import ContentEditor from '@/components/content/content-editor';
+import { redirect } from "next/navigation";
+import { currentUser } from "@clerk/nextjs/server";
+import getDbConnection from "@/lib/db";
+import ContentEditor from "@/components/content/content-editor";
 
 export default async function PostPage({
   params,
 }: {
-  params: { id: string } | Promise<{ id: string }>;
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
 
   const user = await currentUser();
   if (!user) {
-    redirect('/sign-in');
+    redirect("/sign-in");
     return null;
   }
 

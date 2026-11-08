@@ -1,4 +1,3 @@
- 
 import { ArrowRight } from "lucide-react";
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs/server";

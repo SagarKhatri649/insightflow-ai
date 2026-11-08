@@ -1,5 +1,5 @@
-import { ArrowUpRight } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 export default function CTASection() {
   return (
@@ -16,8 +16,9 @@ export default function CTASection() {
               Ready to save hours of watching videos?
             </h2>
             <p className="mx-auto mt-4 mb-8 max-w-2xl text-base leading-relaxed text-[#ecfdf5] md:text-lg">
-              Podcasters, creators, and educators use our platform to generate accurate
-              timestamps, summaries, and titles — all in seconds, with a single click.
+              Podcasters, creators, and educators use our platform to generate
+              accurate timestamps, summaries, and titles — all in seconds, with
+              a single click.
             </p>
             <Link
               href="/upload"
@@ -26,7 +27,9 @@ export default function CTASection() {
               Upload a Video
               <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
-            <p className="mt-4 text-sm text-[#ecfdf5]/80">No credit card required</p>
+            <p className="mt-4 text-sm text-[#ecfdf5]/80">
+              No credit card required
+            </p>
           </div>
         </div>
       </div>

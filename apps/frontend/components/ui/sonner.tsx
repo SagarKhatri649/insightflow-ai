@@ -1,10 +1,9 @@
- 
 "use client";
 
 import { useTheme } from "next-themes";
 import {
   Toaster as Sonner,
-  toast as sonnerToast,      // <- grab helper
+  toast as sonnerToast, // <- grab helper
   type ToasterProps,
 } from "sonner";
 
