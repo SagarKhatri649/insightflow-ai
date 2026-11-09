@@ -5,6 +5,120 @@ import { currentUser } from "@clerk/nextjs/server";
 import openai from "@/lib/openai";
 import getDbConnection from "@/lib/db";
 
+export async function saveWorkspaceItemAction({
+  fileName,
+  fileUrl,
+  fileType,
+  fileSize,
+}: {
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
+}) {
+  const user = await currentUser();
+  if (!user) {
+    return { success: false, message: "Authentication required" };
+  }
+
+  if (
+    typeof fileName !== "string" ||
+    typeof fileUrl !== "string" ||
+    typeof fileType !== "string" ||
+    typeof fileSize !== "number"
+  ) {
+    return { success: false, message: "Invalid uploaded file metadata" };
+  }
+
+  const trimmedFileName = fileName.trim();
+  const trimmedFileUrl = fileUrl.trim();
+  const trimmedFileType = fileType.trim();
+  let parsedUrl: URL;
+
+  try {
+    parsedUrl = new URL(trimmedFileUrl);
+  } catch {
+    return { success: false, message: "Invalid uploaded file URL" };
+  }
+
+  if (
+    !trimmedFileName ||
+    !trimmedFileType ||
+    !trimmedFileUrl ||
+    !Number.isInteger(fileSize) ||
+    fileSize <= 0 ||
+    (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:")
+  ) {
+    return { success: false, message: "Invalid uploaded file metadata" };
+  }
+
+  try {
+    const sql = await getDbConnection();
+    const [workspaceItem] = await sql`
+      INSERT INTO workspace_items (
+        user_id,
+        file_name,
+        file_url,
+        file_type,
+        file_size
+      )
+      VALUES (
+        ${user.id},
+        ${trimmedFileName},
+        ${trimmedFileUrl},
+        ${trimmedFileType},
+        ${fileSize}
+      )
+      RETURNING id
+    `;
+
+    if (!workspaceItem?.id) {
+      return { success: false, message: "Failed to save uploaded file" };
+    }
+
+    return { success: true, workspaceItemId: workspaceItem.id };
+  } catch (error) {
+    console.error("Failed to save workspace item:", error);
+    return { success: false, message: "Failed to save uploaded file" };
+  }
+}
+
+export async function markWorkspaceItemFailedAction({
+  workspaceItemId,
+  stage,
+}: {
+  workspaceItemId: string;
+  stage: "transcription" | "post_generation";
+}) {
+  const user = await currentUser();
+  if (!user || typeof workspaceItemId !== "string") {
+    return { success: false };
+  }
+
+  const errorMessage =
+    stage === "transcription"
+      ? "Transcription failed. Please try again."
+      : "Insight generation failed. Please try again.";
+
+  try {
+    const sql = await getDbConnection();
+    const [updatedWorkspaceItem] = await sql`
+      UPDATE workspace_items
+      SET status = 'failed',
+          error_message = ${errorMessage},
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+      RETURNING id
+    `;
+
+    return { success: Boolean(updatedWorkspaceItem?.id) };
+  } catch (error) {
+    console.error("Failed to update workspace item status:", error);
+    return { success: false };
+  }
+}
+
 /**
  * Fetches the file from UploadThing, sends it to Whisper for transcription,
  * and returns the raw transcript text.
@@ -115,13 +229,35 @@ ${transcript}`,
  */
 export async function generateBlogPostAction({
   transcriptions,
+  workspaceItemId,
 }: {
   transcriptions: { text: string };
+  workspaceItemId: string;
 }) {
+  const user = await currentUser();
+  if (!user) {
+    return { success: false, message: "Authentication required" };
+  }
+
   try {
-    const user = await currentUser();
-    if (!user) {
-      return { success: false, message: "Authentication required" };
+    if (
+      typeof workspaceItemId !== "string" ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        workspaceItemId,
+      )
+    ) {
+      return { success: false, message: "Invalid workspace item" };
+    }
+
+    const sql = await getDbConnection();
+    const [workspaceItem] = await sql`
+      SELECT id
+      FROM workspace_items
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+    `;
+    if (!workspaceItem?.id) {
+      return { success: false, message: "Workspace item not found" };
     }
 
     const transcriptText = transcriptions?.text?.trim();
@@ -138,7 +274,6 @@ export async function generateBlogPostAction({
     const title = firstLine.replace(/^#+\s*/, "").slice(0, 100);
 
     // 3) Insert analysisMarkdown into DB
-    const sql = await getDbConnection();
     const [inserted] = await sql`
       INSERT INTO posts (user_id, title, content)
       VALUES (${user.id}, ${title}, ${analysisMd})
@@ -147,8 +282,30 @@ export async function generateBlogPostAction({
     const postId = inserted?.id;
     if (!postId) throw new Error("Failed to insert post");
 
+    const [linkedWorkspaceItem] = await sql`
+      UPDATE workspace_items
+      SET post_id = ${postId},
+          status = 'completed',
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+      RETURNING id
+    `;
+    if (!linkedWorkspaceItem?.id) {
+      await sql`
+        DELETE FROM posts
+        WHERE id = ${postId}
+          AND user_id = ${user.id}
+      `;
+      return { success: false, message: "Failed to link workspace item" };
+    }
+
     return { success: true, postId };
   } catch (err: any) {
+    await markWorkspaceItemFailedAction({
+      workspaceItemId,
+      stage: "post_generation",
+    });
     return { success: false, message: err.message };
   }
 }

@@ -6,7 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Toaster, useToast } from "@/components/ui/sonner";
 import { useUploadThing } from "@/utils/uploadthing";
-import { generateBlogPostAction } from "@/actions/upload-actions";
+import {
+  generateBlogPostAction,
+  markWorkspaceItemFailedAction,
+  saveWorkspaceItemAction,
+} from "@/actions/upload-actions";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import {
@@ -81,7 +85,33 @@ export default function UploadForm() {
     setFileName(file.name);
     setIsProcessing(true);
 
+    let workspaceItemId: string | undefined;
+    let transcriptionCompleted = false;
+
     try {
+      const uploadResults = await startUpload([file]);
+      const uploaded = Array.isArray(uploadResults)
+        ? uploadResults[0]
+        : undefined;
+      if (!uploaded?.url) throw new Error("File storage failed");
+
+      const workspaceItemResult = await saveWorkspaceItemAction({
+        fileName: file.name,
+        fileUrl: uploaded.url,
+        fileType: file.type,
+        fileSize: file.size,
+      });
+      if (!workspaceItemResult.success) {
+        throw new Error(
+          workspaceItemResult.message || "Failed to save uploaded file",
+        );
+      }
+      const savedWorkspaceItemId = workspaceItemResult.workspaceItemId;
+      if (!savedWorkspaceItemId) {
+        throw new Error("Failed to save uploaded file");
+      }
+      workspaceItemId = savedWorkspaceItemId;
+
       toast("Transcribing…");
       const form = new FormData();
       form.append("file", file, file.name);
@@ -97,16 +127,12 @@ export default function UploadForm() {
           result.message || `Transcription failed (${res.status})`,
         );
       setTranscript(result.data.transcriptions.text);
-
-      const uploadResults = await startUpload([file]);
-      const uploaded = Array.isArray(uploadResults)
-        ? uploadResults[0]
-        : undefined;
-      if (!uploaded?.url) throw new Error("File storage failed");
+      transcriptionCompleted = true;
 
       toast("Generating post…");
       const postResult = await generateBlogPostAction({
         transcriptions: { text: result.data.transcriptions.text },
+        workspaceItemId: savedWorkspaceItemId,
       });
       if (!postResult.success || !postResult.postId)
         throw new Error(postResult.message || "Post creation failed");
@@ -116,6 +142,12 @@ export default function UploadForm() {
       router.push(`/posts/${postResult.postId}`);
     } catch (err: unknown) {
       console.error(err);
+      if (workspaceItemId && !transcriptionCompleted) {
+        await markWorkspaceItemFailedAction({
+          workspaceItemId,
+          stage: "transcription",
+        });
+      }
       toast.error(err instanceof Error ? err.message : "Something went wrong");
       if (isMounted.current) setIsProcessing(false);
     }

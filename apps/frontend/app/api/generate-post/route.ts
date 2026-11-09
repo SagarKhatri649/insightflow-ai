@@ -11,8 +11,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const { transcriptions } = await request.json();
-  const result = await generateBlogPostAction({ transcriptions });
+  const { transcriptions, workspaceItemId } = await request.json();
+  const result = await generateBlogPostAction({
+    transcriptions,
+    workspaceItemId,
+  });
 
   return NextResponse.json(result);
 }
