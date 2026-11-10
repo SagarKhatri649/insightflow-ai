@@ -104,7 +104,11 @@ export async function markWorkspaceItemFailedAction({
     const sql = await getDbConnection();
     const [updatedWorkspaceItem] = await sql`
       UPDATE workspace_items
-      SET status = 'failed',
+      SET status = CASE
+            WHEN ${stage} = 'post_generation' AND transcript IS NOT NULL
+              THEN 'transcribed'
+            ELSE 'failed'
+          END,
           error_message = ${errorMessage},
           updated_at = CURRENT_TIMESTAMP
       WHERE id = ${workspaceItemId}
@@ -116,6 +120,59 @@ export async function markWorkspaceItemFailedAction({
   } catch (error) {
     console.error("Failed to update workspace item status:", error);
     return { success: false };
+  }
+}
+
+export async function saveWorkspaceItemTranscriptAction({
+  workspaceItemId,
+  transcript,
+}: {
+  workspaceItemId: string;
+  transcript: string;
+}) {
+  const user = await currentUser();
+  if (!user) {
+    return { success: false, message: "Authentication required" };
+  }
+
+  if (
+    typeof workspaceItemId !== "string" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      workspaceItemId,
+    )
+  ) {
+    return { success: false, message: "Invalid workspace item" };
+  }
+
+  if (typeof transcript !== "string" || !transcript.trim()) {
+    return { success: false, message: "Transcript cannot be empty" };
+  }
+
+  if (transcript.length > 1_000_000) {
+    return { success: false, message: "Transcript is too long to save" };
+  }
+
+  try {
+    const sql = await getDbConnection();
+    const [updatedWorkspaceItem] = await sql`
+      UPDATE workspace_items
+      SET transcript = ${transcript},
+          status = 'transcribed',
+          error_message = NULL,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+      RETURNING id
+    `;
+
+    if (!updatedWorkspaceItem?.id) {
+      return { success: false, message: "Workspace item not found" };
+    }
+
+    return { success: true, workspaceItemId: updatedWorkspaceItem.id };
+  } catch (error) {
+    console.error("Failed to save workspace item transcript:", error);
+    return { success: false, message: "Failed to save transcript" };
   }
 }
 

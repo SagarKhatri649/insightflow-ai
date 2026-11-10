@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Toaster, useToast } from "@/components/ui/sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import {
-  generateBlogPostAction,
   markWorkspaceItemFailedAction,
+  saveWorkspaceItemTranscriptAction,
   saveWorkspaceItemAction,
 } from "@/actions/upload-actions";
 import { useRouter } from "next/navigation";
@@ -115,7 +115,6 @@ export default function UploadForm() {
       toast("Transcribing…");
       const form = new FormData();
       form.append("file", file, file.name);
-      form.append("userId", user.id);
 
       const res = await fetch("/api/transcribe", {
         method: "POST",
@@ -126,20 +125,24 @@ export default function UploadForm() {
         throw new Error(
           result.message || `Transcription failed (${res.status})`,
         );
-      setTranscript(result.data.transcriptions.text);
+
+      const transcriptText = result.data.transcriptions.text;
+      const transcriptResult = await saveWorkspaceItemTranscriptAction({
+        workspaceItemId: savedWorkspaceItemId,
+        transcript: transcriptText,
+      });
+      if (!transcriptResult.success) {
+        throw new Error(
+          transcriptResult.message || "Failed to save transcript",
+        );
+      }
+
+      setTranscript(transcriptText);
       transcriptionCompleted = true;
 
-      toast("Generating post…");
-      const postResult = await generateBlogPostAction({
-        transcriptions: { text: result.data.transcriptions.text },
-        workspaceItemId: savedWorkspaceItemId,
-      });
-      if (!postResult.success || !postResult.postId)
-        throw new Error(postResult.message || "Post creation failed");
-
       if (isMounted.current) setIsProcessing(false);
-      toast.success("All done! Redirecting…");
-      router.push(`/posts/${postResult.postId}`);
+      toast.success("Transcript ready! Redirecting…");
+      router.push(`/videos/${savedWorkspaceItemId}`);
     } catch (err: unknown) {
       console.error(err);
       if (workspaceItemId && !transcriptionCompleted) {

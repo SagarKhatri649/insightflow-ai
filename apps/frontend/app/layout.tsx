@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Source_Sans_3 } from "next/font/google";
 
-import Header from "../components/common/header";
-import Footer from "../components/common/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ORIGIN_URL } from "@/lib/constants";
@@ -42,12 +40,8 @@ export default function RootLayout({
         <body
           className={`${sourceSans.variable} font-sans antialiased bg-background text-foreground scroll-smooth`}
         >
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Toaster />
-            <Footer />
-          </div>
+          {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
