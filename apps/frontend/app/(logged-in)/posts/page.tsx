@@ -309,23 +309,25 @@ export default async function VideoLibraryPage(props: {
             return (
               <div
                 key={item.id}
-                className={`flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-xs transition-colors sm:flex-row sm:items-center sm:p-5 ${isFailed
-                  ? "border-red-200 bg-red-50/20"
-                  : "border-[#dee1e6] bg-white hover:border-[#064e3b]/30"
-                  }`}
+                className={`flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-xs transition-colors sm:flex-row sm:items-center sm:p-5 ${
+                  isFailed
+                    ? "border-red-200 bg-red-50/20"
+                    : "border-[#dee1e6] bg-white hover:border-[#064e3b]/30"
+                }`}
               >
                 {/* Left: Thumbnail Icon & Information */}
                 <div className="flex min-w-0 items-start gap-4">
                   {/* Thumbnail / Status Icon Box */}
                   <div
-                    className={`flex h-16 w-24 shrink-0 items-center justify-center rounded-lg border sm:h-20 sm:w-28 ${isCompleted
-                      ? "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
-                      : isProcessing
-                        ? "border-[#dee1e6] bg-[#fbfdfc] text-[#064e3b]"
-                        : isFailed
-                          ? "border-red-200 bg-red-50 text-red-600"
-                          : "border-[#dee1e6] bg-[#f8faf9] text-[#5f6368]"
-                      }`}
+                    className={`flex h-16 w-24 shrink-0 items-center justify-center rounded-lg border sm:h-20 sm:w-28 ${
+                      isCompleted
+                        ? "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
+                        : isProcessing
+                          ? "border-[#dee1e6] bg-[#fbfdfc] text-[#064e3b]"
+                          : isFailed
+                            ? "border-red-200 bg-red-50 text-red-600"
+                            : "border-[#dee1e6] bg-[#f8faf9] text-[#5f6368]"
+                    }`}
                   >
                     {isCompleted ? (
                       <Play className="h-6 w-6 fill-[#064e3b] text-[#064e3b]" />

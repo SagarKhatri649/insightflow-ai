@@ -1,7 +1,9 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { ArrowLeft, FileText } from "lucide-react";
+import { ArrowLeft, Clock3, FileText } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -28,20 +30,66 @@ const statusLabels: Record<string, string> = {
 
 function formatFileSize(fileSize: WorkspaceItem["file_size"]) {
   if (fileSize === null || fileSize === undefined) return null;
-
   const bytes = Number(fileSize);
-  if (!Number.isFinite(bytes) || bytes < 0) return null;
+  if (!Number.isFinite(bytes) || bytes <= 0) return null;
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function formatFileType(fileType: string | null | undefined, fileName: string) {
+  if (fileType) {
+    const lower = fileType.toLowerCase();
+    if (lower.includes("mp4")) return "MP4";
+    if (lower.includes("quicktime") || lower.includes("mov")) return "MOV";
+    if (lower.includes("webm")) return "WEBM";
+    if (lower.includes("matroska") || lower.includes("mkv")) return "MKV";
+    if (lower.includes("mpeg") || lower.includes("mp3")) return "MP3";
+    if (lower.includes("wav")) return "WAV";
+    const sub = lower.split("/")[1];
+    if (sub) return sub.toUpperCase();
+  }
+  const ext = fileName.split(".").pop();
+  return ext ? ext.toUpperCase() : null;
+}
+
+function getStatusClasses(status: string) {
+  if (status === "completed" || status === "transcribed") {
+    return "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+  }
+
+  if (status === "failed") {
+    return "border-red-200 bg-red-50 text-red-700";
+  }
+
+  if (status === "processing" || status === "uploaded") {
+    return "border-[#dee1e6] bg-white text-[#5f6368]";
+  }
+
+  return "border-[#dee1e6] bg-[#f1f3f5] text-[#5f6368]";
+}
+
 function StatusMessage({ item }: { item: WorkspaceItem }) {
   if (item.transcript?.trim()) {
+    const wordCount = item.transcript.trim().split(/\s+/).length;
+
     return (
-      <div className="rounded-xl border border-[#dee1e6] bg-white p-5 shadow-sm sm:p-7">
-        <h2 className="mb-4 text-xl font-bold text-[#064e3b]">Transcript</h2>
-        <div className="max-h-[min(70vh,48rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg bg-[#f8faf9] p-5 text-sm leading-7 text-[#3c4043] sm:p-6">
+      <div className="rounded-xl border border-[#dee1e6] bg-white p-5 shadow-xs sm:p-7">
+        <div className="mb-4 flex items-center justify-between border-b border-[#dee1e6] pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
+              <FileText className="h-4 w-4 text-[#064e3b]" />
+            </div>
+            <h2 className="text-base font-bold text-[#064e3b] sm:text-lg">
+              Full Transcript
+            </h2>
+          </div>
+          <span className="text-xs text-[#5f6368]">
+            {wordCount} {wordCount === 1 ? "word" : "words"}
+          </span>
+        </div>
+
+        <div className="max-h-[min(70vh,50rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-[#dee1e6]/60 bg-[#f8faf9] p-5 text-sm leading-relaxed text-[#3c4043] sm:p-6 sm:text-base">
           {item.transcript}
         </div>
       </div>
@@ -50,27 +98,41 @@ function StatusMessage({ item }: { item: WorkspaceItem }) {
 
   if (item.status === "failed") {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-        {item.error_message || "Processing failed. Please try again."}
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-xs">
+        <h2 className="mb-1 font-bold">Transcription Failed</h2>
+        <p>
+          {item.error_message ||
+            "Processing failed. Please try again by uploading the file."}
+        </p>
+        <div className="mt-4">
+          <Button
+            asChild
+            size="sm"
+            variant="outline"
+            className="border-red-300 bg-white text-xs font-semibold text-red-700 shadow-2xs hover:bg-red-50"
+          >
+            <Link href="/upload">Upload again</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
-  if (!item.transcript) {
-    return (
-      <div className="rounded-xl border border-[#dee1e6] bg-white p-8 text-center shadow-sm">
-        <FileText className="mx-auto h-10 w-10 text-[#10b981]" />
-        <h2 className="mt-4 text-lg font-bold text-[#064e3b]">
-          Transcript not available yet
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-[#5f6368]">
-          This video is currently{" "}
-          {statusLabels[item.status] ?? "being processed"}. Check back once
-          transcription is complete.
-        </p>
+  return (
+    <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-xs sm:p-12">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
+        <Clock3 className="h-6 w-6 text-[#10b981]" />
       </div>
-    );
-  }
+      <h2 className="mt-4 text-base font-bold text-[#064e3b]">
+        Transcript in progress
+      </h2>
+      <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-[#5f6368]">
+        This video is currently{" "}
+        {statusLabels[item.status]?.toLowerCase() ?? "being processed"}. Check
+        back once transcription is complete.
+      </p>
+    </div>
+  );
 }
 
 export default async function VideoWorkspacePage({
@@ -88,7 +150,22 @@ export default async function VideoWorkspacePage({
   if (!uuidPattern.test(id)) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12 text-center sm:px-6">
-        <p className="text-sm text-[#5f6368]">Video not found.</p>
+        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-xs sm:p-12">
+          <p className="text-sm font-semibold text-[#202124]">
+            Video not found
+          </p>
+          <p className="mt-1 text-xs text-[#5f6368]">
+            The requested video workspace does not exist or you do not have
+            permission to view it.
+          </p>
+          <Button
+            asChild
+            size="sm"
+            className="mt-4 bg-[#064e3b] text-white hover:bg-[#04382b]"
+          >
+            <Link href="/posts">Back to video library</Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -113,8 +190,8 @@ export default async function VideoWorkspacePage({
 
   if (databaseError) {
     return (
-      <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-xs">
           This video workspace is temporarily unavailable. Please try again
           later.
         </div>
@@ -125,51 +202,64 @@ export default async function VideoWorkspacePage({
   if (!item) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12 text-center sm:px-6">
-        <p className="text-sm text-[#5f6368]">Video not found.</p>
-        <Link
-          href="/posts"
-          className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#064e3b] hover:text-[#04382b]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to video library
-        </Link>
+        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-xs sm:p-12">
+          <p className="text-sm font-semibold text-[#202124]">
+            Video not found
+          </p>
+          <p className="mt-1 text-xs text-[#5f6368]">
+            The requested video workspace does not exist or you do not have
+            permission to view it.
+          </p>
+          <Button
+            asChild
+            size="sm"
+            className="mt-4 bg-[#064e3b] text-white hover:bg-[#04382b]"
+          >
+            <Link href="/posts">Back to video library</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   const fileSize = formatFileSize(item.file_size);
-  const metadata = [item.file_type, fileSize].filter(Boolean).join(" • ");
+  const fileType = formatFileType(item.file_type, item.file_name);
+  const uploadDate = new Date(item.created_at).toLocaleDateString();
+  const metadataParts = [uploadDate, fileType, fileSize].filter(Boolean);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
+      {/* Top Navigation */}
       <Link
         href="/posts"
-        className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-[#064e3b] hover:text-[#04382b]"
+        className="group mb-6 inline-flex items-center gap-2 text-xs font-semibold text-[#064e3b] transition-colors hover:text-[#04382b] sm:text-sm"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
         Back to video library
       </Link>
 
+      {/* Header Section */}
       <header className="mb-7">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.12em] text-[#064e3b]">
-          Video Workspace
-        </p>
-        <h1 className="break-words text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl">
-          {item.file_name}
-        </h1>
-        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[#5f6368]">
-          <span>{statusLabels[item.status] ?? "Unknown status"}</span>
-          <span aria-hidden="true">•</span>
-          <span>{new Date(item.created_at).toLocaleDateString()}</span>
-          {metadata && (
-            <>
-              <span aria-hidden="true">•</span>
-              <span>{metadata}</span>
-            </>
-          )}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="break-words text-2xl font-extrabold tracking-tight text-[#064e3b] sm:text-3xl">
+            {item.file_name}
+          </h1>
+          <Badge
+            variant="outline"
+            className={`w-fit text-[11px] font-semibold ${getStatusClasses(item.status)}`}
+          >
+            {statusLabels[item.status] ?? "Unknown status"}
+          </Badge>
         </div>
+
+        {metadataParts.length > 0 && (
+          <p className="mt-2 text-xs text-[#5f6368] sm:text-sm">
+            {metadataParts.join(" • ")}
+          </p>
+        )}
       </header>
 
+      {/* Main Status / Full Transcript Section */}
       <StatusMessage item={item} />
     </div>
   );
