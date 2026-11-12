@@ -1,9 +1,10 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { ArrowLeft, Clock3, FileText } from "lucide-react";
+import { ArrowLeft, Clock3 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import TranscriptPanel from "@/components/videos/transcript-panel";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -71,28 +72,8 @@ function getStatusClasses(status: string) {
 
 function StatusMessage({ item }: { item: WorkspaceItem }) {
   if (item.transcript?.trim()) {
-    const wordCount = item.transcript.trim().split(/\s+/).length;
-
     return (
-      <div className="rounded-xl border border-[#dee1e6] bg-white p-5 shadow-xs sm:p-7">
-        <div className="mb-4 flex items-center justify-between border-b border-[#dee1e6] pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
-              <FileText className="h-4 w-4 text-[#064e3b]" />
-            </div>
-            <h2 className="text-base font-bold text-[#064e3b] sm:text-lg">
-              Full Transcript
-            </h2>
-          </div>
-          <span className="text-xs text-[#5f6368]">
-            {wordCount} {wordCount === 1 ? "word" : "words"}
-          </span>
-        </div>
-
-        <div className="max-h-[min(70vh,50rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-[#dee1e6]/60 bg-[#f8faf9] p-5 text-sm leading-relaxed text-[#3c4043] sm:p-6 sm:text-base">
-          {item.transcript}
-        </div>
-      </div>
+      <TranscriptPanel transcript={item.transcript} fileName={item.file_name} />
     );
   }
 
