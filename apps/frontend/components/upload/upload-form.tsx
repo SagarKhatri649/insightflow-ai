@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Toaster, useToast } from "@/components/ui/sonner";
+import { useToast } from "@/components/ui/sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import {
   markWorkspaceItemFailedAction,
@@ -35,7 +35,14 @@ const schema = z.object({
     ),
 });
 
-export default function UploadForm() {
+type UploadFormVariant = "full" | "compact";
+
+export default function UploadForm({
+  variant = "full",
+}: {
+  variant?: UploadFormVariant;
+}) {
+  const isCompact = variant === "compact";
   const { toast } = useToast();
   const { user } = useUser();
   const router = useRouter();
@@ -166,18 +173,27 @@ export default function UploadForm() {
 
   return (
     <>
-      <Toaster richColors position="top-center" />
-      <section className="w-full px-4 py-8 sm:px-6 md:py-12">
-        <div className="mx-auto flex w-full max-w-4xl flex-col items-center">
-          <div className="mb-7 max-w-2xl text-center">
-            <h1 className="mb-3 text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
-              Turn your video into clear insights
-            </h1>
-            <p className="text-base leading-[160%] text-[#5f6368]">
-              Upload an audio or video file and get a transcript, summary, and
-              actionable insights in minutes.
-            </p>
-          </div>
+      <section
+        className={isCompact ? "w-full" : "w-full px-4 py-8 sm:px-6 md:py-12"}
+      >
+        <div
+          className={
+            isCompact
+              ? "mx-auto flex w-full flex-col items-center"
+              : "mx-auto flex w-full max-w-4xl flex-col items-center"
+          }
+        >
+          {!isCompact && (
+            <div className="mb-7 max-w-2xl text-center">
+              <h1 className="mb-3 text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
+                Turn your video into clear insights
+              </h1>
+              <p className="text-base leading-[160%] text-[#5f6368]">
+                Upload an audio or video file and get a transcript, summary, and
+                actionable insights in minutes.
+              </p>
+            </div>
+          )}
           <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8">
             <form onSubmit={handleTranscribe}>
               <div className="group flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm sm:p-10">
@@ -248,38 +264,40 @@ export default function UploadForm() {
                   </div>
                 )}
               </div>
-              <div className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-3">
-                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                    <FileText className="h-4 w-4 text-[#5f6368]" />
-                    <span>Transcript</span>
+              {!isCompact && (
+                <div className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-3">
+                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
+                      <FileText className="h-4 w-4 text-[#5f6368]" />
+                      <span>Transcript</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
+                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                    <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
+                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
+                      <Menu className="h-4 w-4 text-[#5f6368]" />
+                      <span>AI Summary</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
+                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
+                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
+                      <Lightbulb className="h-4 w-4 text-[#5f6368]" />
+                      <span>Actionable Takeaways</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
+                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
+                    </div>
                   </div>
                 </div>
-                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                    <Menu className="h-4 w-4 text-[#5f6368]" />
-                    <span>AI Summary</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                    <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
-                  </div>
-                </div>
-                <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                  <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                    <Lightbulb className="h-4 w-4 text-[#5f6368]" />
-                    <span>Actionable Takeaways</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                    <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
-                  </div>
-                </div>
-              </div>
+              )}
               <div className="mt-7 flex flex-col items-center justify-center">
                 <Button
                   type="submit"

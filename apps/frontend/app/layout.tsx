@@ -41,7 +41,7 @@ export default function RootLayout({
           className={`${sourceSans.variable} font-sans antialiased bg-background text-foreground scroll-smooth`}
         >
           {children}
-          <Toaster />
+          <Toaster richColors position="top-center" />
         </body>
       </html>
     </ClerkProvider>

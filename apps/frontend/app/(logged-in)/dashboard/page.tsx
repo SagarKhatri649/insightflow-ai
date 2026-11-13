@@ -7,12 +7,13 @@ import {
   Info,
   Loader2,
   Play,
-  Upload,
+  // Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import UploadForm from "@/components/upload/upload-form";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -103,33 +104,19 @@ export default async function DashboardPage() {
           asChild
           className="w-full bg-[#064e3b] text-white hover:bg-[#04382b] sm:w-auto"
         >
-          <Link href="/upload">
+          {/* <Link href="/upload">
             <Upload className="h-4 w-4" />
             Upload video
-          </Link>
+          </Link> */}
         </Button>
       </section>
 
       {/* Top Cards: Quick Upload & Workspace Summary */}
       <section className="my-6 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12 sm:my-8">
-        {/* Quick Upload Navigation Card */}
-        <Link
-          href="/upload"
-          className="group flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#dee1e6] bg-[#fbfdfc] p-8 text-center shadow-xs transition-all duration-200 hover:border-[#064e3b] hover:bg-[#ecfdf5]/30 lg:col-span-8 sm:p-10"
-        >
-          <div className="mb-3.5 flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b] transition-colors group-hover:bg-[#d1fae5]">
-            <Upload className="h-5 w-5 stroke-[2.2] text-[#064e3b]" />
-          </div>
-          <h2 className="mb-1 text-base font-bold text-[#064e3b]">
-            Upload New Video
-          </h2>
-          <p className="text-xs text-[#5f6368]">
-            Drag and drop your video files here or click to browse.
-          </p>
-          <p className="mt-1 text-[11px] text-[#979797]">
-            Audio or video files up to 20MB (MP4, MOV, WEBM, MP3, WAV)
-          </p>
-        </Link>
+        {/* Quick Upload Card */}
+        <div className="lg:col-span-8">
+          <UploadForm variant="compact" />
+        </div>
 
         {/* Workspace Summary Card */}
         <div className="flex flex-col justify-between rounded-2xl border border-[#dee1e6] bg-white p-6 shadow-xs lg:col-span-4">
