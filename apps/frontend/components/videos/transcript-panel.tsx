@@ -187,7 +187,9 @@ export default function TranscriptPanel({
 
       {/* Transcript body — original text with optional highlights */}
       <div className="max-h-[min(70vh,50rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-[#dee1e6]/60 bg-[#f8faf9] p-5 text-sm leading-relaxed text-[#3c4043] sm:p-6 sm:text-base">
-        {highlight ? highlight.nodes : transcript}
+        <div className="sm:max-w-[75ch]">
+          {highlight ? highlight.nodes : transcript}
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import {
   Loader2,
   Play,
   Search,
-  Upload,
+  // Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -160,7 +160,7 @@ export default async function VideoLibraryPage(props: {
             and insights.
           </p>
         </div>
-        <Button
+        {/* <Button
           asChild
           className="w-full bg-[#064e3b] text-white hover:bg-[#04382b] sm:w-auto"
         >
@@ -168,7 +168,7 @@ export default async function VideoLibraryPage(props: {
             <Upload className="h-4 w-4" />
             Upload Video
           </Link>
-        </Button>
+        </Button> */}
       </section>
 
       {/* Search and Filter Controls Toolbar */}
@@ -312,7 +312,7 @@ export default async function VideoLibraryPage(props: {
                 className={`flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-xs transition-colors sm:flex-row sm:items-center sm:p-5 ${
                   isFailed
                     ? "border-red-200 bg-red-50/20"
-                    : "border-[#dee1e6] bg-white hover:border-[#064e3b]/30"
+                    : "border-[#dee1e6] bg-white hover:border-[#064e3b]/30 hover:bg-[#fbfdfc] hover:shadow-sm"
                 }`}
               >
                 {/* Left: Thumbnail Icon & Information */}

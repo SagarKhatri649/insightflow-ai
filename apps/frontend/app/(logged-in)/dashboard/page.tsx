@@ -100,15 +100,6 @@ export default async function DashboardPage() {
             uploading a file below.
           </p>
         </div>
-        <Button
-          asChild
-          className="w-full bg-[#064e3b] text-white hover:bg-[#04382b] sm:w-auto"
-        >
-          {/* <Link href="/upload">
-            <Upload className="h-4 w-4" />
-            Upload video
-          </Link> */}
-        </Button>
       </section>
 
       {/* Top Cards: Quick Upload & Workspace Summary */}

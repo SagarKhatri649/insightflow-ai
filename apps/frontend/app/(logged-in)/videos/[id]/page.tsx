@@ -227,7 +227,7 @@ export default async function VideoWorkspacePage({
           </h1>
           <Badge
             variant="outline"
-            className={`w-fit text-[11px] font-semibold ${getStatusClasses(item.status)}`}
+            className={`w-fit shrink-0 text-[11px] font-semibold ${getStatusClasses(item.status)}`}
           >
             {statusLabels[item.status] ?? "Unknown status"}
           </Badge>
