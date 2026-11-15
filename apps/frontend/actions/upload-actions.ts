@@ -366,3 +366,175 @@ export async function generateBlogPostAction({
     return { success: false, message: err.message };
   }
 }
+
+/**
+ * Generates a summary from an already-saved transcript.
+ * Uses Groq (via the OpenAI-compatible client) and never retranscribes media.
+ */
+const SUMMARY_MODEL = "openai/gpt-oss-120b";
+
+const MAX_SUMMARY_TRANSCRIPT_CHARS = 16_000;
+
+type WorkspaceSummaryResult =
+  | { success: true; summary: string; cached: boolean }
+  | { success: false; message: string };
+
+/**
+ * Calls the summary model once and returns trimmed Markdown, or an empty
+ * string when the model returned nothing usable.
+ */
+async function generateSummaryFromTranscript(
+  transcript: string,
+): Promise<string> {
+  const completion = await openai.chat.completions.create({
+    model: SUMMARY_MODEL,
+    max_tokens: 2000,
+    reasoning_effort: "low",
+    messages: [
+      {
+        role: "system",
+        content: `You are an AI assistant. Given a transcript, produce a readable summary and key points.
+
+Respond with valid GitHub-Flavored Markdown structured exactly like this, with one blank line between sections:
+
+## Summary
+
+<A concise summary of the transcript>
+
+## Key Points
+
+• <First meaningful key point as a full sentence>
+
+• <Second meaningful key point as a full sentence>
+
+Use 5–10 bullet points, each separated by one blank line. Output only the Markdown document and nothing else. Do not include hidden reasoning or analysis in the output.`,
+      },
+      {
+        role: "user",
+        content: `Transcript:
+${transcript}`,
+      },
+    ],
+  });
+
+  return completion.choices[0]?.message?.content?.trim() ?? "";
+}
+
+/**
+ * Server action: generate and persist a summary for a workspace item.
+ * Reads the saved transcript server-side (transcript text is never accepted
+ * from the client), is idempotent for items that already have a summary, and
+ * never modifies status, transcript, or error_message. Safe to retry after a
+ * failure.
+ */
+export async function generateWorkspaceItemSummaryAction({
+  workspaceItemId,
+}: {
+  workspaceItemId: string;
+}): Promise<WorkspaceSummaryResult> {
+  const user = await currentUser();
+  if (!user) {
+    return { success: false, message: "Authentication required" };
+  }
+
+  if (
+    typeof workspaceItemId !== "string" ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      workspaceItemId,
+    )
+  ) {
+    return { success: false, message: "Invalid workspace item" };
+  }
+
+  try {
+    const sql = await getDbConnection();
+
+    const [workspaceItem] = await sql`
+      SELECT id, transcript, summary
+      FROM public.workspace_items
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+    `;
+
+    if (!workspaceItem?.id) {
+      return { success: false, message: "Workspace item not found" };
+    }
+
+    // Idempotent: an existing summary is returned without another model call.
+    if (
+      typeof workspaceItem.summary === "string" &&
+      workspaceItem.summary.trim()
+    ) {
+      return { success: true, summary: workspaceItem.summary, cached: true };
+    }
+
+    const transcriptText = workspaceItem.transcript?.trim();
+    if (!transcriptText) {
+      return {
+        success: false,
+        message: "No transcript available yet. Transcribe the video first.",
+      };
+    }
+
+    if (transcriptText.length > MAX_SUMMARY_TRANSCRIPT_CHARS) {
+      return {
+        success: false,
+        message: `Transcript is too long to summarize (over ${MAX_SUMMARY_TRANSCRIPT_CHARS.toLocaleString()} characters).`,
+      };
+    }
+
+    const summary = await generateSummaryFromTranscript(transcriptText);
+    if (!summary) {
+      return {
+        success: false,
+        message:
+          "Summary generation returned an empty result. Please try again.",
+      };
+    }
+
+    // Conditional update: if a concurrent request saved a summary first,
+    // this update matches zero rows and we return the saved summary instead
+    // of overwriting it.
+    const [updatedWorkspaceItem] = await sql`
+      UPDATE public.workspace_items
+      SET summary = ${summary},
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+        AND summary IS NULL
+      RETURNING id
+    `;
+
+    if (updatedWorkspaceItem?.id) {
+      return { success: true, summary, cached: false };
+    }
+
+    const [savedWorkspaceItem] = await sql`
+      SELECT summary
+      FROM public.workspace_items
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+    `;
+
+    if (
+      typeof savedWorkspaceItem?.summary === "string" &&
+      savedWorkspaceItem.summary.trim()
+    ) {
+      return {
+        success: true,
+        summary: savedWorkspaceItem.summary,
+        cached: true,
+      };
+    }
+
+    return { success: false, message: "Workspace item not found" };
+  } catch (error) {
+    // Provider and database failures are logged server-side and surfaced as a
+    // generic, retry-friendly message. status/transcript stay untouched.
+    console.error("Failed to generate workspace item summary:", error);
+    return {
+      success: false,
+      message: "Failed to generate summary. Please try again.",
+    };
+  }
+}

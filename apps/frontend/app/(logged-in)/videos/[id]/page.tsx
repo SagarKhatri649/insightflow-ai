@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import TranscriptPanel from "@/components/videos/transcript-panel";
+import SummarySection from "@/components/videos/summary-section";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -14,6 +15,7 @@ type WorkspaceItem = {
   file_size: number | string | null;
   status: string;
   transcript: string | null;
+  summary: string | null;
   error_message: string | null;
   created_at: Date | string;
 };
@@ -158,7 +160,7 @@ export default async function VideoWorkspacePage({
     const sql = await getDbConnection();
     const [workspaceItem] = await sql`
       SELECT id, file_name, file_type, file_size, status, transcript,
-             error_message, created_at
+             summary, error_message, created_at
       FROM public.workspace_items
       WHERE id = ${id}
         AND user_id = ${user.id}
@@ -241,7 +243,14 @@ export default async function VideoWorkspacePage({
       </header>
 
       {/* Main Status / Full Transcript Section */}
-      <StatusMessage item={item} />
+      <div className="flex flex-col gap-6">
+        <SummarySection
+          workspaceItemId={item.id}
+          initialSummary={item.summary}
+          hasTranscript={Boolean(item.transcript?.trim())}
+        />
+        <StatusMessage item={item} />
+      </div>
     </div>
   );
 }
