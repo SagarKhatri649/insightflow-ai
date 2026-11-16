@@ -17,7 +17,42 @@ type SummarySectionProps = {
 type SummaryBlock =
   | { kind: "heading"; text: string }
   | { kind: "paragraph"; text: string }
-  | { kind: "bullet"; text: string };
+  | { kind: "bullet"; text: string }
+  | { kind: "ordered"; number: number; text: string };
+
+/**
+ * Splits text into regular/bold segments at Markdown **bold** markers so they
+ * can be rendered as real <strong> content instead of literal asterisks.
+ * Unmatched asterisks are left untouched.
+ */
+function splitInlineBold(text: string): Array<{ text: string; bold: boolean }> {
+  const parts: Array<{ text: string; bold: boolean }> = [];
+
+  for (const [index, segment] of text.split(/\*\*(.+?)\*\*/g).entries()) {
+    if (!segment) continue;
+    parts.push({ text: segment, bold: index % 2 === 1 });
+  }
+
+  return parts.length > 0 ? parts : [{ text, bold: false }];
+}
+
+/** Renders inline bold segments as plain text with real <strong> elements. */
+function InlineText({ text }: { text: string }) {
+  const parts = splitInlineBold(text);
+  return (
+    <>
+      {parts.map((part, index) =>
+        part.bold ? (
+          <strong key={index} className="font-semibold">
+            {part.text}
+          </strong>
+        ) : (
+          <span key={index}>{part.text}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 /**
  * Renders the limited Markdown shape the summary model is prompted to emit
@@ -37,6 +72,16 @@ function parseSummaryMarkdown(summary: string): SummaryBlock[] {
 
     if (/^[•\-*]\s+/.test(line)) {
       blocks.push({ kind: "bullet", text: line.replace(/^[•\-*]\s+/, "") });
+      continue;
+    }
+
+    const orderedMatch = /^(\d+)[.)]\s+(.*)$/.exec(line);
+    if (orderedMatch) {
+      blocks.push({
+        kind: "ordered",
+        number: Number.parseInt(orderedMatch[1], 10),
+        text: orderedMatch[2],
+      });
       continue;
     }
 
@@ -147,14 +192,29 @@ export default function SummarySection({
                       aria-hidden="true"
                       className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#10b981]"
                     />
-                    <span>{block.text}</span>
+                    <span>
+                      <InlineText text={block.text} />
+                    </span>
+                  </p>
+                );
+              }
+
+              if (block.kind === "ordered") {
+                return (
+                  <p key={index} className="mb-1.5 flex gap-2 leading-relaxed">
+                    <span className="shrink-0 font-semibold text-[#064e3b]">
+                      {block.number}.
+                    </span>
+                    <span>
+                      <InlineText text={block.text} />
+                    </span>
                   </p>
                 );
               }
 
               return (
                 <p key={index} className="mb-3 leading-relaxed last:mb-0">
-                  {block.text}
+                  <InlineText text={block.text} />
                 </p>
               );
             })}

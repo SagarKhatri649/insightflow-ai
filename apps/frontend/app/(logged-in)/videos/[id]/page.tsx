@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import TranscriptPanel from "@/components/videos/transcript-panel";
 import SummarySection from "@/components/videos/summary-section";
 import ChatPanel from "@/components/videos/chat-panel";
+import DownloadPdfButton from "@/components/videos/download-pdf-button";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -228,12 +229,19 @@ export default async function VideoWorkspacePage({
           <h1 className="break-words text-2xl font-extrabold tracking-tight text-[#064e3b] sm:text-3xl">
             {item.file_name}
           </h1>
-          <Badge
-            variant="outline"
-            className={`w-fit shrink-0 text-[11px] font-semibold ${getStatusClasses(item.status)}`}
-          >
-            {statusLabels[item.status] ?? "Unknown status"}
-          </Badge>
+          <div className="flex shrink-0 items-center gap-2">
+            <DownloadPdfButton
+              workspaceItemId={item.id}
+              fileName={item.file_name}
+              hasSummary={Boolean(item.summary?.trim())}
+            />
+            <Badge
+              variant="outline"
+              className={`w-fit shrink-0 text-[11px] font-semibold ${getStatusClasses(item.status)}`}
+            >
+              {statusLabels[item.status] ?? "Unknown status"}
+            </Badge>
+          </div>
         </div>
 
         {metadataParts.length > 0 && (
