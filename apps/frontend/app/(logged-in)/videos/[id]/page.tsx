@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import TranscriptPanel from "@/components/videos/transcript-panel";
 import SummarySection from "@/components/videos/summary-section";
+import ChatPanel from "@/components/videos/chat-panel";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -250,6 +251,10 @@ export default async function VideoWorkspacePage({
           hasTranscript={Boolean(item.transcript?.trim())}
         />
         <StatusMessage item={item} />
+        <ChatPanel
+          workspaceItemId={item.id}
+          hasTranscript={Boolean(item.transcript?.trim())}
+        />
       </div>
     </div>
   );
