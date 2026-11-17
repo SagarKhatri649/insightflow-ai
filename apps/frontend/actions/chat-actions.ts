@@ -308,11 +308,7 @@ export async function askTranscriptQuestionAction({
       };
     }
 
-    const history = await loadRecentChatMessages(
-      sql,
-      workspaceItemId,
-      user.id,
-    );
+    const history = await loadRecentChatMessages(sql, workspaceItemId, user.id);
 
     // Duplicate-submit guard: an unanswered user message from the last few
     // seconds most likely means a request is already in flight.
@@ -379,10 +375,7 @@ export async function askTranscriptQuestionAction({
     } catch (persistenceError) {
       // The answer was generated successfully, so return it to the user even
       // though it was not saved. Details are logged server-side only.
-      console.error(
-        "Failed to persist chat messages:",
-        persistenceError,
-      );
+      console.error("Failed to persist chat messages:", persistenceError);
       return {
         success: true,
         question: {
@@ -418,6 +411,115 @@ export async function askTranscriptQuestionAction({
     // generic, retry-friendly message. No partial turn is ever persisted on
     // this path because persistence only runs after a successful model call.
     console.error("Failed to answer transcript question:", error);
+    return {
+      success: false,
+      message: "Failed to generate an answer. Please try again.",
+    };
+  }
+}
+
+type SuggestedAnswerResult =
+  { success: true; answer: string } | { success: false; message: string };
+
+/**
+ * Generates a grounded answer for one of the UI's suggested questions
+ * without touching chat history. Deliberately a small, self-contained flow
+ * instead of a refactor of `askTranscriptQuestionAction`: that action owns
+ * history loading, duplicate-submission protection and transactional
+ * persistence, none of which apply to suggested answers — reusing it would
+ * persist suggested turns into the user's normal chat history.
+ *
+ * Security and grounding posture is identical: Clerk authentication, the
+ * shared UUID convention, an owner-scoped transcript read, the 16,000-char
+ * transcript limit, the same anti-injection system prompt, and the same
+ * model parameters. Nothing is ever written to the database and no
+ * transcript content is accepted from the client.
+ */
+export async function getSuggestedAnswerAction({
+  workspaceItemId,
+  question,
+}: {
+  workspaceItemId: string;
+  question: string;
+}): Promise<SuggestedAnswerResult> {
+  const user = await currentUser();
+  if (!user) {
+    return { success: false, message: "Authentication required" };
+  }
+
+  if (
+    typeof workspaceItemId !== "string" ||
+    !WORKSPACE_ITEM_ID_PATTERN.test(workspaceItemId)
+  ) {
+    return { success: false, message: "Invalid workspace item" };
+  }
+
+  if (typeof question !== "string" || !question.trim()) {
+    return { success: false, message: "Question cannot be empty" };
+  }
+
+  const trimmedQuestion = question.trim();
+  if (trimmedQuestion.length > MAX_CHAT_QUESTION_CHARS) {
+    return {
+      success: false,
+      message: `Question is too long (over ${MAX_CHAT_QUESTION_CHARS.toLocaleString()} characters).`,
+    };
+  }
+
+  try {
+    const sql = await getDbConnection();
+
+    const [workspaceItem] = await sql`
+      SELECT id, transcript
+      FROM public.workspace_items
+      WHERE id = ${workspaceItemId}
+        AND user_id = ${user.id}
+    `;
+    if (!workspaceItem?.id) {
+      return { success: false, message: "Workspace item not found" };
+    }
+
+    const transcriptText = workspaceItem.transcript?.trim();
+    if (!transcriptText) {
+      return {
+        success: false,
+        message: "No transcript available yet. Transcribe the video first.",
+      };
+    }
+
+    // Rejected rather than truncated, matching the chat action, so an answer
+    // is never presented as covering the full video.
+    if (transcriptText.length > MAX_CHAT_TRANSCRIPT_CHARS) {
+      return {
+        success: false,
+        message: `Transcript is too long to chat with (over ${MAX_CHAT_TRANSCRIPT_CHARS.toLocaleString()} characters).`,
+      };
+    }
+
+    // No conversation history: each suggested answer is grounded only in the
+    // transcript and the question itself.
+    const completion = await openai.chat.completions.create({
+      model: CHAT_MODEL,
+      max_tokens: CHAT_MAX_TOKENS,
+      reasoning_effort: "low",
+      messages: buildChatMessages(transcriptText, [], trimmedQuestion),
+    });
+
+    const answer = completion.choices[0]?.message?.content?.trim() ?? "";
+    if (!answer) {
+      return {
+        success: false,
+        message:
+          "Answer generation returned an empty result. Please try again.",
+      };
+    }
+
+    // Read-only action: no chat_messages insert, no other database record.
+    return { success: true, answer };
+  } catch (error) {
+    // Provider and database failures are logged server-side and surfaced as
+    // a generic, retry-friendly message without internal details.
+    console.error("Failed to generate suggested answer:", error);
     return {
       success: false,
       message: "Failed to generate an answer. Please try again.",

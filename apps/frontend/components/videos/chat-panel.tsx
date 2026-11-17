@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  AlertCircle,
+  ChevronDown,
   MessageCircle,
   Loader2,
   SendHorizontal,
-  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/sonner";
 import {
   askTranscriptQuestionAction,
   getChatMessagesAction,
+  getSuggestedAnswerAction,
 } from "@/actions/chat-actions";
 
 type ChatPanelProps = {
@@ -20,12 +22,33 @@ type ChatPanelProps = {
   hasTranscript: boolean;
 };
 
-/** Mirrors the client-safe shape returned by the chat server actions. */
+/**
+ * Mirrors the client-safe shape returned by the chat server actions.
+ */
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
   createdAt: string;
 };
+
+/** Per-card lifecycle for a suggested question's expandable answer. */
+type SuggestedAnswerState = {
+  status: "idle" | "loading" | "ready" | "error";
+  answer?: string;
+  message?: string;
+};
+
+/**
+ * Static starter questions shown when a conversation is empty. These are
+ * generic on purpose — the client never sees transcript content, so no
+ * per-video suggestion generation happens here.
+ */
+const SUGGESTED_QUESTIONS = [
+  "Summarize the main points",
+  "What are the key takeaways?",
+  "Who is mentioned and in what context?",
+  "What actions or next steps are discussed?",
+];
 
 /**
  * Renders one chat message as plain text with preserved line breaks. No
@@ -52,7 +75,14 @@ export default function ChatPanel({
   const [reloadKey, setReloadKey] = useState(0);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [unsavedNotice, setUnsavedNotice] = useState<string | null>(null);
+  const [suggestedAnswers, setSuggestedAnswers] = useState<
+    Record<string, SuggestedAnswerState>
+  >({});
+  const [expandedSuggestions, setExpandedSuggestions] = useState<
+    Record<string, boolean>
+  >({});
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const questionInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Load persisted history once on mount. Skipped entirely when the video has
   // no transcript yet — chat is unavailable in that state.
@@ -106,11 +136,16 @@ export default function ChatPanel({
     !isSubmitting &&
     question.trim().length > 0;
 
-  const handleSubmit = async () => {
+  /**
+   * Core submission path shared by the composer and the suggested-question
+   * buttons. `handleSubmit` delegates to it with the current composer text;
+   * suggestions call it directly with their own text.
+   */
+  const submitQuestion = async (text: string) => {
     // Duplicate-submission guard alongside the disabled button.
     if (isSubmitting) return;
 
-    const trimmed = question.trim();
+    const trimmed = text.trim();
     if (!trimmed) return;
 
     setIsSubmitting(true);
@@ -139,6 +174,9 @@ export default function ChatPanel({
       } else {
         // Keep the question text in the composer so the user can retry.
         setSubmitError(result.message);
+        // If the question came from a suggestion (composer empty), place it
+        // in the composer so the retry affordance stays accurate.
+        setQuestion((current) => (current.trim() ? current : trimmed));
         toast.error(result.message);
       }
     } catch (caught) {
@@ -149,6 +187,65 @@ export default function ChatPanel({
       toast.error(message);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = () => submitQuestion(question);
+
+  /**
+   * Generates one suggested question's answer on demand. Cards are fully
+   * independent: state is keyed by the exact question text, so generating or
+   * retrying one card never touches another card's cached answer, and the
+   * composer's custom-chat flow is unaffected.
+   */
+  const generateSuggestedAnswer = async (question: string) => {
+    if (suggestedAnswers[question]?.status === "loading") return;
+
+    setSuggestedAnswers((previous) => ({
+      ...previous,
+      [question]: { status: "loading" },
+    }));
+
+    try {
+      const result = await getSuggestedAnswerAction({
+        workspaceItemId,
+        question,
+      });
+
+      if (result.success) {
+        // Only successful answers are cached; failures stay retryable.
+        setSuggestedAnswers((previous) => ({
+          ...previous,
+          [question]: { status: "ready", answer: result.answer },
+        }));
+      } else {
+        setSuggestedAnswers((previous) => ({
+          ...previous,
+          [question]: { status: "error", message: result.message },
+        }));
+      }
+    } catch (caught) {
+      console.error("Failed to generate suggested answer:", caught);
+      setSuggestedAnswers((previous) => ({
+        ...previous,
+        [question]: {
+          status: "error",
+          message: "Failed to generate an answer. Please try again.",
+        },
+      }));
+    }
+  };
+
+  const toggleSuggested = (question: string) => {
+    const willExpand = !expandedSuggestions[question];
+    setExpandedSuggestions((previous) => ({
+      ...previous,
+      [question]: willExpand,
+    }));
+
+    // First expansion triggers generation; later expansions read from cache.
+    if (willExpand && suggestedAnswers[question]?.status !== "ready") {
+      generateSuggestedAnswer(question);
     }
   };
 
@@ -255,6 +352,84 @@ export default function ChatPanel({
             )}
           </div>
 
+          {/* Suggested questions: permanent expandable cards, independent of
+              the conversation and the composer. */}
+          {hasTranscript && !isLoadingHistory && !loadError && (
+            <div className="mt-3">
+              <h3 className="mb-2 text-xs font-semibold text-[#5f6368]">
+                Suggested questions
+              </h3>
+              <div className="flex flex-col gap-2">
+                {SUGGESTED_QUESTIONS.map((suggestion, index) => {
+                  const state = suggestedAnswers[suggestion] ?? {
+                    status: "idle" as const,
+                  };
+                  const expanded = Boolean(expandedSuggestions[suggestion]);
+                  const bodyId = `suggested-answer-${index}`;
+                  return (
+                    <div
+                      key={suggestion}
+                      className="overflow-hidden rounded-lg border border-[#dee1e6] bg-white shadow-2xs"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => toggleSuggested(suggestion)}
+                        aria-expanded={expanded}
+                        aria-controls={bodyId}
+                        className="flex w-full items-center justify-between gap-3 rounded-lg bg-[#064e3b] px-3.5 py-2.5 text-left text-sm font-semibold text-white transition-colors hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981]"
+                      >
+                        <span>{suggestion}</span>
+                        <ChevronDown
+                          aria-hidden="true"
+                          className={`h-4 w-4 shrink-0 text-white transition-transform ${
+                            expanded ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      {expanded && (
+                        <div
+                          id={bodyId}
+                          className="border-t border-[#dee1e6]/60 bg-[#f8faf9] px-3.5 py-3"
+                        >
+                          {state.status === "loading" ? (
+                            <p className="flex items-center gap-2 text-xs text-[#5f6368]">
+                              <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-[#064e3b]" />
+                              Generating answer…
+                            </p>
+                          ) : state.status === "error" ? (
+                            <div className="flex flex-col gap-2 text-xs text-[#5f6368]">
+                              <p className="flex items-start gap-2">
+                                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-600" />
+                                {state.message}
+                              </p>
+                              <div>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() =>
+                                    generateSuggestedAnswer(suggestion)
+                                  }
+                                  className="border-[#dee1e6] bg-white text-xs font-semibold text-[#064e3b] shadow-2xs hover:bg-[#ecfdf5]"
+                                >
+                                  Try again
+                                </Button>
+                              </div>
+                            </div>
+                          ) : state.status === "ready" ? (
+                            <div className="whitespace-pre-wrap break-words text-sm leading-relaxed text-[#3c4043]">
+                              {state.answer}
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Unsaved-answer notice (non-blocking) */}
           {unsavedNotice && (
             <p className="mt-3 rounded-lg bg-[#fefce8] px-3 py-2 text-xs text-[#854d0e]">
@@ -279,6 +454,7 @@ export default function ChatPanel({
             </label>
             <textarea
               id="chat-question-input"
+              ref={questionInputRef}
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
               onKeyDown={handleKeyDown}
