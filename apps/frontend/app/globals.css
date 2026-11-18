@@ -6,8 +6,11 @@
 
 @theme {
   --font-sans:
-    var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    var(--font-inter), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading:
+    var(--font-dm-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -67,10 +70,6 @@
 }
 
 @layer utilities {
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -130,25 +129,25 @@
 } */
 
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 165 100% 45%; /* #00CC99 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 96%; /* #F9FAFB */
-    --secondary-foreground: 0 0% 10%;
-    --muted: 240 5% 80%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 165 100% 90%; /* #CCFFF2 */
-    --accent-foreground: 165 100% 25%;
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 210 20% 90%;
-    --input: 0 0% 93%;
-    --ring: 165 100% 45%;
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 225 5.9% 13.3%; /* #202124 */
+    --card: 0 0% 100%; /* #ffffff */
+    --card-foreground: 225 5.9% 13.3%; /* #202124 */
+    --popover: 0 0% 100%; /* #ffffff */
+    --popover-foreground: 225 5.9% 13.3%; /* #202124 */
+    --primary: 164.2 85.7% 16.5%; /* #064e3b */
+    --primary-foreground: 0 0% 100%; /* #ffffff */
+    --secondary: 150 16.7% 97.6%; /* #f8faf9 */
+    --secondary-foreground: 225 5.9% 13.3%; /* #202124 */
+    --muted: 210 16.7% 95.3%; /* #f1f3f5 */
+    --muted-foreground: 213.3 4.5% 39%; /* #5f6368 */
+    --accent: 151.8 81% 95.9%; /* #ecfdf5 */
+    --accent-foreground: 164.2 85.7% 16.5%; /* #064e3b */
+    --destructive: 0 72.2% 50.6%; /* #dc2626 */
+    --destructive-foreground: 0 0% 100%; /* #ffffff */
+    --border: 217.5 13.8% 88.6%; /* #dee1e6 */
+    --input: 217.5 13.8% 88.6%; /* #dee1e6 */
+    --ring: 164.2 85.7% 16.5%; /* #064e3b */
     --radius: 0.5rem;
   }
 
@@ -179,6 +178,14 @@
   * {
     @apply border-border;
   }
+  h1,
+  h2,
+  h3 {
+    font-family:
+      var(--font-dm-sans), var(--font-inter), ui-sans-serif, system-ui,
+      sans-serif;
+  }
+
   h1 {
     @apply text-4xl md:text-6xl xl:text-7xl font-bold;
   }
@@ -196,7 +203,7 @@
   }
 
   button {
-    @apply hover:cursor-pointer bg-rose-600 hover:bg-rose-700;
+    @apply hover:cursor-pointer;
   }
 
   @keyframes gradient-x {

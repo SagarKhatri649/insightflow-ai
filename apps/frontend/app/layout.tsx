@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Source_Sans_3 } from "next/font/google";
+import { DM_Sans, Inter } from "next/font/google";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ORIGIN_URL } from "@/lib/constants";
 // import { Component } from "lucide-react";
 
-const sourceSans = Source_Sans_3({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-sans",
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -36,10 +41,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${sourceSans.variable} dark`}>
-        <body
-          className={`${sourceSans.variable} font-sans antialiased bg-background text-foreground scroll-smooth`}
-        >
+      <html lang="en" className={`${inter.variable} ${dmSans.variable}`}>
+        <body className="font-sans antialiased bg-background text-foreground scroll-smooth">
           {children}
           <Toaster richColors position="top-center" />
         </body>
