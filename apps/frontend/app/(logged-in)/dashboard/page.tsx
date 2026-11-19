@@ -1,5 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import {
+  AlertTriangle,
   ArrowRight,
   CheckCircle2,
   Clock3,
@@ -52,9 +53,26 @@ function getStatusClasses(status: string) {
   return "border-[#dee1e6] bg-[#f1f3f5] text-[#5f6368]";
 }
 
+function getStatusTileClasses(status: string) {
+  if (status === "completed" || status === "transcribed") {
+    return "border border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+  }
+
+  if (status === "failed") {
+    return "border border-red-200 bg-red-50 text-red-700";
+  }
+
+  if (status === "processing" || status === "uploaded") {
+    return "border border-[#dee1e6] bg-[#f8faf9] text-[#064e3b]";
+  }
+
+  return "border border-[#dee1e6] bg-[#f1f3f5] text-[#5f6368]";
+}
+
 function getStatusIcon(status: string) {
   if (status === "completed") return CheckCircle2;
   if (status === "processing") return Clock3;
+  if (status === "failed") return AlertTriangle;
   return FileVideo;
 }
 
@@ -90,12 +108,12 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
       {/* Welcome Section */}
-      <section className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[#064e3b] sm:text-3xl">
+      <section>
+        <div className="max-w-2xl">
+          <h1 className="font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl">
             Welcome back, {displayName}
           </h1>
-          <p className="mt-1 text-xs text-[#5f6368] sm:text-sm">
+          <p className="mt-2 text-sm leading-6 text-[#5f6368] sm:text-base">
             Ready to turn your videos into actionable insights? Start by
             uploading a file below.
           </p>
@@ -103,115 +121,164 @@ export default async function DashboardPage() {
       </section>
 
       {/* Top Cards: Quick Upload & Workspace Summary */}
-      <section className="my-6 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12 sm:my-8">
+      <section className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:mt-8 lg:grid-cols-12">
         {/* Quick Upload Card */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-7 xl:col-span-8">
           <UploadForm variant="compact" />
         </div>
 
         {/* Workspace Summary Card */}
-        <div className="flex flex-col justify-between rounded-2xl border border-[#dee1e6] bg-white p-6 shadow-xs lg:col-span-4">
+        <section
+          aria-labelledby="workspace-summary-heading"
+          className="flex flex-col justify-between rounded-xl border border-[#dee1e6] bg-white p-6 shadow-sm lg:col-span-5 xl:col-span-4"
+        >
           <div>
-            <div className="mb-4 flex items-center justify-between">
-              <span className="text-[11px] font-bold tracking-wider text-[#064e3b]/80 uppercase">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <h2
+                id="workspace-summary-heading"
+                className="font-heading text-xs font-bold tracking-wider text-[#064e3b] uppercase"
+              >
                 Workspace Summary
-              </span>
-              <span className="inline-flex items-center rounded-full border border-[#a7f3d0] bg-[#ecfdf5] px-2 py-0.5 text-[10px] font-semibold text-[#064e3b]">
-                Active
+              </h2>
+              <span
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                  workspaceError
+                    ? "border-red-200 bg-red-50 text-red-700"
+                    : "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
+                }`}
+              >
+                {workspaceError ? "Unavailable" : "Latest 5"}
               </span>
             </div>
+            <p className="mb-4 text-xs text-[#5f6368]">
+              {workspaceError
+                ? "Summary is temporarily unavailable."
+                : "Based on your 5 most recent items."}
+            </p>
 
-            <div className="mb-4">
-              <div className="mb-1 flex items-baseline justify-between">
-                <span className="text-xs font-semibold text-[#202124]">
-                  Recent Uploads
-                </span>
-                <span className="text-lg font-extrabold text-[#064e3b]">
-                  {workspaceItems.length}
-                </span>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div>
+                <div className="mb-1 flex items-baseline justify-between gap-3">
+                  <span className="text-sm font-semibold text-[#202124]">
+                    Recent uploads
+                  </span>
+                  <span className="font-heading text-xl font-bold text-[#064e3b]">
+                    {workspaceError ? (
+                      <>
+                        <span aria-hidden="true">—</span>
+                        <span className="sr-only">Unavailable</span>
+                      </>
+                    ) : (
+                      workspaceItems.length
+                    )}
+                  </span>
+                </div>
+                <p className="text-xs text-[#5f6368]">
+                  Files shown in this view
+                </p>
               </div>
-              <p className="text-[11px] text-[#5f6368]">
-                Recorded in your active dashboard
-              </p>
-            </div>
 
-            <div className="mb-2">
-              <div className="mb-1 flex items-baseline justify-between">
-                <span className="text-xs font-semibold text-[#202124]">
-                  Transcripts Ready
-                </span>
-                <span className="text-lg font-extrabold text-[#064e3b]">
-                  {readyCount}
-                </span>
+              <div>
+                <div className="mb-1 flex items-baseline justify-between gap-3">
+                  <span className="text-sm font-semibold text-[#202124]">
+                    Transcripts ready
+                  </span>
+                  <span className="font-heading text-xl font-bold text-[#064e3b]">
+                    {workspaceError ? (
+                      <>
+                        <span aria-hidden="true">—</span>
+                        <span className="sr-only">Unavailable</span>
+                      </>
+                    ) : (
+                      readyCount
+                    )}
+                  </span>
+                </div>
+                <p className="text-xs text-[#5f6368]">
+                  Available for review and export
+                </p>
               </div>
-              <p className="text-[11px] text-[#5f6368]">
-                Available for instant review and export
-              </p>
             </div>
           </div>
 
-          <div className="mt-4 flex items-center gap-1.5 border-t border-[#dee1e6] pt-3 text-[11px] text-[#5f6368]">
-            <Info className="h-3.5 w-3.5 shrink-0 text-[#064e3b]" />
+          <div className="mt-4 flex items-center gap-1.5 border-t border-[#dee1e6] pt-3 text-xs text-[#5f6368]">
+            <Info
+              aria-hidden="true"
+              className="h-3.5 w-3.5 shrink-0 text-[#064e3b]"
+            />
             <span>Fast AI transcription powered by Groq</span>
           </div>
-        </div>
+        </section>
       </section>
 
       {/* Recent Videos Section */}
-      <section aria-labelledby="recent-videos-heading" className="pt-2">
-        <div className="mb-3.5 flex items-center justify-between">
+      <section aria-labelledby="recent-videos-heading" className="mt-10">
+        <div className="mb-4 flex items-center justify-between gap-3">
           <h2
             id="recent-videos-heading"
-            className="text-base font-bold text-[#064e3b] sm:text-lg"
+            className="font-heading text-lg font-bold text-[#064e3b]"
           >
             Recent Videos
           </h2>
           <Link
             href="/posts"
-            className="group inline-flex items-center gap-1.5 text-xs font-semibold text-[#064e3b] transition-colors hover:text-[#04382b]"
+            className="group inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-[#064e3b] transition-colors hover:bg-[#ecfdf5] hover:text-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
           >
             <span>View library</span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            <ArrowRight
+              aria-hidden="true"
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+            />
           </Link>
         </div>
 
         {workspaceError ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
-            Your recent videos are temporarily unavailable. Please try again
-            later.
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700 shadow-sm sm:p-6"
+          >
+            <AlertTriangle
+              aria-hidden="true"
+              className="mt-0.5 h-5 w-5 shrink-0"
+            />
+            <p>
+              Your recent videos are temporarily unavailable. Please try again
+              later.
+            </p>
           </div>
         ) : workspaceItems.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-xs sm:p-12">
+          <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
-              <FileVideo className="h-6 w-6 text-[#10b981]" />
+              <FileVideo
+                aria-hidden="true"
+                className="h-6 w-6 text-[#10b981]"
+              />
             </div>
-            <h3 className="mt-4 text-base font-bold text-[#064e3b]">
+            <h3 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
               No videos yet
             </h3>
-            <p className="mx-auto mt-1 max-w-sm text-xs text-[#5f6368]">
+            <p className="mx-auto mt-1 max-w-sm text-sm text-[#5f6368]">
               Upload your first video to create a transcript and summary.
             </p>
             <Button
               asChild
-              size="sm"
-              className="mt-4 bg-[#064e3b] text-white hover:bg-[#04382b]"
+              className="mt-5 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-sm font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
             >
               <Link href="/upload">Upload your first video</Link>
             </Button>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-[#dee1e6] bg-white shadow-xs">
-            <div className="hidden grid-cols-12 border-b border-[#dee1e6] bg-[#fbfdfc] px-6 py-3 text-xs font-semibold text-[#5f6368] sm:grid">
-              <span className="col-span-5 sm:col-span-6">Video Name</span>
-              <span className="col-span-3 sm:col-span-3">Upload Date</span>
-              <span className="col-span-2 text-center sm:col-span-2">
-                Status
-              </span>
-              <span className="col-span-2 text-right sm:col-span-1">
-                Action
-              </span>
+          <div className="overflow-hidden rounded-xl border border-[#dee1e6] bg-white shadow-sm">
+            <div
+              aria-hidden="true"
+              className="hidden border-b border-[#dee1e6] bg-[#f8faf9] px-6 py-3 text-xs font-semibold text-[#5f6368] lg:flex lg:items-center lg:gap-4"
+            >
+              <span className="min-w-0 flex-1">Video Name</span>
+              <span className="w-32 shrink-0">Upload Date</span>
+              <span className="w-32 shrink-0 text-center">Status</span>
+              <span className="w-24 shrink-0 text-right">Action</span>
             </div>
-            <div className="divide-y divide-[#dee1e6]">
+            <ul className="divide-y divide-[#dee1e6]">
               {workspaceItems.map((item) => {
                 const statusLabel =
                   statusLabels[item.status] ?? "Unknown status";
@@ -235,79 +302,90 @@ export default async function DashboardPage() {
                   item.status === "processing" || item.status === "uploaded";
 
                 return (
-                  <div
+                  <li
                     key={item.id}
-                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#fbfdfc] sm:grid sm:grid-cols-12 sm:items-center sm:gap-4 sm:px-6"
+                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#f8faf9] focus-within:bg-[#f8faf9] sm:px-6 lg:flex-row lg:items-center lg:gap-4"
                   >
-                    {/* Video Name with mint icon box */}
-                    <div className="flex min-w-0 items-center gap-3.5 sm:col-span-6">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
+                    {/* Video Name with status icon tile */}
+                    <div className="flex min-w-0 flex-1 items-center gap-3.5">
+                      <div
+                        aria-hidden="true"
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${getStatusTileClasses(item.status)}`}
+                      >
                         {isCompleted ? (
-                          <Play className="ml-0.5 h-3.5 w-3.5 fill-[#064e3b] text-[#064e3b]" />
+                          <Play className="ml-0.5 h-4 w-4 fill-[#064e3b] text-[#064e3b]" />
                         ) : isProcessing ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin text-[#064e3b]" />
+                          <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
-                          <StatusIcon className="h-3.5 w-3.5 text-[#064e3b]" />
+                          <StatusIcon className="h-4 w-4" />
                         )}
                       </div>
-                      <span className="truncate text-xs font-semibold text-[#202124]">
+                      <span
+                        className="truncate text-sm font-semibold text-[#202124]"
+                        title={item.file_name}
+                      >
                         {item.file_name}
                       </span>
                     </div>
 
-                    {/* Upload Date */}
-                    <div className="text-xs text-[#5f6368] sm:col-span-3">
-                      <span className="mr-2 font-semibold text-[#5f6368] sm:hidden">
-                        Uploaded:
-                      </span>
-                      {new Date(item.created_at).toLocaleDateString()}
-                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-3 lg:flex-nowrap lg:gap-4">
+                      {/* Upload Date */}
+                      <div className="text-xs text-[#5f6368] lg:w-32 lg:shrink-0">
+                        <span className="mr-2 font-semibold lg:sr-only">
+                          Uploaded:
+                        </span>
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </div>
 
-                    {/* Status Badge */}
-                    <div className="flex sm:col-span-2 sm:justify-center">
-                      <Badge
-                        variant="outline"
-                        className={`w-fit text-[11px] font-semibold ${getStatusClasses(item.status)}`}
-                      >
-                        {statusLabel}
-                      </Badge>
-                    </div>
-
-                    {/* Action */}
-                    <div className="text-left sm:col-span-1 sm:text-right">
-                      {resultHref ? (
-                        <Button
-                          asChild
-                          size="sm"
+                      {/* Status Badge */}
+                      <div className="flex lg:w-32 lg:shrink-0 lg:justify-center">
+                        <Badge
                           variant="outline"
-                          className="h-7 border-[#dee1e6] bg-white px-3 text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5]"
+                          className={`w-fit text-xs font-semibold ${getStatusClasses(item.status)}`}
                         >
-                          <Link href={resultHref}>Open</Link>
-                        </Button>
-                      ) : (
-                        <button
-                          disabled
-                          type="button"
-                          className="h-7 cursor-not-allowed rounded-md border border-[#dee1e6] bg-[#f8faf9] px-3 text-xs font-medium text-[#979797]"
-                        >
-                          Wait
-                        </button>
-                      )}
+                          {statusLabel}
+                        </Badge>
+                      </div>
+
+                      {/* Action */}
+                      <div className="flex lg:w-24 lg:shrink-0 lg:justify-end">
+                        {resultHref ? (
+                          <Button
+                            asChild
+                            size="sm"
+                            variant="outline"
+                            className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                          >
+                            <Link
+                              href={resultHref}
+                              aria-label={`Open ${item.file_name}`}
+                            >
+                              Open
+                            </Link>
+                          </Button>
+                        ) : (
+                          <button
+                            disabled
+                            type="button"
+                            aria-label={
+                              item.status === "failed"
+                                ? `Failed: ${item.file_name}`
+                                : `Waiting for ${item.file_name}`
+                            }
+                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#f8faf9] px-3.5 font-heading text-xs font-medium text-[#979797]"
+                          >
+                            {item.status === "failed" ? "Failed" : "Wait"}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         )}
       </section>
-
-      {/* Minimal Bottom Boundary */}
-      <footer className="pt-8 pb-4 text-center">
-        <p className="text-[11px] text-[#979797]">
-          © {new Date().getFullYear()} InsightFlow. All rights reserved.
-        </p>
-      </footer>
     </div>
   );
 }

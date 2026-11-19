@@ -17,6 +17,7 @@ import {
   Check,
   FileText,
   Lightbulb,
+  Loader2,
   Lock,
   Menu,
   Sparkles,
@@ -185,7 +186,7 @@ export default function UploadForm({
         >
           {!isCompact && (
             <div className="mb-7 max-w-2xl text-center">
-              <h1 className="mb-3 text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
+              <h1 className="mb-3 font-heading text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
                 Turn your video into clear insights
               </h1>
               <p className="text-base leading-[160%] text-[#5f6368]">
@@ -194,30 +195,60 @@ export default function UploadForm({
               </p>
             </div>
           )}
-          <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8">
-            <form onSubmit={handleTranscribe}>
-              <div className="group flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] p-6 transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm sm:p-10">
+          <div
+            className={`w-full rounded-xl border border-[#dee1e6] bg-white shadow-sm ${
+              isCompact ? "p-4 sm:p-6" : "p-4 sm:p-8"
+            }`}
+          >
+            <form onSubmit={handleTranscribe} aria-busy={isProcessing}>
+              <p className="sr-only" role="status" aria-live="polite">
+                {isProcessing
+                  ? `Processing ${fileName}. Please wait.`
+                  : fileName
+                    ? `Selected file: ${fileName}. Ready.`
+                    : ""}
+              </p>
+              <div
+                className={`group flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm focus-within:ring-2 focus-within:ring-[#064e3b] focus-within:ring-offset-2 ${
+                  isCompact ? "p-5 sm:p-6" : "p-6 sm:p-10"
+                }`}
+              >
                 <label
                   htmlFor="file"
                   aria-label="Choose an audio or video file"
-                  className="mb-4 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2"
+                  className={`flex cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md hover:border-[#10b981] ${
+                    isCompact ? "mb-3 h-10 w-10" : "mb-4 h-12 w-12"
+                  }`}
                 >
-                  <Upload className="h-6 w-6" />
+                  <Upload
+                    aria-hidden="true"
+                    className={isCompact ? "h-5 w-5" : "h-6 w-6"}
+                  />
                 </label>
-                <h2 className="mb-2 text-center text-lg font-bold text-[#064e3b]">
+                <h2
+                  id="upload-form-heading"
+                  className={`text-center font-heading font-bold text-[#064e3b] ${
+                    isCompact ? "mb-1.5 text-base" : "mb-2 text-lg"
+                  }`}
+                >
                   Upload your audio or video
                 </h2>
                 <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]">
                   <span>Drag and drop a file here, or</span>
                   <label
                     htmlFor="file"
-                    className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981] focus-within:ring-2 focus-within:ring-[#10b981] focus-within:ring-offset-2"
+                    className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1.5 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981]"
                   >
                     Browse files
                   </label>
                   <span>from your computer</span>
                 </div>
-                <p className="mt-1 text-center text-sm text-[#5f6368]">
+                <p
+                  id="upload-form-help"
+                  className={`mt-1 text-center text-[#5f6368] ${
+                    isCompact ? "text-xs" : "text-sm"
+                  }`}
+                >
                   Audio or video files up to 20MB
                 </p>
                 <Input
@@ -228,37 +259,71 @@ export default function UploadForm({
                   required
                   disabled={isProcessing}
                   ref={fileInputRef}
+                  aria-labelledby="upload-form-heading"
+                  aria-describedby="upload-form-help"
                   onChange={(e) => setFileName(e.target.files?.[0]?.name || "")}
                   className="sr-only"
                 />
                 {fileName && (
-                  <div className="mt-6 flex w-full max-w-xl animate-in fade-in slide-in-from-bottom-2 items-center justify-between rounded-xl border border-[#dee1e6] bg-white p-3.5 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-4">
-                    <div className="flex min-w-0 items-center space-x-3 sm:space-x-4">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#064e3b] text-white">
-                        <Video className="h-5 w-5 text-[#10b981]" />
+                  <div
+                    className={`flex w-full max-w-xl animate-in fade-in slide-in-from-bottom-2 rounded-xl border border-[#dee1e6] bg-white shadow-sm transition-shadow duration-200 hover:shadow-md ${
+                      isCompact
+                        ? "mt-4 flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between"
+                        : "mt-6 items-center justify-between p-3.5 sm:p-4"
+                    }`}
+                  >
+                    <div
+                      className={`flex min-w-0 items-center ${
+                        isCompact ? "gap-3" : "space-x-3 sm:space-x-4"
+                      }`}
+                    >
+                      <div
+                        className={`flex shrink-0 items-center justify-center rounded-lg bg-[#064e3b] text-white ${
+                          isCompact ? "h-9 w-9" : "h-10 w-10"
+                        }`}
+                      >
+                        <Video
+                          aria-hidden="true"
+                          className="h-5 w-5 text-[#10b981]"
+                        />
                       </div>
                       <div className="min-w-0 text-left">
-                        <p className="truncate font-semibold text-[#064e3b]">
+                        <p
+                          className="truncate font-semibold text-[#064e3b]"
+                          title={fileName}
+                        >
                           {fileName}
                         </p>
                         <p className="text-xs text-[#5f6368]">
-                          Selected audio or video file
+                          {isCompact
+                            ? "Selected file"
+                            : "Selected audio or video file"}
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-shrink-0 items-center space-x-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="inline-flex items-center rounded-md border border-[#a7f3d0] bg-[#ecfdf5] px-2.5 py-1 text-xs font-medium text-[#064e3b]">
-                        <Check className="mr-1 h-3.5 w-3.5 text-[#10b981]" />
-                        Ready to process
+                        {isProcessing ? (
+                          <Loader2
+                            aria-hidden="true"
+                            className="mr-1 h-3.5 w-3.5 animate-spin text-[#10b981]"
+                          />
+                        ) : (
+                          <Check
+                            aria-hidden="true"
+                            className="mr-1 h-3.5 w-3.5 text-[#10b981]"
+                          />
+                        )}
+                        {isProcessing ? "Processing" : "Ready"}
                       </span>
                       <button
                         aria-label="Remove file"
-                        className="rounded-md border border-transparent p-1.5 text-[#979797] transition-colors hover:border-[#dee1e6] hover:text-[#5f6368] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-8 w-8 items-center justify-center rounded-md border border-transparent text-[#979797] transition-colors hover:border-[#dee1e6] hover:text-[#5f6368] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         type="button"
                         disabled={isProcessing}
                         onClick={handleRemoveFile}
                       >
-                        <X className="h-4 w-4" />
+                        <X aria-hidden="true" className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -267,8 +332,11 @@ export default function UploadForm({
               {!isCompact && (
                 <div className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-3">
                   <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                      <FileText className="h-4 w-4 text-[#5f6368]" />
+                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
+                      <FileText
+                        aria-hidden="true"
+                        className="h-4 w-4 text-[#5f6368]"
+                      />
                       <span>Transcript</span>
                     </div>
                     <div className="space-y-2">
@@ -277,8 +345,11 @@ export default function UploadForm({
                     </div>
                   </div>
                   <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                      <Menu className="h-4 w-4 text-[#5f6368]" />
+                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
+                      <Menu
+                        aria-hidden="true"
+                        className="h-4 w-4 text-[#5f6368]"
+                      />
                       <span>AI Summary</span>
                     </div>
                     <div className="space-y-2">
@@ -287,8 +358,11 @@ export default function UploadForm({
                     </div>
                   </div>
                   <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 text-xs font-semibold text-[#064e3b]">
-                      <Lightbulb className="h-4 w-4 text-[#5f6368]" />
+                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
+                      <Lightbulb
+                        aria-hidden="true"
+                        className="h-4 w-4 text-[#5f6368]"
+                      />
                       <span>Actionable Takeaways</span>
                     </div>
                     <div className="space-y-2">
@@ -298,21 +372,46 @@ export default function UploadForm({
                   </div>
                 </div>
               )}
-              <div className="mt-7 flex flex-col items-center justify-center">
+              <div
+                className={`flex flex-col items-center justify-center ${
+                  isCompact ? "mt-5" : "mt-7"
+                }`}
+              >
                 <Button
                   type="submit"
                   disabled={isProcessing}
-                  className="flex w-full items-center justify-center space-x-2.5 whitespace-nowrap rounded-lg bg-[#064e3b] px-7 py-3 font-bold text-white shadow-sm transition-colors hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                  className={`flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#064e3b] px-6 font-heading font-bold text-white shadow-sm transition-colors hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto ${
+                    isCompact
+                      ? "h-10 text-sm"
+                      : "h-11 text-sm sm:text-base sm:px-7"
+                  }`}
                 >
-                  <Sparkles className="h-4 w-4 text-[#10b981]" />
+                  {isProcessing ? (
+                    <Loader2
+                      aria-hidden="true"
+                      className="h-4 w-4 animate-spin text-[#10b981]"
+                    />
+                  ) : (
+                    <Sparkles
+                      aria-hidden="true"
+                      className="h-4 w-4 text-[#10b981]"
+                    />
+                  )}
                   <span>
                     {isProcessing
                       ? "Processing…"
                       : "Upload and Generate Insights"}
                   </span>
                 </Button>
-                <div className="mt-3 flex items-center space-x-1.5 text-xs text-[#5f6368]">
-                  <Lock className="h-3.5 w-3.5 flex-shrink-0" />
+                <div
+                  className={`flex items-center gap-1.5 text-xs text-[#5f6368] ${
+                    isCompact ? "mt-2" : "mt-3"
+                  }`}
+                >
+                  <Lock
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 flex-shrink-0"
+                  />
                   <span>
                     Your file stays private. Processing starts on click.
                   </span>
@@ -322,7 +421,7 @@ export default function UploadForm({
           </div>
           {transcript && (
             <section className="mt-6 w-full rounded-xl border border-[#dee1e6] bg-white p-5 shadow-sm sm:p-6">
-              <h2 className="mb-3 text-lg font-bold text-[#064e3b]">
+              <h2 className="mb-3 font-heading text-lg font-bold text-[#064e3b]">
                 Full Transcription
               </h2>
               <div className="max-h-96 overflow-y-auto whitespace-pre-wrap rounded-lg bg-[#f8faf9] p-4 text-sm leading-7 text-[#3c4043]">

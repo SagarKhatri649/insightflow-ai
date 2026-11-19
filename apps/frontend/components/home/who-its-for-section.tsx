@@ -18,11 +18,11 @@ export default function WhoItsForSection() {
             Built for anyone learning from video.
           </h2>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {audiences.map((audience) => (
             <div
               key={audience}
-              className="rounded-lg border border-[#dee1e6] bg-white px-5 py-4 text-center font-semibold text-[#202124] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-[#a7f3d0] hover:bg-[#ecfdf5] hover:shadow-md"
+              className="rounded-[10px] border border-[#dee1e6] bg-white px-5 py-4 text-center text-sm font-bold text-[#202124] shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-[#10b981] md:text-base"
             >
               {audience}
             </div>
