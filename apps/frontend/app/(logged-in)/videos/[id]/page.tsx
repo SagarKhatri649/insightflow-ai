@@ -83,8 +83,13 @@ function StatusMessage({ item }: { item: WorkspaceItem }) {
 
   if (item.status === "failed") {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-xs">
-        <h2 className="mb-1 font-bold">Transcription Failed</h2>
+      <div
+        role="alert"
+        className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-sm"
+      >
+        <h2 className="mb-1 font-heading text-base font-bold sm:text-lg">
+          Transcription Failed
+        </h2>
         <p>
           {item.error_message ||
             "Processing failed. Please try again by uploading the file."}
@@ -94,7 +99,7 @@ function StatusMessage({ item }: { item: WorkspaceItem }) {
             asChild
             size="sm"
             variant="outline"
-            className="border-red-300 bg-white text-xs font-semibold text-red-700 shadow-2xs hover:bg-red-50"
+            className="h-9 rounded-lg border-red-300 bg-white px-3.5 font-heading text-xs font-semibold text-red-700 shadow-2xs hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
           >
             <Link href="/upload">Upload again</Link>
           </Button>
@@ -104,14 +109,17 @@ function StatusMessage({ item }: { item: WorkspaceItem }) {
   }
 
   return (
-    <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-xs sm:p-12">
+    <div
+      role="status"
+      className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12"
+    >
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
-        <Clock3 className="h-6 w-6 text-[#10b981]" />
+        <Clock3 aria-hidden="true" className="h-6 w-6 text-[#10b981]" />
       </div>
-      <h2 className="mt-4 text-base font-bold text-[#064e3b]">
+      <h2 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
         Transcript in progress
       </h2>
-      <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-[#5f6368]">
+      <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-[#5f6368]">
         This video is currently{" "}
         {statusLabels[item.status]?.toLowerCase() ?? "being processed"}. Check
         back once transcription is complete.
@@ -135,18 +143,18 @@ export default async function VideoWorkspacePage({
   if (!uuidPattern.test(id)) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12 text-center sm:px-6">
-        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-xs sm:p-12">
+        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-sm sm:p-12">
           <p className="text-sm font-semibold text-[#202124]">
             Video not found
           </p>
-          <p className="mt-1 text-xs text-[#5f6368]">
+          <p className="mt-1 text-sm text-[#5f6368]">
             The requested video workspace does not exist or you do not have
             permission to view it.
           </p>
           <Button
             asChild
             size="sm"
-            className="mt-4 bg-[#064e3b] text-white hover:bg-[#04382b]"
+            className="mt-4 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
           >
             <Link href="/posts">Back to video library</Link>
           </Button>
@@ -176,7 +184,10 @@ export default async function VideoWorkspacePage({
   if (databaseError) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-xs">
+        <div
+          role="alert"
+          className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-sm"
+        >
           This video workspace is temporarily unavailable. Please try again
           later.
         </div>
@@ -187,18 +198,18 @@ export default async function VideoWorkspacePage({
   if (!item) {
     return (
       <div className="mx-auto w-full max-w-4xl px-4 py-12 text-center sm:px-6">
-        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-xs sm:p-12">
+        <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 shadow-sm sm:p-12">
           <p className="text-sm font-semibold text-[#202124]">
             Video not found
           </p>
-          <p className="mt-1 text-xs text-[#5f6368]">
+          <p className="mt-1 text-sm text-[#5f6368]">
             The requested video workspace does not exist or you do not have
             permission to view it.
           </p>
           <Button
             asChild
             size="sm"
-            className="mt-4 bg-[#064e3b] text-white hover:bg-[#04382b]"
+            className="mt-4 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
           >
             <Link href="/posts">Back to video library</Link>
           </Button>
@@ -217,19 +228,27 @@ export default async function VideoWorkspacePage({
       {/* Top Navigation */}
       <Link
         href="/posts"
-        className="group mb-6 inline-flex items-center gap-2 text-xs font-semibold text-[#064e3b] transition-colors hover:text-[#04382b] sm:text-sm"
+        className="group mb-6 inline-flex min-h-9 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-[#064e3b] transition-colors hover:bg-[#ecfdf5] hover:text-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
       >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+        <ArrowLeft
+          aria-hidden="true"
+          className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+        />
         Back to video library
       </Link>
 
       {/* Header Section */}
       <header className="mb-7">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="break-words text-2xl font-extrabold tracking-tight text-[#064e3b] sm:text-3xl">
-            {item.file_name}
-          </h1>
-          <div className="flex shrink-0 items-center gap-2">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0 lg:flex-1">
+            <h1
+              title={item.file_name}
+              className="break-words font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl lg:truncate"
+            >
+              {item.file_name}
+            </h1>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
             <DownloadPdfButton
               workspaceItemId={item.id}
               fileName={item.file_name}
@@ -237,7 +256,7 @@ export default async function VideoWorkspacePage({
             />
             <Badge
               variant="outline"
-              className={`w-fit shrink-0 text-[11px] font-semibold ${getStatusClasses(item.status)}`}
+              className={`w-fit shrink-0 text-xs font-semibold ${getStatusClasses(item.status)}`}
             >
               {statusLabels[item.status] ?? "Unknown status"}
             </Badge>
@@ -245,7 +264,7 @@ export default async function VideoWorkspacePage({
         </div>
 
         {metadataParts.length > 0 && (
-          <p className="mt-2 text-xs text-[#5f6368] sm:text-sm">
+          <p className="mt-2 text-sm leading-6 text-[#5f6368]">
             {metadataParts.join(" • ")}
           </p>
         )}

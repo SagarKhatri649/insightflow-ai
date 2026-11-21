@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FileDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/sonner";
@@ -31,10 +31,13 @@ export default function DownloadPdfButton({
 }: DownloadPdfButtonProps) {
   const { toast } = useToast();
   const [isDownloading, setIsDownloading] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const restoreFocusRef = useRef(false);
 
   const handleDownload = async () => {
     // Duplicate-click guard alongside the disabled button state.
     if (isDownloading) return;
+    restoreFocusRef.current = document.activeElement === buttonRef.current;
     setIsDownloading(true);
 
     try {
@@ -80,22 +83,39 @@ export default function DownloadPdfButton({
       toast.error("Failed to download the PDF report. Please try again.");
     } finally {
       setIsDownloading(false);
+      if (restoreFocusRef.current) {
+        requestAnimationFrame(() => {
+          // Restore focus only if the disabled button caused it to fall back
+          // to the document and the user has not moved focus elsewhere.
+          if (document.activeElement === document.body) {
+            buttonRef.current?.focus();
+          }
+          restoreFocusRef.current = false;
+        });
+      }
     }
   };
 
   return (
     <Button
+      ref={buttonRef}
       type="button"
       size="sm"
+      variant="outline"
       onClick={handleDownload}
       disabled={isDownloading}
-      aria-label="Download video insight report as PDF"
-      className="border-[#a7f3d0] bg-white text-xs font-semibold text-[#064e3b] shadow-2xs hover:bg-[#ecfdf5] disabled:cursor-not-allowed disabled:opacity-50"
+      aria-busy={isDownloading}
+      aria-label={
+        isDownloading
+          ? "Preparing PDF report"
+          : "Download video insight report as PDF"
+      }
+      className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {isDownloading ? (
-        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        <Loader2 aria-hidden="true" className="h-3.5 w-3.5 animate-spin" />
       ) : (
-        <FileDown className="h-3.5 w-3.5" />
+        <FileDown aria-hidden="true" className="h-3.5 w-3.5" />
       )}
       {isDownloading ? "Preparing PDF…" : "Download PDF"}
     </Button>
