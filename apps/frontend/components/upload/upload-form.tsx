@@ -16,10 +16,10 @@ import { useUser } from "@clerk/nextjs";
 import {
   Check,
   FileText,
+  Info,
   Lightbulb,
   Loader2,
   Lock,
-  Menu,
   Sparkles,
   Upload,
   Video,
@@ -35,6 +35,39 @@ const schema = z.object({
       "Must be an audio or video file",
     ),
 });
+
+const uploadSteps = [
+  {
+    title: "Upload your file",
+    description: "Choose an audio or video file from your device.",
+  },
+  {
+    title: "AI transcribes it",
+    description: "We convert your recording into a complete transcript.",
+  },
+  {
+    title: "Review and generate insights",
+    description: "Open the workspace to create a summary and key takeaways.",
+  },
+];
+
+const examplePreview = [
+  {
+    title: "Transcript",
+    description: "A complete, readable transcript of your recording.",
+    icon: FileText,
+  },
+  {
+    title: "AI Summary",
+    description: "A concise overview of the main discussion.",
+    icon: Sparkles,
+  },
+  {
+    title: "Key Takeaways",
+    description: "The key points and action items worth remembering.",
+    icon: Lightbulb,
+  },
+];
 
 type UploadFormVariant = "full" | "compact";
 
@@ -185,15 +218,42 @@ export default function UploadForm({
           }
         >
           {!isCompact && (
-            <div className="mb-7 max-w-2xl text-center">
-              <h1 className="mb-3 font-heading text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
-                Turn your video into clear insights
-              </h1>
-              <p className="text-base leading-[160%] text-[#5f6368]">
-                Upload an audio or video file and get a transcript, summary, and
-                actionable insights in minutes.
-              </p>
-            </div>
+            <>
+              <div className="mb-7 max-w-2xl text-center">
+                <p className="mb-2 font-heading text-xs font-bold tracking-wider text-[#064e3b] uppercase">
+                  Upload &amp; Transcribe
+                </p>
+                <h1 className="mb-3 font-heading text-3xl font-bold tracking-tight text-[#064e3b] sm:text-4xl lg:text-[40px]">
+                  Turn your recordings into clear transcripts.
+                </h1>
+                <p className="text-base leading-[160%] text-[#5f6368]">
+                  Upload an audio or video file to create a transcript. Once it
+                  is ready, you can generate a summary and key takeaways in your
+                  workspace.
+                </p>
+              </div>
+
+              <ol className="mb-7 grid w-full gap-3 sm:grid-cols-3">
+                {uploadSteps.map((step, index) => (
+                  <li
+                    key={step.title}
+                    className="flex items-start gap-3 rounded-lg border border-[#dee1e6] bg-[#f8faf9] p-3.5"
+                  >
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#064e3b] font-heading text-xs font-bold text-white">
+                      {index + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="font-heading text-sm font-semibold text-[#064e3b]">
+                        {step.title}
+                      </p>
+                      <p className="mt-0.5 text-xs leading-5 text-[#5f6368]">
+                        {step.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </>
           )}
           <div
             className={`w-full rounded-xl border border-[#dee1e6] bg-white shadow-sm ${
@@ -234,14 +294,18 @@ export default function UploadForm({
                   Upload your audio or video
                 </h2>
                 <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]">
-                  <span>Drag and drop a file here, or</span>
+                  <span>
+                    {isCompact
+                      ? "Drag and drop a file here, or"
+                      : "Select a file to upload, or"}
+                  </span>
                   <label
                     htmlFor="file"
                     className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1.5 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981]"
                   >
                     Browse files
                   </label>
-                  <span>from your computer</span>
+                  {isCompact && <span>from your computer</span>}
                 </div>
                 <p
                   id="upload-form-help"
@@ -249,7 +313,7 @@ export default function UploadForm({
                     isCompact ? "text-xs" : "text-sm"
                   }`}
                 >
-                  Audio or video files up to 20MB
+                  Audio or video files up to 20 MB
                 </p>
                 <Input
                   id="file"
@@ -329,49 +393,6 @@ export default function UploadForm({
                   </div>
                 )}
               </div>
-              {!isCompact && (
-                <div className="mt-6 grid grid-cols-1 gap-3.5 md:grid-cols-3">
-                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
-                      <FileText
-                        aria-hidden="true"
-                        className="h-4 w-4 text-[#5f6368]"
-                      />
-                      <span>Transcript</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
-                    </div>
-                  </div>
-                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
-                      <Menu
-                        aria-hidden="true"
-                        className="h-4 w-4 text-[#5f6368]"
-                      />
-                      <span>AI Summary</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
-                    </div>
-                  </div>
-                  <div className="rounded-lg border border-[#dee1e6] bg-white p-3.5">
-                    <div className="mb-3 flex items-center space-x-2 font-heading text-xs font-semibold text-[#064e3b]">
-                      <Lightbulb
-                        aria-hidden="true"
-                        className="h-4 w-4 text-[#5f6368]"
-                      />
-                      <span>Actionable Takeaways</span>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-1.5 w-full rounded-full bg-[#f1f3f5]" />
-                      <div className="h-1.5 w-2/3 rounded-full bg-[#f1f3f5]" />
-                    </div>
-                  </div>
-                </div>
-              )}
               <div
                 className={`flex flex-col items-center justify-center ${
                   isCompact ? "mt-5" : "mt-7"
@@ -391,8 +412,13 @@ export default function UploadForm({
                       aria-hidden="true"
                       className="h-4 w-4 animate-spin text-[#10b981]"
                     />
-                  ) : (
+                  ) : isCompact ? (
                     <Sparkles
+                      aria-hidden="true"
+                      className="h-4 w-4 text-[#10b981]"
+                    />
+                  ) : (
+                    <Upload
                       aria-hidden="true"
                       className="h-4 w-4 text-[#10b981]"
                     />
@@ -400,7 +426,9 @@ export default function UploadForm({
                   <span>
                     {isProcessing
                       ? "Processing…"
-                      : "Upload and Generate Insights"}
+                      : isCompact
+                        ? "Upload and Generate Insights"
+                        : "Upload and transcribe"}
                   </span>
                 </Button>
                 <div
@@ -427,6 +455,61 @@ export default function UploadForm({
               <div className="max-h-96 overflow-y-auto whitespace-pre-wrap rounded-lg bg-[#f8faf9] p-4 text-sm leading-7 text-[#3c4043]">
                 {transcript}
               </div>
+            </section>
+          )}
+          {!isCompact && (
+            <section
+              aria-labelledby="example-preview-heading"
+              className="mt-8 w-full"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <h2
+                  id="example-preview-heading"
+                  className="font-heading text-lg font-bold text-[#064e3b]"
+                >
+                  Example preview
+                </h2>
+                <span className="inline-flex items-center rounded-full border border-[#a7f3d0] bg-[#ecfdf5] px-2.5 py-0.5 text-xs font-semibold text-[#064e3b]">
+                  Illustrative
+                </span>
+              </div>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-[#5f6368]">
+                A sample of the transcript and insights you can create after
+                uploading.
+              </p>
+
+              <div className="mt-4 grid grid-cols-1 gap-3.5 md:grid-cols-3">
+                {examplePreview.map(({ title, description, icon: Icon }) => (
+                  <div
+                    key={title}
+                    className="rounded-lg border border-[#dee1e6] bg-white p-4 shadow-2xs"
+                  >
+                    <div className="mb-2.5 flex items-center gap-2 font-heading text-sm font-semibold text-[#064e3b]">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#ecfdf5]">
+                        <Icon
+                          aria-hidden="true"
+                          className="h-4 w-4 text-[#10b981]"
+                        />
+                      </span>
+                      <span>{title}</span>
+                    </div>
+                    <p className="text-xs leading-5 text-[#5f6368]">
+                      {description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-3 flex items-start gap-1.5 text-xs leading-5 text-[#5f6368]">
+                <Info
+                  aria-hidden="true"
+                  className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#064e3b]"
+                />
+                <span>
+                  This preview is illustrative only. Your transcript, summary,
+                  and key takeaways are generated from the file you upload.
+                </span>
+              </p>
             </section>
           )}
         </div>

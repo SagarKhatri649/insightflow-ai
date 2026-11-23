@@ -6,15 +6,15 @@ import {
   Clock3,
   FileVideo,
   Info,
+  Link2,
   Loader2,
   Play,
-  // Upload,
+  Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import UploadForm from "@/components/upload/upload-form";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -114,101 +114,113 @@ export default async function DashboardPage() {
             Welcome back, {displayName}
           </h1>
           <p className="mt-2 text-sm leading-6 text-[#5f6368] sm:text-base">
-            Ready to turn your videos into actionable insights? Start by
-            uploading a file below.
+            Ready to turn your videos into actionable insights? Upload a file to
+            create a transcript, summary, and key points.
           </p>
         </div>
+
+        <Link
+          href="/upload"
+          aria-label="Upload a video"
+          className="group mt-5 flex w-full flex-col gap-3 rounded-xl border border-[#dee1e6] bg-white p-3 shadow-sm transition-colors hover:border-[#a7f3d0] hover:bg-[#f8faf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 sm:flex-row sm:items-center sm:gap-4 sm:px-4"
+        >
+          <span className="flex min-w-0 flex-1 items-center gap-2.5 px-1 sm:px-0">
+            <Link2
+              aria-hidden="true"
+              className="h-4 w-4 shrink-0 text-[#979797] transition-colors group-hover:text-[#064e3b]"
+            />
+            <span className="truncate text-sm text-[#979797]">
+              Upload a video to get started…
+            </span>
+          </span>
+          <span className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-[#064e3b] px-4 font-heading text-sm font-semibold text-white shadow-sm transition-colors group-hover:bg-[#04382b] sm:w-auto">
+            <Upload aria-hidden="true" className="h-4 w-4 text-[#10b981]" />
+            Upload video
+          </span>
+        </Link>
       </section>
 
-      {/* Top Cards: Quick Upload & Workspace Summary */}
-      <section className="mt-6 grid grid-cols-1 items-stretch gap-6 sm:mt-8 lg:grid-cols-12">
-        {/* Quick Upload Card */}
-        <div className="lg:col-span-7 xl:col-span-8">
-          <UploadForm variant="compact" />
-        </div>
-
-        {/* Workspace Summary Card */}
-        <section
-          aria-labelledby="workspace-summary-heading"
-          className="flex flex-col justify-between rounded-xl border border-[#dee1e6] bg-white p-6 shadow-sm lg:col-span-5 xl:col-span-4"
-        >
+      {/* Workspace Summary */}
+      <section
+        aria-labelledby="workspace-summary-heading"
+        className="mt-6 rounded-xl border border-[#dee1e6] bg-white p-6 shadow-sm sm:mt-8"
+      >
+        <div className="flex flex-col gap-3 border-b border-[#dee1e6] pb-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-              <h2
-                id="workspace-summary-heading"
-                className="font-heading text-xs font-bold tracking-wider text-[#064e3b] uppercase"
-              >
-                Workspace Summary
-              </h2>
-              <span
-                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                  workspaceError
-                    ? "border-red-200 bg-red-50 text-red-700"
-                    : "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
-                }`}
-              >
-                {workspaceError ? "Unavailable" : "Latest 5"}
-              </span>
-            </div>
-            <p className="mb-4 text-xs text-[#5f6368]">
+            <h2
+              id="workspace-summary-heading"
+              className="font-heading text-xs font-bold tracking-wider text-[#064e3b] uppercase"
+            >
+              Workspace Summary
+            </h2>
+            <p className="mt-1 text-sm text-[#5f6368]">
               {workspaceError
                 ? "Summary is temporarily unavailable."
                 : "Based on your 5 most recent items."}
             </p>
+          </div>
+          <span
+            className={`inline-flex w-fit shrink-0 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+              workspaceError
+                ? "border-red-200 bg-red-50 text-red-700"
+                : "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
+            }`}
+          >
+            {workspaceError ? "Unavailable" : "Latest 5"}
+          </span>
+        </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-              <div>
-                <div className="mb-1 flex items-baseline justify-between gap-3">
-                  <span className="text-sm font-semibold text-[#202124]">
-                    Recent uploads
-                  </span>
-                  <span className="font-heading text-xl font-bold text-[#064e3b]">
-                    {workspaceError ? (
-                      <>
-                        <span aria-hidden="true">—</span>
-                        <span className="sr-only">Unavailable</span>
-                      </>
-                    ) : (
-                      workspaceItems.length
-                    )}
-                  </span>
-                </div>
-                <p className="text-xs text-[#5f6368]">
-                  Files shown in this view
-                </p>
-              </div>
-
-              <div>
-                <div className="mb-1 flex items-baseline justify-between gap-3">
-                  <span className="text-sm font-semibold text-[#202124]">
-                    Transcripts ready
-                  </span>
-                  <span className="font-heading text-xl font-bold text-[#064e3b]">
-                    {workspaceError ? (
-                      <>
-                        <span aria-hidden="true">—</span>
-                        <span className="sr-only">Unavailable</span>
-                      </>
-                    ) : (
-                      readyCount
-                    )}
-                  </span>
-                </div>
-                <p className="text-xs text-[#5f6368]">
-                  Available for review and export
-                </p>
-              </div>
+        <div className="grid gap-4 pt-5 sm:grid-cols-2">
+          <div className="rounded-lg border border-[#dee1e6] bg-[#f8faf9] p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-sm font-semibold text-[#202124]">
+                Recent uploads
+              </span>
+              <span className="font-heading text-3xl font-bold text-[#064e3b]">
+                {workspaceError ? (
+                  <>
+                    <span aria-hidden="true">—</span>
+                    <span className="sr-only">Unavailable</span>
+                  </>
+                ) : (
+                  workspaceItems.length
+                )}
+              </span>
             </div>
+            <p className="mt-1 text-xs text-[#5f6368]">
+              Files shown in this view
+            </p>
           </div>
 
-          <div className="mt-4 flex items-center gap-1.5 border-t border-[#dee1e6] pt-3 text-xs text-[#5f6368]">
-            <Info
-              aria-hidden="true"
-              className="h-3.5 w-3.5 shrink-0 text-[#064e3b]"
-            />
-            <span>Fast AI transcription powered by Groq</span>
+          <div className="rounded-lg border border-[#dee1e6] bg-[#f8faf9] p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-sm font-semibold text-[#202124]">
+                Transcripts ready
+              </span>
+              <span className="font-heading text-3xl font-bold text-[#064e3b]">
+                {workspaceError ? (
+                  <>
+                    <span aria-hidden="true">—</span>
+                    <span className="sr-only">Unavailable</span>
+                  </>
+                ) : (
+                  readyCount
+                )}
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-[#5f6368]">
+              Available for review and export
+            </p>
           </div>
-        </section>
+        </div>
+
+        <div className="mt-5 flex items-center gap-1.5 border-t border-[#dee1e6] pt-4 text-xs text-[#5f6368]">
+          <Info
+            aria-hidden="true"
+            className="h-3.5 w-3.5 shrink-0 text-[#064e3b]"
+          />
+          <span>Fast AI transcription powered by Groq</span>
+        </div>
       </section>
 
       {/* Recent Videos Section */}
