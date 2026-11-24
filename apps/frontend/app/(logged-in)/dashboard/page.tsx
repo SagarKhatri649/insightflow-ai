@@ -6,15 +6,14 @@ import {
   Clock3,
   FileVideo,
   Info,
-  Link2,
   Loader2,
   Play,
-  Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import UploadForm from "@/components/upload/upload-form";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -118,26 +117,11 @@ export default async function DashboardPage() {
             create a transcript, summary, and key points.
           </p>
         </div>
+      </section>
 
-        <Link
-          href="/upload"
-          aria-label="Upload a video"
-          className="group mt-5 flex w-full flex-col gap-3 rounded-xl border border-[#dee1e6] bg-white p-3 shadow-sm transition-colors hover:border-[#a7f3d0] hover:bg-[#f8faf9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 sm:flex-row sm:items-center sm:gap-4 sm:px-4"
-        >
-          <span className="flex min-w-0 flex-1 items-center gap-2.5 px-1 sm:px-0">
-            <Link2
-              aria-hidden="true"
-              className="h-4 w-4 shrink-0 text-[#979797] transition-colors group-hover:text-[#064e3b]"
-            />
-            <span className="truncate text-sm text-[#979797]">
-              Upload a video to get started…
-            </span>
-          </span>
-          <span className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-[#064e3b] px-4 font-heading text-sm font-semibold text-white shadow-sm transition-colors group-hover:bg-[#04382b] sm:w-auto">
-            <Upload aria-hidden="true" className="h-4 w-4 text-[#10b981]" />
-            Upload video
-          </span>
-        </Link>
+      {/* Quick Upload */}
+      <section aria-label="Quick upload" className="mt-6 sm:mt-8">
+        <UploadForm variant="compact" />
       </section>
 
       {/* Workspace Summary */}

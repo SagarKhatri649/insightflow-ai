@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/sonner";
@@ -77,6 +77,10 @@ export default function UploadForm({
   variant?: UploadFormVariant;
 }) {
   const isCompact = variant === "compact";
+  const formId = useId();
+  const fileInputId = `${formId}-file`;
+  const headingId = `${formId}-heading`;
+  const helpId = `${formId}-help`;
   const { toast } = useToast();
   const { user } = useUser();
   const router = useRouter();
@@ -84,6 +88,7 @@ export default function UploadForm({
   const [fileName, setFileName] = useState<string>("");
   const [transcript, setTranscript] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const isMounted = useRef(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -205,6 +210,43 @@ export default function UploadForm({
     }
   };
 
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (isProcessing) return;
+    setIsDragging(true);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (isProcessing) return;
+    e.dataTransfer.dropEffect = "copy";
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    const nextTarget = e.relatedTarget;
+    if (nextTarget instanceof Node && e.currentTarget.contains(nextTarget)) {
+      return;
+    }
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (isProcessing) return;
+
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    if (fileInputRef.current) {
+      fileInputRef.current.files = transfer.files;
+    }
+    setFileName(file.name);
+  };
+
   return (
     <>
       <section
@@ -256,11 +298,21 @@ export default function UploadForm({
             </>
           )}
           <div
-            className={`w-full rounded-xl border border-[#dee1e6] bg-white shadow-sm ${
-              isCompact ? "p-4 sm:p-6" : "p-4 sm:p-8"
+            className={`w-full ${
+              isCompact
+                ? ""
+                : "rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-8"
             }`}
           >
-            <form onSubmit={handleTranscribe} aria-busy={isProcessing}>
+            <form
+              onSubmit={handleTranscribe}
+              aria-busy={isProcessing}
+              className={
+                isCompact
+                  ? "flex w-full flex-col gap-3 sm:flex-row sm:items-center"
+                  : undefined
+              }
+            >
               <p className="sr-only" role="status" aria-live="polite">
                 {isProcessing
                   ? `Processing ${fileName}. Please wait.`
@@ -269,86 +321,116 @@ export default function UploadForm({
                     : ""}
               </p>
               <div
-                className={`group flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm focus-within:ring-2 focus-within:ring-[#064e3b] focus-within:ring-offset-2 ${
-                  isCompact ? "p-5 sm:p-6" : "p-6 sm:p-10"
+                className={`group flex w-full flex-col rounded-xl border border-dashed border-[#10b981] bg-[#ecfdf5] transition-all duration-300 hover:bg-[#e6fbf2] hover:shadow-sm focus-within:ring-2 focus-within:ring-[#064e3b] focus-within:ring-offset-2 ${
+                  isCompact
+                    ? "min-w-0 flex-1 justify-center gap-2 p-3"
+                    : "items-center justify-center p-6 sm:p-10"
+                } ${
+                  isDragging
+                    ? "shadow-md ring-2 ring-[#064e3b] ring-offset-2"
+                    : ""
                 }`}
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
               >
-                <label
-                  htmlFor="file"
-                  aria-label="Choose an audio or video file"
-                  className={`flex cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md hover:border-[#10b981] ${
-                    isCompact ? "mb-3 h-10 w-10" : "mb-4 h-12 w-12"
-                  }`}
+                <div
+                  className={
+                    isCompact
+                      ? "flex w-full min-w-0 items-center gap-3"
+                      : "contents"
+                  }
                 >
-                  <Upload
-                    aria-hidden="true"
-                    className={isCompact ? "h-5 w-5" : "h-6 w-6"}
-                  />
-                </label>
-                <h2
-                  id="upload-form-heading"
-                  className={`text-center font-heading font-bold text-[#064e3b] ${
-                    isCompact ? "mb-1.5 text-base" : "mb-2 text-lg"
-                  }`}
-                >
-                  Upload your audio or video
-                </h2>
-                <div className="mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]">
-                  <span>
-                    {isCompact
-                      ? "Drag and drop a file here, or"
-                      : "Select a file to upload, or"}
-                  </span>
                   <label
-                    htmlFor="file"
-                    className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1.5 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981]"
+                    htmlFor={fileInputId}
+                    aria-label="Choose an audio or video file"
+                    className={`flex cursor-pointer items-center justify-center rounded-full border border-[#d1fae5] bg-white text-[#10b981] shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md hover:border-[#10b981] ${
+                      isCompact ? "h-9 w-9 shrink-0" : "mb-4 h-12 w-12"
+                    }`}
                   >
-                    Browse files
+                    <Upload
+                      aria-hidden="true"
+                      className={isCompact ? "h-4 w-4" : "h-6 w-6"}
+                    />
                   </label>
-                  {isCompact && <span>from your computer</span>}
+                  <div
+                    className={
+                      isCompact ? "min-w-0 flex-1 text-left" : "contents"
+                    }
+                  >
+                    <h2
+                      id={headingId}
+                      className={`font-heading font-bold text-[#064e3b] ${
+                        isCompact ? "text-sm" : "mb-2 text-center text-lg"
+                      }`}
+                    >
+                      {isCompact
+                        ? "Drop a video or browse files"
+                        : "Upload your audio or video"}
+                    </h2>
+                    <div
+                      className={
+                        isCompact
+                          ? "mt-1 flex flex-wrap items-center gap-1.5 text-sm text-[#5f6368]"
+                          : "mb-2 flex flex-wrap items-center justify-center gap-1.5 text-center text-sm text-[#5f6368]"
+                      }
+                    >
+                      {!isCompact && <span>Drag and drop a file here, or</span>}
+                      <label
+                        htmlFor={fileInputId}
+                        className="inline-flex cursor-pointer items-center rounded-lg border border-[#dee1e6] bg-white px-2.5 py-1.5 font-medium text-[#064e3b] shadow-sm transition-colors hover:border-[#10b981]"
+                      >
+                        Browse files
+                      </label>
+                      {!isCompact && <span>from your computer</span>}
+                    </div>
+                    <p
+                      id={helpId}
+                      className={`mt-1 text-[#5f6368] ${
+                        isCompact ? "text-xs" : "text-center text-sm"
+                      }`}
+                    >
+                      Audio or video files up to 20 MB
+                    </p>
+                  </div>
                 </div>
-                <p
-                  id="upload-form-help"
-                  className={`mt-1 text-center text-[#5f6368] ${
-                    isCompact ? "text-xs" : "text-sm"
-                  }`}
-                >
-                  Audio or video files up to 20 MB
-                </p>
                 <Input
-                  id="file"
+                  id={fileInputId}
                   name="file"
                   type="file"
                   accept="audio/*,video/*"
                   required
                   disabled={isProcessing}
                   ref={fileInputRef}
-                  aria-labelledby="upload-form-heading"
-                  aria-describedby="upload-form-help"
+                  aria-labelledby={headingId}
+                  aria-describedby={helpId}
                   onChange={(e) => setFileName(e.target.files?.[0]?.name || "")}
                   className="sr-only"
                 />
                 {fileName && (
                   <div
-                    className={`flex w-full max-w-xl animate-in fade-in slide-in-from-bottom-2 rounded-xl border border-[#dee1e6] bg-white shadow-sm transition-shadow duration-200 hover:shadow-md ${
+                    className={`flex w-full animate-in fade-in slide-in-from-bottom-2 items-center justify-between border border-[#dee1e6] bg-white transition-shadow duration-200 ${
                       isCompact
-                        ? "mt-4 flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between"
-                        : "mt-6 items-center justify-between p-3.5 sm:p-4"
+                        ? "mt-0 gap-2 rounded-lg p-2"
+                        : "mt-6 max-w-xl rounded-xl p-3.5 shadow-sm hover:shadow-md sm:p-4"
                     }`}
                   >
                     <div
                       className={`flex min-w-0 items-center ${
-                        isCompact ? "gap-3" : "space-x-3 sm:space-x-4"
+                        isCompact ? "gap-2" : "space-x-3 sm:space-x-4"
                       }`}
                     >
                       <div
                         className={`flex shrink-0 items-center justify-center rounded-lg bg-[#064e3b] text-white ${
-                          isCompact ? "h-9 w-9" : "h-10 w-10"
+                          isCompact ? "h-8 w-8" : "h-10 w-10"
                         }`}
                       >
                         <Video
                           aria-hidden="true"
-                          className="h-5 w-5 text-[#10b981]"
+                          className={`text-[#10b981] ${
+                            isCompact ? "h-4 w-4" : "h-5 w-5"
+                          }`}
                         />
                       </div>
                       <div className="min-w-0 text-left">
@@ -358,15 +440,25 @@ export default function UploadForm({
                         >
                           {fileName}
                         </p>
-                        <p className="text-xs text-[#5f6368]">
-                          {isCompact
-                            ? "Selected file"
-                            : "Selected audio or video file"}
-                        </p>
+                        {!isCompact && (
+                          <p className="text-xs text-[#5f6368]">
+                            Selected audio or video file
+                          </p>
+                        )}
                       </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center rounded-md border border-[#a7f3d0] bg-[#ecfdf5] px-2.5 py-1 text-xs font-medium text-[#064e3b]">
+                    <div
+                      className={
+                        isCompact
+                          ? "flex shrink-0 items-center gap-2"
+                          : "flex flex-wrap items-center gap-2"
+                      }
+                    >
+                      <span
+                        className={`inline-flex items-center rounded-md border border-[#a7f3d0] bg-[#ecfdf5] text-xs font-medium text-[#064e3b] ${
+                          isCompact ? "px-2 py-0.5" : "px-2.5 py-1"
+                        }`}
+                      >
                         {isProcessing ? (
                           <Loader2
                             aria-hidden="true"
@@ -394,9 +486,11 @@ export default function UploadForm({
                 )}
               </div>
               <div
-                className={`flex flex-col items-center justify-center ${
-                  isCompact ? "mt-5" : "mt-7"
-                }`}
+                className={
+                  isCompact
+                    ? "flex w-full shrink-0 sm:w-auto"
+                    : "mt-7 flex flex-col items-center justify-center"
+                }
               >
                 <Button
                   type="submit"
@@ -412,12 +506,7 @@ export default function UploadForm({
                       aria-hidden="true"
                       className="h-4 w-4 animate-spin text-[#10b981]"
                     />
-                  ) : isCompact ? (
-                    <Sparkles
-                      aria-hidden="true"
-                      className="h-4 w-4 text-[#10b981]"
-                    />
-                  ) : (
+                  ) : isCompact ? null : (
                     <Upload
                       aria-hidden="true"
                       className="h-4 w-4 text-[#10b981]"
@@ -427,23 +516,21 @@ export default function UploadForm({
                     {isProcessing
                       ? "Processing…"
                       : isCompact
-                        ? "Upload and Generate Insights"
+                        ? "Upload"
                         : "Upload and transcribe"}
                   </span>
                 </Button>
-                <div
-                  className={`flex items-center gap-1.5 text-xs text-[#5f6368] ${
-                    isCompact ? "mt-2" : "mt-3"
-                  }`}
-                >
-                  <Lock
-                    aria-hidden="true"
-                    className="h-3.5 w-3.5 flex-shrink-0"
-                  />
-                  <span>
-                    Your file stays private. Processing starts on click.
-                  </span>
-                </div>
+                {!isCompact && (
+                  <div className="mt-3 flex items-center gap-1.5 text-xs text-[#5f6368]">
+                    <Lock
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 flex-shrink-0"
+                    />
+                    <span>
+                      Your file stays private. Processing starts on click.
+                    </span>
+                  </div>
+                )}
               </div>
             </form>
           </div>
