@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import UploadForm from "@/components/upload/upload-form";
+import YouTubeUrlForm from "@/components/upload/youtube-url-form";
 import getDbConnection from "@/lib/db";
 
 type WorkspaceItem = {
@@ -122,6 +123,11 @@ export default async function DashboardPage() {
       {/* Quick Upload */}
       <section aria-label="Quick upload" className="mt-6 sm:mt-8">
         <UploadForm variant="compact" />
+      </section>
+
+      {/* YouTube Import */}
+      <section aria-label="Import from YouTube" className="mt-6 sm:mt-8">
+        <YouTubeUrlForm />
       </section>
 
       {/* Workspace Summary */}

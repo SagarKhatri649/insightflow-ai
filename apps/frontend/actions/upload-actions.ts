@@ -395,6 +395,8 @@ async function generateSummaryFromTranscript(
         role: "system",
         content: `You are an AI assistant. Given a transcript, produce a readable summary and key points.
 
+Use only information that is explicitly supported by the transcript. Do not invent facts, examples, recommendations, background, statistics, or conclusions. Do not present general knowledge or plausible inferences as statements made by the speaker. If the transcript is too short or too vague to support a detailed summary, say so plainly in the Summary and keep the key points to a minimum.
+
 Respond with valid GitHub-Flavored Markdown structured exactly like this, with one blank line between sections:
 
 ## Summary
@@ -403,11 +405,11 @@ Respond with valid GitHub-Flavored Markdown structured exactly like this, with o
 
 ## Key Points
 
-• <First meaningful key point as a full sentence>
+• <First key point supported by the transcript, as a full sentence>
 
-• <Second meaningful key point as a full sentence>
+• <Second key point supported by the transcript, as a full sentence>
 
-Use 5–10 bullet points, each separated by one blank line. Output only the Markdown document and nothing else. Do not include hidden reasoning or analysis in the output.`,
+Use only as many bullet points as the transcript genuinely supports; never invent content or pad the list to reach a target number. For very short transcripts, prefer 1–3 concise points. Each point must be distinct — do not restate the same idea in different wording. Output only the Markdown document and nothing else. Do not include hidden reasoning or analysis in the output.`,
       },
       {
         role: "user",
