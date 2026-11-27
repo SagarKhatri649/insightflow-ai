@@ -202,8 +202,8 @@ export default async function VideoLibraryPage(props: {
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 xl:flex-nowrap">
-            <div className="relative min-w-0 flex-1 sm:flex-none">
+          <div className="flex flex-wrap items-center gap-2.5 lg:flex-nowrap">
+            <div className="relative">
               <label htmlFor="status-filter" className="sr-only">
                 Filter by status
               </label>
@@ -211,7 +211,7 @@ export default async function VideoLibraryPage(props: {
                 id="status-filter"
                 name="status"
                 defaultValue={statusFilter}
-                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20 sm:w-auto"
+                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
               >
                 <option value="all">All Statuses</option>
                 <option value="completed">Completed</option>
@@ -224,7 +224,7 @@ export default async function VideoLibraryPage(props: {
               />
             </div>
 
-            <div className="relative min-w-0 flex-1 sm:flex-none">
+            <div className="relative">
               <label htmlFor="sort-order" className="sr-only">
                 Sort videos
               </label>
@@ -232,7 +232,7 @@ export default async function VideoLibraryPage(props: {
                 id="sort-order"
                 name="sort"
                 defaultValue={sortOrder}
-                className="h-10 w-full cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20 sm:w-auto"
+                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
               >
                 <option value="newest">Newest first</option>
                 <option value="oldest">Oldest first</option>

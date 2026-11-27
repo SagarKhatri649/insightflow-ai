@@ -224,11 +224,11 @@ export default async function VideoWorkspacePage({
   const metadataParts = [uploadDate, fileType, fileSize].filter(Boolean);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
       {/* Top Navigation */}
       <Link
         href="/posts"
-        className="group mb-5 inline-flex min-h-9 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-[#111111] transition-colors hover:bg-[#F4F4F5] hover:text-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+        className="group mb-6 inline-flex min-h-9 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-[#111111] transition-colors hover:bg-[#F4F4F5] hover:text-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
       >
         <ArrowLeft
           aria-hidden="true"
@@ -238,12 +238,12 @@ export default async function VideoWorkspacePage({
       </Link>
 
       {/* Header Section */}
-      <header className="mb-6">
+      <header className="mb-7">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0 lg:flex-1">
             <h1
               title={item.file_name}
-              className="break-words font-heading text-xl font-bold tracking-tight text-[#111111] sm:text-2xl xl:truncate xl:text-3xl"
+              className="break-words font-heading text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl lg:truncate"
             >
               {item.file_name}
             </h1>
@@ -270,22 +270,18 @@ export default async function VideoWorkspacePage({
         )}
       </header>
 
-      {/* Responsive Split Workspace: 1 col below xl (when sidebar is visible), 2 cols on xl+ */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12 xl:items-start">
-        <div className="flex min-w-0 flex-col gap-6 xl:col-span-7">
-          <SummarySection
-            workspaceItemId={item.id}
-            initialSummary={item.summary}
-            hasTranscript={Boolean(item.transcript?.trim())}
-          />
-          <StatusMessage item={item} />
-        </div>
-        <div className="min-w-0 xl:sticky xl:top-[88px] xl:col-span-5">
-          <ChatPanel
-            workspaceItemId={item.id}
-            hasTranscript={Boolean(item.transcript?.trim())}
-          />
-        </div>
+      {/* Main Status / Full Transcript Section */}
+      <div className="flex flex-col gap-6">
+        <SummarySection
+          workspaceItemId={item.id}
+          initialSummary={item.summary}
+          hasTranscript={Boolean(item.transcript?.trim())}
+        />
+        <StatusMessage item={item} />
+        <ChatPanel
+          workspaceItemId={item.id}
+          hasTranscript={Boolean(item.transcript?.trim())}
+        />
       </div>
     </div>
   );

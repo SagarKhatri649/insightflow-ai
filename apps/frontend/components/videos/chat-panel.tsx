@@ -303,7 +303,7 @@ export default function ChatPanel({
             aria-relevant="additions"
             aria-busy={isLoadingHistory || isSubmitting}
             tabIndex={0}
-            className="max-h-[min(45vh,22rem)] overflow-y-auto rounded-lg border border-[#dee1e6]/60 bg-[#FAFAFA] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 sm:p-5"
+            className="max-h-[min(60vh,32rem)] overflow-y-auto rounded-lg border border-[#dee1e6]/60 bg-[#FAFAFA] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 sm:p-5"
           >
             {isLoadingHistory ? (
               <p className="flex items-center gap-2 text-sm text-[#5f6368]">
@@ -512,7 +512,7 @@ export default function ChatPanel({
               onChange={(event) => setQuestion(event.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask a question about the transcript…"
-              rows={2}
+              rows={3}
               disabled={isSubmitting}
               className="w-full resize-none rounded-lg border border-[#dee1e6] bg-white px-3 py-2 text-sm text-[#202124] shadow-sm transition-[border-color,box-shadow] outline-none placeholder:text-[#9aa0a6] focus-visible:border-[#111111] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
             />

@@ -11,10 +11,10 @@ export default function UploadPage() {
       <section
         id="upload-youtube"
         aria-label="Import from YouTube"
-        className="w-full bg-white px-4 pb-12 sm:px-6 md:pb-16"
+        className="w-full bg-white px-4 pb-10 sm:px-6 md:pb-14"
       >
-        <div className="mx-auto w-full max-w-4xl border-t border-[#E5E7EB] pt-8">
-          <p className="mb-3 font-mono text-xs font-medium tracking-widest text-[#71717A] uppercase">
+        <div className="mx-auto w-full max-w-4xl border-t border-[#dee1e6] pt-8">
+          <p className="mb-3 font-heading text-xs font-bold tracking-wider text-[#111111] uppercase">
             Or import from YouTube
           </p>
           <YouTubeUrlForm />
