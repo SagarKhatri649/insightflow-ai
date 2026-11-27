@@ -13,14 +13,14 @@ const navLinks = [
 ];
 
 const navLinkBase =
-  "rounded-md text-sm font-semibold text-[#3c4043] transition-colors duration-200 hover:bg-[#ecfdf5] hover:text-[#064e3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2";
+  "rounded-full text-sm font-medium text-[#52525B] transition-colors duration-200 hover:bg-[#F4F4F5] hover:text-[#111111] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2";
 
-const navLinkClass = `${navLinkBase} px-3 py-2`;
+const navLinkClass = `${navLinkBase} px-3.5 py-2`;
 
-const mobileNavLinkClass = `${navLinkBase} block px-3 py-3`;
+const mobileNavLinkClass = `${navLinkBase} block rounded-xl px-3.5 py-3`;
 
 const primaryActionBase =
-  "inline-flex items-center justify-center gap-2 rounded-lg bg-[#064e3b] px-5 font-heading text-sm font-bold text-white shadow-sm transition-colors duration-200 hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2";
+  "inline-flex items-center justify-center gap-2 rounded-full bg-[#111111] px-5 font-heading text-sm font-semibold text-white shadow-xs transition-colors duration-200 hover:bg-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2";
 
 const primaryActionClass = `${primaryActionBase} py-2.5`;
 
@@ -54,29 +54,30 @@ export default function Header() {
   return (
     <nav
       aria-label="Primary"
-      className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white"
+      className="sticky top-0 z-50 w-full border-b border-[#E5E7EB]/80 bg-white/95 backdrop-blur-md"
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 md:px-10">
+      <div className="mx-auto flex h-[74px] max-w-6xl items-center justify-between gap-4 px-5 sm:px-6 md:px-10">
         <Link
           href="/"
           aria-label="InsightFlow Home"
           onClick={closeMenu}
-          className="group flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+          className="group flex shrink-0 items-center gap-2.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#064e3b]/20 bg-[#064e3b]/5 transition-transform duration-200 ">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] bg-[#FAFAFA] transition-transform duration-200 group-hover:scale-105">
             <img
               src="/breeze.svg"
               alt=""
               aria-hidden="true"
-              className="h-6 w-6"
+              className="h-4.5 w-4.5"
             />
           </span>
-          <span className="font-heading text-xl font-bold tracking-tight text-[#064e3b]">
+          <span className="font-heading text-[17px] font-semibold tracking-tight text-[#111111]">
+            <span className="mr-1.5 font-normal text-[#A1A1AA]">/</span>
             InsightFlow
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -109,12 +110,18 @@ export default function Header() {
               Upload Video
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <span className="hidden font-heading text-sm font-semibold text-[#064e3b] lg:inline">
+            <span className="hidden font-heading text-xs font-semibold text-[#52525B] lg:inline">
               Pro
             </span>
             <UserButton />
           </SignedIn>
           <SignedOut>
+            <Link
+              href="/upload"
+              className="hidden rounded-full px-3.5 py-2 text-sm font-medium text-[#52525B] transition-colors hover:bg-[#F4F4F5] hover:text-[#111111] sm:inline-flex"
+            >
+              Upload
+            </Link>
             <Link
               href="/sign-in"
               className={`hidden sm:inline-flex ${primaryActionClass}`}
@@ -131,7 +138,7 @@ export default function Header() {
             aria-label={
               menuOpen ? "Close navigation menu" : "Open navigation menu"
             }
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-[#064e3b] transition-colors duration-200 hover:bg-[#ecfdf5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#111111] transition-colors duration-200 hover:bg-[#F4F4F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 md:hidden"
           >
             {menuOpen ? (
               <X className="h-5 w-5" aria-hidden="true" />
@@ -145,9 +152,9 @@ export default function Header() {
       {menuOpen && (
         <div
           id="mobile-nav"
-          className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-gray-100 bg-white lg:hidden"
+          className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-[#E5E7EB] bg-white md:hidden"
         >
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+          <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 sm:px-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -180,6 +187,13 @@ export default function Header() {
               </Link>
             </SignedIn>
             <SignedOut>
+              <Link
+                href="/upload"
+                onClick={closeMenu}
+                className={mobileNavLinkClass}
+              >
+                Upload Video
+              </Link>
               <Link
                 href="/sign-in"
                 onClick={closeMenu}

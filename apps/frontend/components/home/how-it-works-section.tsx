@@ -1,18 +1,21 @@
 const steps = [
   {
-    title: "Upload Your Video",
+    number: "01",
+    title: "Upload or Link a Video",
     description:
-      "Upload lectures, meetings, tutorials, or presentations from your device.",
+      "Drop an audio or video file from your device, or paste a YouTube link directly into the importer.",
   },
   {
-    title: "Generate Insights",
+    number: "02",
+    title: "Generate Transcript & Summary",
     description:
-      "Let AI transcribe your video and create summaries and key insights.",
+      "Groq Whisper transcribes spoken audio and AI distills long content into structured headings and key points.",
   },
   {
-    title: "Review and Export",
+    number: "03",
+    title: "Search, Ask Q&A & Export",
     description:
-      "Review the transcript, Q&A, and summary, then download your results as a PDF.",
+      "Highlight keywords inside the transcript, chat with AI for answers, and download a formatted PDF anytime.",
   },
 ];
 
@@ -20,28 +23,31 @@ export default function HowItWorksSection() {
   return (
     <section
       id="how-to-use"
-      className="scroll-mt-24 border-y border-gray-100 bg-[#f8faf9] py-20 md:py-24"
+      className="scroll-mt-24 border-t border-[#E5E7EB]/80 bg-white py-20 md:py-24"
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-10">
-        <div className="mb-12 max-w-3xl">
-          <div className="mb-3 text-xs font-bold uppercase tracking-wider text-[#064e3b]">
-            HOW IT WORKS
-          </div>
-          <h2 className="text-2xl font-extrabold leading-snug tracking-tight text-[#202124] md:text-3xl lg:text-4xl">
-            From video to clear insights in three simple steps.
+      <div className="mx-auto max-w-6xl px-6 md:px-10">
+        <div className="mb-12 max-w-2xl">
+          <p className="mb-3 font-mono text-xs font-medium tracking-widest text-[#71717A] uppercase">
+            How It Works
+          </p>
+          <h2 className="font-heading text-3xl font-medium leading-tight tracking-[-0.03em] text-[#111111] md:text-4xl">
+            From raw video to clear answers in three steps.
           </h2>
         </div>
-        <div className="grid gap-8 md:grid-cols-3">
-          {steps.map(({ title, description }, idx) => (
+
+        <div className="grid gap-5 md:grid-cols-3">
+          {steps.map(({ number, title, description }) => (
             <div
               key={title}
-              className="flex flex-col rounded-xl border border-[#dee1e6] bg-white p-8 shadow-sm transition-shadow duration-200 hover:shadow-md"
+              className="flex flex-col rounded-2xl border border-[#E5E7EB] bg-[#FAFAFA]/70 p-7 transition-colors duration-200 hover:bg-white"
             >
-              <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg border border-[#d1fae5] bg-[#ecfdf5] text-lg font-bold text-[#064e3b]">
-                {idx + 1}
-              </div>
-              <h3 className="mb-3 text-xl font-bold text-[#202124]">{title}</h3>
-              <p className="text-sm leading-relaxed text-[#3c4043] md:text-base">
+              <span className="mb-5 font-mono text-xs font-semibold tracking-wider text-[#71717A]">
+                {number}
+              </span>
+              <h3 className="mb-2.5 font-heading text-xl font-semibold tracking-tight text-[#111111]">
+                {title}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#6B7280]">
                 {description}
               </p>
             </div>

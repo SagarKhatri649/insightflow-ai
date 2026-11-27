@@ -1,28 +1,29 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { DM_Sans, Inter } from "next/font/google";
+import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ORIGIN_URL } from "@/lib/constants";
-// import { Component } from "lucide-react";
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-sans-body",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-code",
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "InsightFlow-AI: Multilingual Video Insight Platform",
   description:
-    "InsightFlow-AI lets users upload or link Indian and English videos, generate summaries, create chapter-wise timestamps, ask questions with AI responses, and interact prompts.",
+    "InsightFlow-AI lets users upload or link Indian and English videos, generate summaries, search transcripts, ask AI questions, and export PDFs.",
 
   icons: {
     icon: "/icon.ico",
@@ -41,8 +42,11 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${inter.variable} ${dmSans.variable}`}>
-        <body className="font-sans antialiased bg-background text-foreground scroll-smooth">
+      <html
+        lang="en"
+        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable}`}
+      >
+        <body className="bg-white font-sans text-[#111111] antialiased scroll-smooth">
           {children}
           <Toaster richColors position="top-center" />
         </body>

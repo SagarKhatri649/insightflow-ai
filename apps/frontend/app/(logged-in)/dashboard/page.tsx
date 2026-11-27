@@ -39,7 +39,7 @@ const postIdPattern =
 
 function getStatusClasses(status: string) {
   if (status === "completed" || status === "transcribed") {
-    return "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+    return "border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]";
   }
 
   if (status === "failed") {
@@ -55,7 +55,7 @@ function getStatusClasses(status: string) {
 
 function getStatusTileClasses(status: string) {
   if (status === "completed" || status === "transcribed") {
-    return "border border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+    return "border border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]";
   }
 
   if (status === "failed") {
@@ -63,7 +63,7 @@ function getStatusTileClasses(status: string) {
   }
 
   if (status === "processing" || status === "uploaded") {
-    return "border border-[#dee1e6] bg-[#f8faf9] text-[#064e3b]";
+    return "border border-[#dee1e6] bg-[#FAFAFA] text-[#111111]";
   }
 
   return "border border-[#dee1e6] bg-[#f1f3f5] text-[#5f6368]";
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
       {/* Welcome Section */}
       <section>
         <div className="max-w-2xl">
-          <h1 className="font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl">
+          <h1 className="font-heading text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl">
             Welcome back, {displayName}
           </h1>
           <p className="mt-2 text-sm leading-6 text-[#5f6368] sm:text-base">
@@ -139,7 +139,7 @@ export default async function DashboardPage() {
           <div>
             <h2
               id="workspace-summary-heading"
-              className="font-heading text-xs font-bold tracking-wider text-[#064e3b] uppercase"
+              className="font-heading text-xs font-bold tracking-wider text-[#111111] uppercase"
             >
               Workspace Summary
             </h2>
@@ -153,7 +153,7 @@ export default async function DashboardPage() {
             className={`inline-flex w-fit shrink-0 items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
               workspaceError
                 ? "border-red-200 bg-red-50 text-red-700"
-                : "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]"
+                : "border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]"
             }`}
           >
             {workspaceError ? "Unavailable" : "Latest 5"}
@@ -161,12 +161,12 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid gap-4 pt-5 sm:grid-cols-2">
-          <div className="rounded-lg border border-[#dee1e6] bg-[#f8faf9] p-5">
+          <div className="rounded-lg border border-[#dee1e6] bg-[#FAFAFA] p-5">
             <div className="flex items-baseline justify-between gap-3">
               <span className="text-sm font-semibold text-[#202124]">
                 Recent uploads
               </span>
-              <span className="font-heading text-3xl font-bold text-[#064e3b]">
+              <span className="font-heading text-3xl font-bold text-[#111111]">
                 {workspaceError ? (
                   <>
                     <span aria-hidden="true">—</span>
@@ -182,12 +182,12 @@ export default async function DashboardPage() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-[#dee1e6] bg-[#f8faf9] p-5">
+          <div className="rounded-lg border border-[#dee1e6] bg-[#FAFAFA] p-5">
             <div className="flex items-baseline justify-between gap-3">
               <span className="text-sm font-semibold text-[#202124]">
                 Transcripts ready
               </span>
-              <span className="font-heading text-3xl font-bold text-[#064e3b]">
+              <span className="font-heading text-3xl font-bold text-[#111111]">
                 {workspaceError ? (
                   <>
                     <span aria-hidden="true">—</span>
@@ -207,7 +207,7 @@ export default async function DashboardPage() {
         <div className="mt-5 flex items-center gap-1.5 border-t border-[#dee1e6] pt-4 text-xs text-[#5f6368]">
           <Info
             aria-hidden="true"
-            className="h-3.5 w-3.5 shrink-0 text-[#064e3b]"
+            className="h-3.5 w-3.5 shrink-0 text-[#111111]"
           />
           <span>Fast AI transcription powered by Groq</span>
         </div>
@@ -218,13 +218,13 @@ export default async function DashboardPage() {
         <div className="mb-4 flex items-center justify-between gap-3">
           <h2
             id="recent-videos-heading"
-            className="font-heading text-lg font-bold text-[#064e3b]"
+            className="font-heading text-lg font-bold text-[#111111]"
           >
             Recent Videos
           </h2>
           <Link
             href="/posts"
-            className="group inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-[#064e3b] transition-colors hover:bg-[#ecfdf5] hover:text-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+            className="group inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-[#111111] transition-colors hover:bg-[#F4F4F5] hover:text-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
           >
             <span>View library</span>
             <ArrowRight
@@ -250,13 +250,13 @@ export default async function DashboardPage() {
           </div>
         ) : workspaceItems.length === 0 ? (
           <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F4F4F5] text-[#111111]">
               <FileVideo
                 aria-hidden="true"
-                className="h-6 w-6 text-[#10b981]"
+                className="h-6 w-6 text-[#111111]"
               />
             </div>
-            <h3 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
+            <h3 className="mt-4 font-heading text-base font-bold text-[#111111]">
               No videos yet
             </h3>
             <p className="mx-auto mt-1 max-w-sm text-sm text-[#5f6368]">
@@ -264,7 +264,7 @@ export default async function DashboardPage() {
             </p>
             <Button
               asChild
-              className="mt-5 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-sm font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="mt-5 h-9 rounded-lg bg-[#111111] px-4 font-heading text-sm font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               <Link href="/upload">Upload your first video</Link>
             </Button>
@@ -273,7 +273,7 @@ export default async function DashboardPage() {
           <div className="overflow-hidden rounded-xl border border-[#dee1e6] bg-white shadow-sm">
             <div
               aria-hidden="true"
-              className="hidden border-b border-[#dee1e6] bg-[#f8faf9] px-6 py-3 text-xs font-semibold text-[#5f6368] lg:flex lg:items-center lg:gap-4"
+              className="hidden border-b border-[#dee1e6] bg-[#FAFAFA] px-6 py-3 text-xs font-semibold text-[#5f6368] lg:flex lg:items-center lg:gap-4"
             >
               <span className="min-w-0 flex-1">Video Name</span>
               <span className="w-32 shrink-0">Upload Date</span>
@@ -306,7 +306,7 @@ export default async function DashboardPage() {
                 return (
                   <li
                     key={item.id}
-                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#f8faf9] focus-within:bg-[#f8faf9] sm:px-6 lg:flex-row lg:items-center lg:gap-4"
+                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#FAFAFA] focus-within:bg-[#FAFAFA] sm:px-6 lg:flex-row lg:items-center lg:gap-4"
                   >
                     {/* Video Name with status icon tile */}
                     <div className="flex min-w-0 flex-1 items-center gap-3.5">
@@ -315,7 +315,7 @@ export default async function DashboardPage() {
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${getStatusTileClasses(item.status)}`}
                       >
                         {isCompleted ? (
-                          <Play className="ml-0.5 h-4 w-4 fill-[#064e3b] text-[#064e3b]" />
+                          <Play className="ml-0.5 h-4 w-4 fill-[#111111] text-[#111111]" />
                         ) : isProcessing ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
@@ -356,7 +356,7 @@ export default async function DashboardPage() {
                             asChild
                             size="sm"
                             variant="outline"
-                            className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                            className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
                           >
                             <Link
                               href={resultHref}
@@ -374,7 +374,7 @@ export default async function DashboardPage() {
                                 ? `Failed: ${item.file_name}`
                                 : `Waiting for ${item.file_name}`
                             }
-                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#f8faf9] px-3.5 font-heading text-xs font-medium text-[#979797]"
+                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#FAFAFA] px-3.5 font-heading text-xs font-medium text-[#979797]"
                           >
                             {item.status === "failed" ? "Failed" : "Wait"}
                           </button>

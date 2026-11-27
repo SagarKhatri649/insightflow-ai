@@ -50,7 +50,7 @@ function buildHighlight(
     nodes.push(
       <mark
         key={matchCount}
-        className="rounded-sm bg-[#fef08a] px-0.5 text-[#064e3b]"
+        className="rounded-sm bg-[#fef08a] px-0.5 text-[#111111]"
       >
         {transcript.slice(index, index + query.length)}
       </mark>,
@@ -124,12 +124,12 @@ export default function TranscriptPanel({
       <div className="mb-4 border-b border-[#dee1e6] pb-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
-              <FileText aria-hidden="true" className="h-4 w-4 text-[#064e3b]" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F4F4F5] text-[#111111]">
+              <FileText aria-hidden="true" className="h-4 w-4 text-[#111111]" />
             </div>
             <h2
               id="transcript-heading"
-              className="font-heading text-base font-bold text-[#064e3b] sm:text-lg"
+              className="font-heading text-base font-bold text-[#111111] sm:text-lg"
             >
               Full Transcript
             </h2>
@@ -154,7 +154,7 @@ export default function TranscriptPanel({
               variant="outline"
               size="sm"
               onClick={handleCopy}
-              className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               <Copy aria-hidden="true" className="h-3.5 w-3.5" />
               Copy
@@ -164,7 +164,7 @@ export default function TranscriptPanel({
               variant="outline"
               size="sm"
               onClick={handleDownload}
-              className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               <Download aria-hidden="true" className="h-3.5 w-3.5" />
               Download
@@ -183,14 +183,14 @@ export default function TranscriptPanel({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search transcript…"
               aria-label="Search transcript"
-              className="h-9 rounded-lg border-[#dee1e6] bg-white pl-8 pr-8 text-sm shadow-2xs focus-visible:border-[#064e3b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="h-9 rounded-lg border-[#dee1e6] bg-white pl-8 pr-8 text-sm shadow-2xs focus-visible:border-[#111111] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             />
             {trimmedQuery && (
               <button
                 type="button"
                 onClick={handleClearSearch}
                 aria-label="Clear transcript search"
-                className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#5f6368] transition-colors hover:text-[#064e3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-[#5f6368] transition-colors hover:text-[#111111] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
               >
                 <X aria-hidden="true" className="h-3.5 w-3.5" />
               </button>
@@ -204,7 +204,7 @@ export default function TranscriptPanel({
         role="region"
         aria-label="Transcript content"
         tabIndex={0}
-        className="max-h-[min(70vh,50rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-[#dee1e6]/60 bg-[#f8faf9] p-5 text-sm leading-7 text-[#3c4043] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 sm:p-6 sm:text-base"
+        className="max-h-[min(70vh,50rem)] overflow-y-auto whitespace-pre-wrap break-words rounded-lg border border-[#dee1e6]/60 bg-[#FAFAFA] p-5 text-sm leading-7 text-[#3c4043] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 sm:p-6 sm:text-base"
       >
         <div className="sm:max-w-[75ch]">
           {highlight ? highlight.nodes : transcript}

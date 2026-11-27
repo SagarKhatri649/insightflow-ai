@@ -270,15 +270,15 @@ export default function ChatPanel({
       {/* Header: title and capability note */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#dee1e6] pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F4F4F5] text-[#111111]">
             <MessageCircle
               aria-hidden="true"
-              className="h-4 w-4 text-[#064e3b]"
+              className="h-4 w-4 text-[#111111]"
             />
           </div>
           <h2
             id="chat-transcript-heading"
-            className="font-heading text-base font-bold text-[#064e3b] sm:text-lg"
+            className="font-heading text-base font-bold text-[#111111] sm:text-lg"
           >
             Chat with Transcript
           </h2>
@@ -286,7 +286,7 @@ export default function ChatPanel({
       </div>
 
       {!hasTranscript ? (
-        <div className="rounded-lg bg-[#f8faf9] p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
+        <div className="rounded-lg bg-[#FAFAFA] p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
           <p>
             Chat becomes available once transcription is complete. Check back
             after the transcript is ready.
@@ -303,13 +303,13 @@ export default function ChatPanel({
             aria-relevant="additions"
             aria-busy={isLoadingHistory || isSubmitting}
             tabIndex={0}
-            className="max-h-[min(60vh,32rem)] overflow-y-auto rounded-lg border border-[#dee1e6]/60 bg-[#f8faf9] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 sm:p-5"
+            className="max-h-[min(45vh,22rem)] overflow-y-auto rounded-lg border border-[#dee1e6]/60 bg-[#FAFAFA] p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 sm:p-5"
           >
             {isLoadingHistory ? (
               <p className="flex items-center gap-2 text-sm text-[#5f6368]">
                 <Loader2
                   aria-hidden="true"
-                  className="h-3.5 w-3.5 shrink-0 animate-spin text-[#064e3b]"
+                  className="h-3.5 w-3.5 shrink-0 animate-spin text-[#111111]"
                 />
                 Loading your conversation…
               </p>
@@ -335,7 +335,7 @@ export default function ChatPanel({
                       // keyboard focus on the stable conversation log.
                       requestAnimationFrame(() => scrollRef.current?.focus());
                     }}
-                    className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                    className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
                   >
                     Try again
                   </Button>
@@ -352,7 +352,7 @@ export default function ChatPanel({
                 {messages.map((message, index) =>
                   message.role === "user" ? (
                     <div key={index} className="flex justify-end">
-                      <div className="max-w-[85%] rounded-lg rounded-br-sm bg-[#ecfdf5] px-3.5 py-2.5 text-[#064e3b] shadow-2xs sm:max-w-[75%]">
+                      <div className="max-w-[85%] rounded-lg rounded-br-sm bg-[#F4F4F5] px-3.5 py-2.5 text-[#111111] shadow-2xs sm:max-w-[75%]">
                         <ChatMessageBody message={message} />
                       </div>
                     </div>
@@ -369,7 +369,7 @@ export default function ChatPanel({
                   <div className="flex items-center gap-2 px-1 text-sm text-[#5f6368]">
                     <Loader2
                       aria-hidden="true"
-                      className="h-3.5 w-3.5 shrink-0 animate-spin text-[#064e3b]"
+                      className="h-3.5 w-3.5 shrink-0 animate-spin text-[#111111]"
                     />
                     Thinking about your question…
                   </div>
@@ -382,7 +382,7 @@ export default function ChatPanel({
               the conversation and the composer. */}
           {hasTranscript && !isLoadingHistory && !loadError && (
             <div className="mt-3">
-              <h3 className="mb-2 font-heading text-sm font-semibold text-[#064e3b]">
+              <h3 className="mb-2 font-heading text-sm font-semibold text-[#111111]">
                 Suggested questions
               </h3>
               <div className="flex flex-col gap-2">
@@ -416,12 +416,12 @@ export default function ChatPanel({
                         onClick={() => toggleSuggested(suggestion)}
                         aria-expanded={expanded}
                         aria-controls={bodyId}
-                        className="flex w-full items-center justify-between gap-3 rounded-lg bg-white px-3.5 py-2.5 text-left text-sm font-semibold text-[#064e3b] transition-colors hover:bg-[#ecfdf5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                        className="flex w-full items-center justify-between gap-3 rounded-lg bg-white px-3.5 py-2.5 text-left text-sm font-semibold text-[#111111] transition-colors hover:bg-[#F4F4F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
                       >
                         <span>{suggestion}</span>
                         <ChevronDown
                           aria-hidden="true"
-                          className={`h-4 w-4 shrink-0 text-[#064e3b] transition-transform ${
+                          className={`h-4 w-4 shrink-0 text-[#111111] transition-transform ${
                             expanded ? "rotate-180" : ""
                           }`}
                         />
@@ -430,13 +430,13 @@ export default function ChatPanel({
                         id={bodyId}
                         hidden={!expanded}
                         aria-busy={state.status === "loading"}
-                        className="rounded-b-lg border-t border-[#dee1e6]/60 bg-[#f8faf9] px-3.5 py-3"
+                        className="rounded-b-lg border-t border-[#dee1e6]/60 bg-[#FAFAFA] px-3.5 py-3"
                       >
                         {state.status === "loading" ? (
                           <p className="flex items-center gap-2 text-sm text-[#5f6368]">
                             <Loader2
                               aria-hidden="true"
-                              className="h-3.5 w-3.5 shrink-0 animate-spin text-[#064e3b]"
+                              className="h-3.5 w-3.5 shrink-0 animate-spin text-[#111111]"
                             />
                             Generating answer…
                           </p>
@@ -458,7 +458,7 @@ export default function ChatPanel({
                                 onClick={() =>
                                   generateSuggestedAnswer(suggestion)
                                 }
-                                className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                                className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
                               >
                                 Try again
                               </Button>
@@ -512,9 +512,9 @@ export default function ChatPanel({
               onChange={(event) => setQuestion(event.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask a question about the transcript…"
-              rows={3}
+              rows={2}
               disabled={isSubmitting}
-              className="w-full resize-none rounded-lg border border-[#dee1e6] bg-white px-3 py-2 text-sm text-[#202124] shadow-sm transition-[border-color,box-shadow] outline-none placeholder:text-[#9aa0a6] focus-visible:border-[#064e3b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
+              className="w-full resize-none rounded-lg border border-[#dee1e6] bg-white px-3 py-2 text-sm text-[#202124] shadow-sm transition-[border-color,box-shadow] outline-none placeholder:text-[#9aa0a6] focus-visible:border-[#111111] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:text-base"
             />
             <div className="flex items-center justify-between gap-3">
               <p className="hidden text-xs text-[#5f6368] sm:block">
@@ -526,7 +526,7 @@ export default function ChatPanel({
                 size="sm"
                 onClick={handleSubmit}
                 disabled={!canSubmit}
-                className="ml-auto h-9 rounded-lg bg-[#064e3b] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="ml-auto h-9 rounded-lg bg-[#111111] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <Loader2
