@@ -59,7 +59,8 @@ export default function YouTubeUrlForm() {
             Import from YouTube
           </h2>
           <p className="mt-0.5 text-xs leading-5 text-[#5f6368]">
-            Paste a link to a YouTube video that has captions.
+            Paste a YouTube link. We use existing captions when available, or
+            generate a transcript with AI.
           </p>
         </div>
       </div>
@@ -111,7 +112,8 @@ export default function YouTubeUrlForm() {
         </Button>
       </form>
       <p id={helpId} className="mt-2 text-xs leading-5 text-[#5f6368]">
-        Only videos with captions can be imported.
+        Captions are used when available. Videos without captions are
+        transcribed with AI, which can take a minute or two.
       </p>
     </div>
   );
