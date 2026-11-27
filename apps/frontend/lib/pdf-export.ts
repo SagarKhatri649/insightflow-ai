@@ -8,10 +8,10 @@ import path from "path";
 import PDFDocument from "pdfkit";
 
 /**
- * InsightFlow emerald palette, kept in sync with the web UI.
+ * InsightFlow monochrome palette, kept in sync with the web UI.
  */
-const COLOR_HEADING = "#064e3b";
-const COLOR_ACCENT = "#10b981";
+const COLOR_HEADING = "#111111";
+const COLOR_ACCENT = "#52525B";
 const COLOR_BODY = "#3c4043";
 const COLOR_MUTED = "#5f6368";
 const COLOR_RULE = "#dee1e6";
@@ -129,7 +129,7 @@ function drawHeader(doc: PDFKit.PDFDocument, data: VideoReportData): void {
 }
 
 /**
- * Draws an emerald section heading with a soft accent chip and rule, then
+ * Draws a monochrome section heading with a soft accent chip and rule, then
  * returns the cursor at a clean text baseline.
  */
 function drawSectionHeading(doc: PDFKit.PDFDocument, heading: string): void {

@@ -160,7 +160,7 @@ export default function SummarySection({
     <section
       aria-labelledby="ai-summary-heading"
       aria-busy={isGenerating}
-      className="rounded-xl border border-[#a7f3d0] bg-[#ecfdf5] p-5 shadow-sm sm:p-7"
+      className="rounded-xl border border-[#E5E7EB] bg-[#F4F4F5] p-5 shadow-sm sm:p-7"
     >
       <p
         role="status"
@@ -172,16 +172,16 @@ export default function SummarySection({
       </p>
 
       {/* Header: title and generate action */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#a7f3d0]/70 pb-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#E5E7EB]/70 pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[#064e3b] shadow-2xs">
-            <Lightbulb aria-hidden="true" className="h-4 w-4 text-[#064e3b]" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-[#111111] shadow-2xs">
+            <Lightbulb aria-hidden="true" className="h-4 w-4 text-[#111111]" />
           </div>
           <h2
             id="ai-summary-heading"
             ref={summaryHeadingRef}
             tabIndex={-1}
-            className="rounded font-heading text-base font-bold text-[#064e3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#ecfdf5] sm:text-lg"
+            className="rounded font-heading text-base font-bold text-[#111111] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F4F5] sm:text-lg"
           >
             AI Summary
           </h2>
@@ -194,7 +194,7 @@ export default function SummarySection({
             ref={generateButtonRef}
             onClick={handleGenerate}
             disabled={isGenerating}
-            className="h-9 rounded-lg bg-[#064e3b] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-9 rounded-lg bg-[#111111] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isGenerating ? (
               <Loader2
@@ -215,7 +215,7 @@ export default function SummarySection({
           role="region"
           aria-label="Summary content"
           tabIndex={0}
-          className="max-h-[min(70vh,50rem)] overflow-y-auto rounded-lg border border-[#a7f3d0]/70 bg-white p-5 text-sm leading-7 text-[#3c4043] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 sm:p-6 sm:text-base"
+          className="max-h-[min(70vh,50rem)] overflow-y-auto rounded-lg border border-[#E5E7EB]/70 bg-white p-5 text-sm leading-7 text-[#3c4043] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 sm:p-6 sm:text-base"
         >
           <div className="sm:max-w-[75ch]">
             {parseSummaryMarkdown(savedSummary).map((block, index) => {
@@ -223,7 +223,7 @@ export default function SummarySection({
                 return (
                   <h3
                     key={index}
-                    className="mb-2 mt-4 font-heading text-sm font-bold text-[#064e3b] first:mt-0 sm:text-base"
+                    className="mb-2 mt-4 font-heading text-sm font-bold text-[#111111] first:mt-0 sm:text-base"
                   >
                     {block.text}
                   </h3>
@@ -235,7 +235,7 @@ export default function SummarySection({
                   <p key={index} className="mb-1.5 flex gap-2 leading-relaxed">
                     <span
                       aria-hidden="true"
-                      className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#10b981]"
+                      className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-[#111111]"
                     />
                     <span>
                       <InlineText text={block.text} />
@@ -247,7 +247,7 @@ export default function SummarySection({
               if (block.kind === "ordered") {
                 return (
                   <p key={index} className="mb-1.5 flex gap-2 leading-relaxed">
-                    <span className="shrink-0 font-semibold text-[#064e3b]">
+                    <span className="shrink-0 font-semibold text-[#111111]">
                       {block.number}.
                     </span>
                     <span>
@@ -267,11 +267,11 @@ export default function SummarySection({
         </div>
       ) : hasTranscript ? (
         isGenerating ? (
-          <div className="rounded-lg border border-[#a7f3d0]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
+          <div className="rounded-lg border border-[#E5E7EB]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
             <p className="flex items-center gap-2">
               <Loader2
                 aria-hidden="true"
-                className="h-3.5 w-3.5 shrink-0 animate-spin text-[#064e3b]"
+                className="h-3.5 w-3.5 shrink-0 animate-spin text-[#111111]"
               />
               Generating a summary and key points from the transcript…
             </p>
@@ -288,12 +288,12 @@ export default function SummarySection({
             <p>{error}</p>
           </div>
         ) : (
-          <div className="rounded-lg border border-[#a7f3d0]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
+          <div className="rounded-lg border border-[#E5E7EB]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
             <p>Generate a summary and key points from the saved transcript.</p>
           </div>
         )
       ) : (
-        <div className="rounded-lg border border-[#a7f3d0]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
+        <div className="rounded-lg border border-[#E5E7EB]/70 bg-white p-5 text-sm leading-6 text-[#5f6368] sm:p-6">
           <p>
             Summaries become available once transcription is complete. Check
             back after the transcript is ready.

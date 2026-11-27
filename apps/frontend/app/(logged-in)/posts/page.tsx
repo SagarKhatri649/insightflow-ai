@@ -64,7 +64,7 @@ function formatFileType(fileType: string | null | undefined, fileName: string) {
 
 function getStatusClasses(status: string) {
   if (status === "completed" || status === "transcribed") {
-    return "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+    return "border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]";
   }
 
   if (status === "failed") {
@@ -80,7 +80,7 @@ function getStatusClasses(status: string) {
 
 function getStatusTileClasses(status: string) {
   if (status === "completed" || status === "transcribed") {
-    return "border border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+    return "border border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]";
   }
 
   if (status === "failed") {
@@ -88,7 +88,7 @@ function getStatusTileClasses(status: string) {
   }
 
   if (status === "processing" || status === "uploaded") {
-    return "border border-[#dee1e6] bg-[#f8faf9] text-[#064e3b]";
+    return "border border-[#dee1e6] bg-[#FAFAFA] text-[#111111]";
   }
 
   return "border border-[#dee1e6] bg-[#f1f3f5] text-[#5f6368]";
@@ -167,7 +167,7 @@ export default async function VideoLibraryPage(props: {
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
       {/* Header Section */}
       <header className="max-w-2xl">
-        <h1 className="font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl">
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl">
           Video Library
         </h1>
         <p className="mt-2 text-sm leading-6 text-[#5f6368] sm:text-base">
@@ -198,7 +198,7 @@ export default async function VideoLibraryPage(props: {
               name="q"
               defaultValue={rawSearchQuery}
               placeholder="Search your videos..."
-              className="h-10 w-full rounded-lg border border-[#dee1e6] bg-white pl-10 pr-4 text-sm text-[#202124] placeholder:text-[#979797] focus:border-[#064e3b] focus:outline-none focus:ring-2 focus:ring-[#064e3b]/20"
+              className="h-10 w-full rounded-lg border border-[#dee1e6] bg-white pl-10 pr-4 text-sm text-[#202124] placeholder:text-[#979797] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
             />
           </div>
 
@@ -211,7 +211,7 @@ export default async function VideoLibraryPage(props: {
                 id="status-filter"
                 name="status"
                 defaultValue={statusFilter}
-                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#064e3b] focus:outline-none focus:ring-2 focus:ring-[#064e3b]/20"
+                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
               >
                 <option value="all">All Statuses</option>
                 <option value="completed">Completed</option>
@@ -232,7 +232,7 @@ export default async function VideoLibraryPage(props: {
                 id="sort-order"
                 name="sort"
                 defaultValue={sortOrder}
-                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#064e3b] focus:outline-none focus:ring-2 focus:ring-[#064e3b]/20"
+                className="h-10 cursor-pointer appearance-none rounded-lg border border-[#dee1e6] bg-white py-2 pl-3.5 pr-8 text-sm font-medium text-[#202124] focus:border-[#111111] focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
               >
                 <option value="newest">Newest first</option>
                 <option value="oldest">Oldest first</option>
@@ -246,7 +246,7 @@ export default async function VideoLibraryPage(props: {
             <Button
               type="submit"
               variant="outline"
-              className="h-10 rounded-lg border-[#dee1e6] bg-white px-4 font-heading text-sm font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="h-10 rounded-lg border-[#dee1e6] bg-white px-4 font-heading text-sm font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               Filter
             </Button>
@@ -255,7 +255,7 @@ export default async function VideoLibraryPage(props: {
               <Button
                 asChild
                 variant="ghost"
-                className="h-10 rounded-lg px-3 font-heading text-sm font-semibold text-[#5f6368] hover:bg-[#f8faf9] hover:text-[#064e3b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                className="h-10 rounded-lg px-3 font-heading text-sm font-semibold text-[#5f6368] hover:bg-[#FAFAFA] hover:text-[#111111] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
               >
                 <Link href="/posts">Reset</Link>
               </Button>
@@ -293,13 +293,13 @@ export default async function VideoLibraryPage(props: {
           </div>
         ) : workspaceItems.length === 0 ? (
           <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F4F4F5] text-[#111111]">
               <FileVideo
                 aria-hidden="true"
-                className="h-6 w-6 text-[#10b981]"
+                className="h-6 w-6 text-[#111111]"
               />
             </div>
-            <h2 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
+            <h2 className="mt-4 font-heading text-base font-bold text-[#111111]">
               No videos in your library yet
             </h2>
             <p className="mx-auto mt-1 max-w-sm text-sm text-[#5f6368]">
@@ -308,17 +308,17 @@ export default async function VideoLibraryPage(props: {
             </p>
             <Button
               asChild
-              className="mt-5 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-sm font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="mt-5 h-9 rounded-lg bg-[#111111] px-4 font-heading text-sm font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               <Link href="/upload">Upload your first video</Link>
             </Button>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
-              <Search aria-hidden="true" className="h-6 w-6 text-[#10b981]" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F4F4F5] text-[#111111]">
+              <Search aria-hidden="true" className="h-6 w-6 text-[#111111]" />
             </div>
-            <h2 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
+            <h2 className="mt-4 font-heading text-base font-bold text-[#111111]">
               No videos matched your filter
             </h2>
             <p className="mx-auto mt-1 max-w-sm text-sm text-[#5f6368]">
@@ -327,7 +327,7 @@ export default async function VideoLibraryPage(props: {
             <Button
               asChild
               variant="outline"
-              className="mt-5 h-9 rounded-lg border-[#dee1e6] bg-white px-4 font-heading text-sm font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+              className="mt-5 h-9 rounded-lg border-[#dee1e6] bg-white px-4 font-heading text-sm font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             >
               <Link href="/posts">Reset filters</Link>
             </Button>
@@ -336,7 +336,7 @@ export default async function VideoLibraryPage(props: {
           <div className="overflow-hidden rounded-xl border border-[#dee1e6] bg-white shadow-sm">
             <div
               aria-hidden="true"
-              className="hidden border-b border-[#dee1e6] bg-[#f8faf9] px-6 py-3 text-xs font-semibold text-[#5f6368] lg:flex lg:items-center lg:gap-4"
+              className="hidden border-b border-[#dee1e6] bg-[#FAFAFA] px-6 py-3 text-xs font-semibold text-[#5f6368] lg:flex lg:items-center lg:gap-4"
             >
               <span className="min-w-0 flex-1">Video Name</span>
               <span className="w-32 shrink-0 text-center">Status</span>
@@ -376,7 +376,7 @@ export default async function VideoLibraryPage(props: {
                 return (
                   <li
                     key={item.id}
-                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#f8faf9] focus-within:bg-[#f8faf9] sm:px-6 lg:flex-row lg:items-center lg:gap-4"
+                    className="flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#FAFAFA] focus-within:bg-[#FAFAFA] sm:px-6 lg:flex-row lg:items-center lg:gap-4"
                   >
                     {/* Status Icon, Title, Metadata, and Error Description */}
                     <div className="flex min-w-0 flex-1 items-start gap-3.5">
@@ -387,7 +387,7 @@ export default async function VideoLibraryPage(props: {
                         )}`}
                       >
                         {isCompleted ? (
-                          <Play className="ml-0.5 h-4 w-4 fill-[#064e3b] text-[#064e3b]" />
+                          <Play className="ml-0.5 h-4 w-4 fill-[#111111] text-[#111111]" />
                         ) : isProcessing ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : isFailed ? (
@@ -436,7 +436,7 @@ export default async function VideoLibraryPage(props: {
                             asChild
                             size="sm"
                             variant="outline"
-                            className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#064e3b] shadow-2xs hover:border-[#064e3b] hover:bg-[#ecfdf5] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+                            className="h-9 rounded-lg border-[#dee1e6] bg-white px-3.5 font-heading text-xs font-semibold text-[#111111] shadow-2xs hover:border-[#111111] hover:bg-[#F4F4F5] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
                           >
                             <Link
                               href={resultHref}
@@ -449,7 +449,7 @@ export default async function VideoLibraryPage(props: {
                           <button
                             disabled
                             type="button"
-                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#f8faf9] px-3.5 font-heading text-xs font-medium text-[#979797]"
+                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#FAFAFA] px-3.5 font-heading text-xs font-medium text-[#979797]"
                           >
                             Wait
                           </button>
@@ -466,7 +466,7 @@ export default async function VideoLibraryPage(props: {
                           <button
                             disabled
                             type="button"
-                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#f8faf9] px-3.5 font-heading text-xs font-medium text-[#979797]"
+                            className="h-9 cursor-not-allowed rounded-lg border border-[#dee1e6] bg-[#FAFAFA] px-3.5 font-heading text-xs font-medium text-[#979797]"
                           >
                             Not ready
                           </button>

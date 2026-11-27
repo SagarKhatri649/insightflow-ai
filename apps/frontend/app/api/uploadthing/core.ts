@@ -9,6 +9,9 @@ export const ourFileRouter = {
     video: {
       maxFileSize: "32MB",
     },
+    audio: {
+      maxFileSize: "32MB",
+    },
   })
     .middleware(async () => {
       const user = await currentUser();

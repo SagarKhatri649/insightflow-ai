@@ -34,7 +34,7 @@ export default async function SettingsPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:py-10">
       <header className="max-w-2xl">
-        <h1 className="font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl">
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl">
           Settings
         </h1>
         <p className="mt-2 text-sm leading-6 text-[#5f6368] sm:text-base">
@@ -48,13 +48,13 @@ export default async function SettingsPage() {
       >
         <div className="flex flex-col gap-4 border-b border-[#dee1e6] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#ecfdf5] text-[#064e3b]">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F4F5] text-[#111111]">
               <UserRound aria-hidden="true" className="h-5 w-5" />
             </span>
             <div>
               <h2
                 id="profile-settings-heading"
-                className="font-heading text-base font-bold text-[#064e3b] sm:text-lg"
+                className="font-heading text-base font-bold text-[#111111] sm:text-lg"
               >
                 Profile
               </h2>

@@ -126,7 +126,7 @@ export default function AppShell({
   }, [isMenuOpen]);
 
   return (
-    <div className="flex min-h-dvh bg-white text-[#202124]">
+    <div className="flex min-h-dvh w-full overflow-x-clip bg-white text-[#202124]">
       {isMenuOpen && (
         <button
           type="button"
@@ -140,7 +140,7 @@ export default function AppShell({
       <aside
         id="app-sidebar"
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-[#dee1e6] bg-white transition-[transform,visibility] duration-200 md:static md:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r border-[#dee1e6] bg-white transition-[transform,visibility] duration-200 md:sticky md:top-0 md:bottom-auto md:left-auto md:z-auto md:h-dvh md:self-start md:translate-x-0",
           isMenuOpen
             ? "translate-x-0"
             : "-translate-x-full invisible md:visible",
@@ -149,10 +149,10 @@ export default function AppShell({
         <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#dee1e6] px-5">
           <Link
             href="/dashboard"
-            className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+            className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
             onClick={closeMenu}
           >
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#064e3b]/20 bg-[#064e3b]/5">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#111111]/20 bg-[#111111]/5">
               <img
                 src="/breeze.svg"
                 alt=""
@@ -160,7 +160,7 @@ export default function AppShell({
                 className="h-6 w-6"
               />
             </span>
-            <span className="truncate font-heading text-lg font-bold tracking-tight text-[#064e3b]">
+            <span className="truncate font-heading text-lg font-bold tracking-tight text-[#111111]">
               InsightFlow
             </span>
           </Link>
@@ -168,7 +168,7 @@ export default function AppShell({
             ref={closeButtonRef}
             type="button"
             aria-label="Close navigation menu"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[#064e3b] transition-colors hover:bg-[#ecfdf5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 md:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[#111111] transition-colors hover:bg-[#F4F4F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 md:hidden"
             onClick={closeMenu}
           >
             <X aria-hidden="true" className="h-5 w-5" />
@@ -192,16 +192,16 @@ export default function AppShell({
                 onClick={closeMenu}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2",
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2",
                   isActive
-                    ? "bg-[#ecfdf5] text-[#064e3b]"
-                    : "text-[#5f6368] hover:bg-[#f1f3f5] hover:text-[#064e3b]",
+                    ? "bg-[#F4F4F5] text-[#111111]"
+                    : "text-[#5f6368] hover:bg-[#f1f3f5] hover:text-[#111111]",
                 )}
               >
                 {isActive && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-y-2 left-0 w-[3px] rounded-full bg-[#064e3b]"
+                    className="absolute inset-y-2 left-0 w-[3px] rounded-full bg-[#111111]"
                   />
                 )}
                 <Icon aria-hidden="true" className="h-4 w-4" />
@@ -223,12 +223,12 @@ export default function AppShell({
               }
               aria-expanded={isMenuOpen}
               aria-controls="app-sidebar"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[#064e3b] transition-colors hover:bg-[#ecfdf5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 md:hidden"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[#111111] transition-colors hover:bg-[#F4F4F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 md:hidden"
               onClick={() => setIsMenuOpen((open) => !open)}
             >
               <Menu aria-hidden="true" className="h-5 w-5" />
             </button>
-            <span className="truncate font-heading text-sm font-semibold text-[#064e3b] sm:text-base">
+            <span className="truncate font-heading text-sm font-semibold text-[#111111] sm:text-base">
               {pageTitle}
             </span>
           </div>
@@ -237,7 +237,7 @@ export default function AppShell({
             <Button
               asChild
               size="sm"
-              className="h-9 rounded-lg bg-[#064e3b] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] sm:text-sm"
+              className="h-9 rounded-lg bg-[#111111] px-3.5 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#27272A] sm:text-sm"
             >
               <Link href="/upload" aria-label="Upload video">
                 <Upload aria-hidden="true" className="h-4 w-4" />

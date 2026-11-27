@@ -51,11 +51,11 @@ export default function YouTubeUrlForm() {
   return (
     <div className="w-full rounded-xl border border-[#dee1e6] bg-white p-4 shadow-sm sm:p-5">
       <div className="mb-3 flex items-start gap-2.5">
-        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#ecfdf5]">
-          <Youtube aria-hidden="true" className="h-4 w-4 text-[#10b981]" />
+        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#F4F4F5]">
+          <Youtube aria-hidden="true" className="h-4 w-4 text-[#111111]" />
         </span>
         <div className="min-w-0">
-          <h2 className="font-heading text-sm font-bold text-[#064e3b]">
+          <h2 className="font-heading text-sm font-bold text-[#111111]">
             Import from YouTube
           </h2>
           <p className="mt-0.5 text-xs leading-5 text-[#5f6368]">
@@ -77,7 +77,7 @@ export default function YouTubeUrlForm() {
         <div className="min-w-0 flex-1">
           <label
             htmlFor={inputId}
-            className="mb-1.5 block font-heading text-xs font-semibold text-[#064e3b]"
+            className="mb-1.5 block font-heading text-xs font-semibold text-[#111111]"
           >
             YouTube link
           </label>
@@ -92,21 +92,21 @@ export default function YouTubeUrlForm() {
             disabled={isProcessing}
             aria-describedby={helpId}
             onChange={(e) => setUrl(e.target.value)}
-            className="h-10 border-[#dee1e6] bg-white text-sm text-[#3c4043] placeholder:text-[#979797] focus-visible:border-[#10b981] focus-visible:ring-[#064e3b]/20"
+            className="h-10 border-[#dee1e6] bg-white text-sm text-[#3c4043] placeholder:text-[#979797] focus-visible:border-[#111111] focus-visible:ring-[#111111]/20"
           />
         </div>
         <Button
           type="submit"
           disabled={isProcessing}
-          className="h-10 w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#064e3b] px-5 font-heading text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          className="h-10 w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#111111] px-5 font-heading text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
           {isProcessing ? (
             <Loader2
               aria-hidden="true"
-              className="h-4 w-4 animate-spin text-[#10b981]"
+              className="h-4 w-4 animate-spin text-white"
             />
           ) : (
-            <Youtube aria-hidden="true" className="h-4 w-4 text-[#10b981]" />
+            <Youtube aria-hidden="true" className="h-4 w-4 text-white" />
           )}
           <span>{isProcessing ? "Importing…" : "Import"}</span>
         </Button>

@@ -18,12 +18,12 @@ export default function ContactPage() {
       <div className="not-prose mb-12 grid gap-5 sm:grid-cols-2">
         <a
           href="mailto:insightflowai@gmail.com"
-          className="group rounded-xl border border-[#a7f3d0] bg-[#ecfdf5] p-6 transition-shadow hover:shadow-sm sm:p-7"
+          className="group rounded-xl border border-[#E5E7EB] bg-[#F4F4F5] p-6 transition-shadow hover:shadow-sm sm:p-7"
         >
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#064e3b]">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#111111]">
             Email support
           </p>
-          <p className="break-all text-lg font-bold tracking-[-0.01em] text-[#064e3b] group-hover:underline group-hover:underline-offset-4">
+          <p className="break-all text-lg font-bold tracking-[-0.01em] text-[#111111] group-hover:underline group-hover:underline-offset-4">
             insightflowai@gmail.com
           </p>
           <p className="mt-2 text-sm leading-6 text-[#5f6368]">
@@ -31,7 +31,7 @@ export default function ContactPage() {
           </p>
         </a>
         <div className="rounded-xl border border-[#dee1e6] bg-white p-6 sm:p-7">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#064e3b]">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-[#111111]">
             Helpful details
           </p>
           <p className="text-sm leading-7 text-[#5f6368]">
@@ -56,7 +56,7 @@ export default function ContactPage() {
         If you are ready to try the product, you can return to the{" "}
         <Link
           href="/"
-          className="font-semibold text-[#064e3b] underline underline-offset-4"
+          className="font-semibold text-[#111111] underline underline-offset-4"
         >
           InsightFlow home page
         </Link>

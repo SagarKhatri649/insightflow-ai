@@ -60,7 +60,7 @@ function formatFileType(fileType: string | null | undefined, fileName: string) {
 
 function getStatusClasses(status: string) {
   if (status === "completed" || status === "transcribed") {
-    return "border-[#a7f3d0] bg-[#ecfdf5] text-[#064e3b]";
+    return "border-[#E5E7EB] bg-[#F4F4F5] text-[#111111]";
   }
 
   if (status === "failed") {
@@ -113,10 +113,10 @@ function StatusMessage({ item }: { item: WorkspaceItem }) {
       role="status"
       className="rounded-xl border border-dashed border-[#dee1e6] bg-white p-8 text-center shadow-sm sm:p-12"
     >
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ecfdf5] text-[#064e3b]">
-        <Clock3 aria-hidden="true" className="h-6 w-6 text-[#10b981]" />
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F4F4F5] text-[#111111]">
+        <Clock3 aria-hidden="true" className="h-6 w-6 text-[#111111]" />
       </div>
-      <h2 className="mt-4 font-heading text-base font-bold text-[#064e3b]">
+      <h2 className="mt-4 font-heading text-base font-bold text-[#111111]">
         Transcript in progress
       </h2>
       <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-[#5f6368]">
@@ -154,7 +154,7 @@ export default async function VideoWorkspacePage({
           <Button
             asChild
             size="sm"
-            className="mt-4 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+            className="mt-4 h-9 rounded-lg bg-[#111111] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
           >
             <Link href="/posts">Back to video library</Link>
           </Button>
@@ -209,7 +209,7 @@ export default async function VideoWorkspacePage({
           <Button
             asChild
             size="sm"
-            className="mt-4 h-9 rounded-lg bg-[#064e3b] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#04382b] focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+            className="mt-4 h-9 rounded-lg bg-[#111111] px-4 font-heading text-xs font-semibold text-white shadow-sm hover:bg-[#27272A] focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
           >
             <Link href="/posts">Back to video library</Link>
           </Button>
@@ -228,7 +228,7 @@ export default async function VideoWorkspacePage({
       {/* Top Navigation */}
       <Link
         href="/posts"
-        className="group mb-6 inline-flex min-h-9 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-[#064e3b] transition-colors hover:bg-[#ecfdf5] hover:text-[#04382b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064e3b] focus-visible:ring-offset-2"
+        className="group mb-6 inline-flex min-h-9 items-center gap-2 rounded-lg px-1 text-sm font-semibold text-[#111111] transition-colors hover:bg-[#F4F4F5] hover:text-[#27272A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
       >
         <ArrowLeft
           aria-hidden="true"
@@ -243,7 +243,7 @@ export default async function VideoWorkspacePage({
           <div className="min-w-0 lg:flex-1">
             <h1
               title={item.file_name}
-              className="break-words font-heading text-2xl font-bold tracking-tight text-[#064e3b] sm:text-3xl lg:truncate"
+              className="break-words font-heading text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl lg:truncate"
             >
               {item.file_name}
             </h1>
